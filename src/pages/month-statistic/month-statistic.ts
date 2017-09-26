@@ -23,6 +23,10 @@ export class MonthStatisticPage implements OnInit {
   public chartOpen: boolean = false;
   public noData: boolean = true;
 
+  public categoriesDataTable = [];
+  public categoriesColorTable = [];
+  public categoriesLabelTable = [];
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -69,8 +73,8 @@ export class MonthStatisticPage implements OnInit {
     }
     this.getDayMoney();
 
-    for (let category of this.expensesService.categories) {
-      this.getDayMoneyByCategory(category);
+    for (let category of this.expensesService.categoriesData) {
+      this.getDayMoneyByCategory(category.name);
     }
   }
 
@@ -83,12 +87,12 @@ export class MonthStatisticPage implements OnInit {
         }
       });
       listOfDay.subscribe(x => {
-        for (let i = 0; i < this.expensesService.daysWithCategoriesExpensesInMonth.length; i++) {
-          if (category == this.expensesService.daysWithCategoriesExpensesInMonth[i].name) {
-            this.expensesService.daysWithCategoriesExpensesInMonth[i].days[day] = this.getFullSpentMoney(x);
-            this.expensesService.allMonthlyMoneySpentForCategories[i] = 0;
-            for (let money in this.expensesService.daysWithCategoriesExpensesInMonth[i].days) {
-              this.expensesService.allMonthlyMoneySpentForCategories[i] = this.expensesService.allMonthlyMoneySpentForCategories[i] + this.expensesService.daysWithCategoriesExpensesInMonth[i].days[money];
+        for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
+          if (category == this.expensesService.categoriesData[i].name) {
+            this.expensesService.categoriesData[i].days[day] = this.getFullSpentMoney(x);
+            this.expensesService.categoriesData[i].allMonthlyMoneySpent = 0;
+            for (let money in this.expensesService.categoriesData[i].days) {
+              this.expensesService.categoriesData[i].allMonthlyMoneySpent = this.expensesService.categoriesData[i].allMonthlyMoneySpent + this.expensesService.categoriesData[i].days[money];
             }
           }
         }
@@ -115,16 +119,32 @@ export class MonthStatisticPage implements OnInit {
     return allMoney;
   }
 
+  getChartInfo() {
+    this.categoriesColorTable = [];
+    this.categoriesLabelTable = [];
+    this.categoriesDataTable = [];
+    for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
+      this.categoriesColorTable.push(this.expensesService.categoriesData[i].color);
+      this.categoriesLabelTable.push(this.expensesService.categoriesData[i].name);
+      this.categoriesDataTable.push(this.expensesService.categoriesData[i].allMonthlyMoneySpent);
+    }
+    this.categoriesColorTable.splice(0, 1);
+    this.categoriesLabelTable.splice(0, 1);
+    this.categoriesDataTable.splice(0, 1);
+  }
+
+
   setChart() {
+    this.getChartInfo();
     this.chartOpen = true;
     var ctx = document.getElementById("myChart");
     var myChart = new Chart(ctx, {
       type: 'pie',
       data: {
-        labels: this.expensesService.categories,
+        labels: this.categoriesLabelTable,
         datasets: [{
-          backgroundColor: this.expensesService.categoriesColors,
-          data: this.expensesService.allMonthlyMoneySpentForCategories
+          backgroundColor: this.categoriesColorTable,
+          data: this.categoriesDataTable
         }]
       }
     });

@@ -5,51 +5,15 @@ import * as moment from 'moment';
 @Injectable()
 export class ExpensesService {
     private currentYear: string = moment().format('YYYY');
-    public categories = ['rachunki', 'dzieci', 'zakupy', 'osobiste', 'prezenty', 'auta', 'wakacje'];
-    public categoriesColors = ["#996633", "#ffb84d", "#ff4d4d", "#0099ff", "#ffccff", "#b3b3b3", "#ffff66"];
-    public allMonthlyMoneySpentForCategories = [0, 0, 0, 0, 0, 0, 0];
-    public daysWithCategoriesExpensesInMonth = [
-        {
-            name: "rachunki",
-            days: {}
-        },
-        {
-            name: "dzieci",
-            days: {}
-        },
-        {
-            name: "zakupy",
-            days: {}
-        },
-        {
-            name: "osobiste",
-            days: {}
-        },
-        {
-            name: "prezenty",
-            days: {}
-        },
-        {
-            name: "auta",
-            days: {}
-        },
-        {
-            name: "wakacje",
-            days: {}
-        }
-
-    ]
-    public radioSignsForCategories = [];
     public selectedMonth;
     public selectedMonthNumber: number;
     public selectedDay;
-
     public categoriesData = [
         {
             name: "wszystkie",
             days: {},
+            color: '#ffffff',
             allMonthlyMoneySpent: 0,
-            monthlyDaysWithExpenses: [],
             radioSign: true
         },
         {
@@ -57,7 +21,6 @@ export class ExpensesService {
             days: {},
             color: '#996633',
             allMonthlyMoneySpent: 0,
-            monthlyDaysWithExpenses: [],
             radioSign: false
         },
         {
@@ -65,7 +28,6 @@ export class ExpensesService {
             days: {},
             color: '#ffb84d',
             allMonthlyMoneySpent: 0,
-            monthlyDaysWithExpenses: [],
             radioSign: false
         },
         {
@@ -73,7 +35,6 @@ export class ExpensesService {
             days: {},
             color: '#ff4d4d',
             allMonthlyMoneySpent: 0,
-            monthlyDaysWithExpenses: [],
             radioSign: false
         },
         {
@@ -81,7 +42,6 @@ export class ExpensesService {
             days: {},
             color: '#0099ff',
             allMonthlyMoneySpent: 0,
-            monthlyDaysWithExpenses: [],
             radioSign: false
         },
         {
@@ -89,7 +49,6 @@ export class ExpensesService {
             days: {},
             color: '#ffccff',
             allMonthlyMoneySpent: 0,
-            monthlyDaysWithExpenses: [],
             radioSign: false
         },
         {
@@ -97,7 +56,6 @@ export class ExpensesService {
             days: {},
             color: '#b3b3b3',
             allMonthlyMoneySpent: 0,
-            monthlyDaysWithExpenses: [],
             radioSign: false
         },
         {
@@ -105,7 +63,6 @@ export class ExpensesService {
             days: {},
             color: '#ffff66',
             allMonthlyMoneySpent: 0,
-            monthlyDaysWithExpenses: [],
             radioSign: false
         }
 

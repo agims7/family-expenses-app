@@ -20,14 +20,6 @@ export class DayPage implements OnInit {
   public expenseListOfDay: FirebaseListObservable<any[]>
   public allMoneySpent: number;
   public equal: string;
-  public radioRachunki: boolean = false;
-  public radioDzieci: boolean = false;
-  public radioZakupy: boolean = false;
-  public radioOsobiste: boolean = false;
-  public radioPrezenty: boolean = false
-  public radioAll: boolean = true;
-
-  public radioSign = [];
 
   public sortDateDown: boolean = true;
   public sortPriceDown: boolean = true;
@@ -117,62 +109,10 @@ export class DayPage implements OnInit {
   }
 
   setChecked(data) {
-    switch (data) {
-      case ('rachunki'): {
-        this.radioRachunki = true;
-        this.radioDzieci = false;
-        this.radioZakupy = false;
-        this.radioOsobiste = false;
-        this.radioPrezenty = false;
-        this.radioAll = false;
-        break;
-      }
-      case ('dzieci'): {
-        this.radioRachunki = false;
-        this.radioDzieci = true;
-        this.radioZakupy = false;
-        this.radioOsobiste = false;
-        this.radioPrezenty = false;
-        this.radioAll = false;
-        break;
-      }
-      case ('zakupy'): {
-        this.radioRachunki = false;
-        this.radioDzieci = false;
-        this.radioZakupy = true;
-        this.radioOsobiste = false;
-        this.radioPrezenty = false;
-        this.radioAll = false;
-        break;
-      }
-      case ('osobiste'): {
-        this.radioRachunki = false;
-        this.radioDzieci = false;
-        this.radioZakupy = false;
-        this.radioOsobiste = true;
-        this.radioPrezenty = false;
-        this.radioAll = false;
-        break;
-      }
-      case ('prezenty'): {
-        this.radioRachunki = false;
-        this.radioDzieci = false;
-        this.radioZakupy = false;
-        this.radioOsobiste = false;
-        this.radioPrezenty = true;
-        this.radioAll = false;
-        break;
-      }
-      case ('wszystkie'): {
-        this.radioRachunki = false;
-        this.radioDzieci = false;
-        this.radioZakupy = false;
-        this.radioOsobiste = false;
-        this.radioPrezenty = false;
-        this.radioAll = true;
-        break;
-      }
+    for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
+      this.expensesService.categoriesData[i].radioSign = false;
     }
+    this.expensesService.categoriesData[data].radioSign = true;
   }
 
   dateAscending() {
@@ -182,7 +122,7 @@ export class DayPage implements OnInit {
       }
     });
     this.sortDateDown = false;
-    this.setChecked('wszystkie');
+    this.setChecked(0);
   }
 
   dateDescending() {
@@ -192,7 +132,7 @@ export class DayPage implements OnInit {
       }
     }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.sortDateDown = true;
-    this.setChecked('wszystkie');
+    this.setChecked(0);
   }
 
   priceAscending() {
@@ -202,7 +142,7 @@ export class DayPage implements OnInit {
       }
     });
     this.sortPriceDown = false;
-    this.setChecked('wszystkie');
+    this.setChecked(0);
   }
 
   priceDescending() {
@@ -212,70 +152,61 @@ export class DayPage implements OnInit {
       }
     }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.sortPriceDown = true;
-    this.setChecked('wszystkie');
+    this.setChecked(0);
   }
 
 
   filter() {
-      let alert = this.alertCtrl.create();
-      alert.setTitle('Wybierz kategorie');
+    let alert = this.alertCtrl.create();
+    alert.setTitle('Wybierz kategorie');
 
-for (let category of this.expensesService.categories) {
-  alert.addInput({ type: 'radio', label: category, value: category, checked: this.radioRachunki });
-}
-
-      alert.addInput({ type: 'radio', label: 'Rachunki', value: 'rachunki', checked: this.radioRachunki });
-      alert.addInput({ type: 'radio', label: 'Dzieci', value: 'dzieci', checked: this.radioDzieci });
-      alert.addInput({ type: 'radio', label: 'Zakupy', value: 'zakupy', checked: this.radioZakupy });
-      alert.addInput({ type: 'radio', label: 'Osobiste', value: 'osobiste', checked: this.radioOsobiste });
-      alert.addInput({ type: 'radio', label: 'Prezenty', value: 'prezenty', checked: this.radioPrezenty });
-      alert.addInput({ type: 'radio', label: 'Wszystkie', value: 'wszystkie', checked: this.radioAll });
-
-      alert.addButton('Wstecz');
-      alert.addButton({
-        text: 'OK',
-        handler: data => {
-          this.equal = data;
-          this.setChecked(data)
-          if (data == 'wszystkie') {
-            this.expenseListOfDay = this.database.list('expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
-              query: {
-                orderByChild: 'expenseCategory'
-              }
-            });
-          } else {
-            this.expenseListOfDay = this.database.list('expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
-              query: {
-                orderByChild: 'expenseCategory',
-                equalTo: this.equal
-              }
-            });
-          }
+    for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
+      alert.addInput({ type: 'radio', label: this.expensesService.categoriesData[i].name, value: i.toString(), checked: this.expensesService.categoriesData[i].radioSign });
+    }
+    alert.addButton('Wstecz');
+    alert.addButton({
+      text: 'OK',
+      handler: data => {
+        this.equal = this.expensesService.categoriesData[data].name;
+        this.setChecked(data)
+        if (data == 0) {
+          this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+            query: {
+              orderByChild: 'expenseCategory'
+            }
+          });
+        } else {
+          this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+            query: {
+              orderByChild: 'expenseCategory',
+              equalTo: this.equal
+            }
+          });
         }
-      });
-      alert.present();
-      this.sortPriceDown = false;
-      this.sortDateDown = false;
+      }
+    });
+    alert.present();
+    this.sortPriceDown = false;
+    this.sortDateDown = false;
   }
 
-  showTime(time){
+  showTime(time) {
     return moment.unix(time).format('LTS');
   }
 
-  setRadioSigns() {
-    for (let category of this.expensesService.categories) {
-      this.radioSign.push(
-        {
-          name: category,
-          checked: false
-        }
-      )
-      }
-      console.log('this.radioSign ', this.radioSign)
-    }
+  // setRadioSigns() {
+  //   for (let category of this.expensesService.categories) {
+  //     this.radioSign.push(
+  //       {
+  //         name: category,
+  //         checked: false
+  //       }
+  //     )
+  //   }
+  //   console.log('this.radioSign ', this.radioSign)
+  // }
 
   ngOnInit() {
-    this.setRadioSigns();
     this.dayList = this.navParams.data;
     this.expensesService.selectedDay = this.dayList.$key
     this.dbList = 'expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
