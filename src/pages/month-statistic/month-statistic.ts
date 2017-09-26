@@ -18,18 +18,7 @@ export class MonthStatisticPage implements OnInit {
 
   public allMonthlyMoneySpent: number;
   public dayWithExpenses = {};
-  public daysWithBillsExpenses = {};
-  public daysWithKidsExpenses = {};
-  public daysWithShoppingExpenses = {};
-  public daysWithPersonalExpenses = {};
-  public daysWithGiftsExpenses = {};
   public days = [];
-
-  public allMonthlyMoneySpentForBills: number;
-  public allMonthlyMoneySpentForKids: number;
-  public allMonthlyMoneySpentForShopping: number;
-  public allMonthlyMoneySpentForPersonal: number;
-  public allMonthlyMoneySpentForGifts: number;
 
   public chartOpen: boolean = false;
   public noData: boolean = true;
@@ -51,16 +40,13 @@ export class MonthStatisticPage implements OnInit {
     this.expenseListOfDays.subscribe(x => {
       if (x == null) {
         this.noData = true;
-        console.log(x, 'pusto null')
         return;
       } else {
         if (x.length < 1) {
           this.noData = true;
-          console.log(x, 'pusto < 1')
           return;
         } else {
           this.noData = false;
-          console.log(x, 'pelne')
           this.getDays(x);
           setTimeout(() => {
             this.setChart()

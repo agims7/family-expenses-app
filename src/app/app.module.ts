@@ -17,7 +17,10 @@ import { DayPage } from "../pages/day/day";
 import { NewExpensesPage } from "../pages/new-expenses/new-expenses";
 import { MonthStatisticPage } from "../pages/month-statistic/month-statistic";
 
+import { EditCategoriesPage } from "../pages/edit-categories/edit-categories";
 import { ExpensesService } from "../services/expenses";
+
+import { ColorPickerModule } from 'ngx-color-picker';
 
 @NgModule({
   declarations: [
@@ -29,12 +32,14 @@ import { ExpensesService } from "../services/expenses";
     DayPage,
     NewExpensesPage,
     MonthStatisticPage,
+    EditCategoriesPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(config),
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    ColorPickerModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -46,6 +51,7 @@ import { ExpensesService } from "../services/expenses";
     DayPage,
     NewExpensesPage,
     MonthStatisticPage,
+    EditCategoriesPage
   ],
   providers: [
     StatusBar,

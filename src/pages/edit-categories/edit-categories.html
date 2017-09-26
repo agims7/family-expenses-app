@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Edycja kategorii</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <form #category="ngForm" (ngSubmit)="addCategory()">
+    <ion-item>
+      <ion-label floating>Nazwa</ion-label>
+      <ion-input type="text" name="name" [(ngModel)]="newCategoryName" ngModel required></ion-input>
+    </ion-item>
+    <div class="color-container">
+      <label>Kolor</label>
+      <input class="color-picker-input" [(colorPicker)]="color" [style.background]="color" (colorPickerChange)="changeColor()" [cpPosition]="'bottom'" [cpOutputFormat]="'hex'" [cpOKButtonClass]="'color-picker-button'" [cpOKButton]="true" [cpOKButtonText]="'OK'" />
+    </div>
+
+    <div padding>
+      <button ion-button block type="submit">Dodaj</button>
+    </div>
+  </form>
+
+  <ion-list>
+      <ion-item ion-item *ngFor="let category of categoriesItemsList | async; let i = index">
+        <h2 class="category-name">{{ category.name }}</h2>
+        <ion-icon name="trash" color="danger" item-end (click)="deleteCategory(category, i, category.$key)"></ion-icon>
+        <ion-icon name="settings" color="primary" item-end (click)="editCategory()"></ion-icon>
+      </ion-item>
+    </ion-list>
+
+</ion-content>
