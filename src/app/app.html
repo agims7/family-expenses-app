@@ -1,0 +1,17 @@
+<ion-menu [content]="nav">
+        <ion-content>
+          <ion-list>
+            <button ion-item (click)="onLoad(expensesPage)">
+              <ion-icon name="expenses" item-left></ion-icon>
+              Expenses
+            </button>
+            <button ion-item (click)="onLoad(statisticsPage)">
+              <ion-icon name="statistics" item-left></ion-icon>
+              Statistics
+            </button>
+          </ion-list>
+        </ion-content>
+      </ion-menu>
+      
+      <ion-nav [root]="tabsPage" #nav></ion-nav>
+      

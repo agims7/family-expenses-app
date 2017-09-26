@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Statystyki miesięcy</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h3 text-center>Wybierz miesiąc</h3>
+  <ion-list>
+    <button ion-item *ngFor="let month of polishMonth" [navPush]="monthStatisticPage"
+    [navParams]="month">
+      <ion-icon name="calendar" item-left></ion-icon>
+      <h3 class="months">{{ month }}</h3>
+    </button>
+  </ion-list>
+</ion-content>

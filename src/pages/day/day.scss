@@ -1,0 +1,17 @@
+page-day {
+    .money-header {
+        display: inline-block;
+    }
+    .all-money {
+        color: red;
+        float: right;
+    }
+    .box {
+        margin: 7px;
+        width: calc(100% - 14px);
+    }
+    .money {
+        text-align: right;
+        float: right;
+    }
+}

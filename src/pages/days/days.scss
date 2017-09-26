@@ -1,0 +1,23 @@
+page-days {
+    .list-item {
+        display: inline;
+    }
+    .spent {
+        float: right;
+        color: red;
+        h2 {
+            display: inline;
+        }
+    }
+    .box {
+        margin: 7px;
+        width: calc(100% - 14px);
+    }
+    .money-header {
+        display: inline-block;
+    }
+    .all-money {
+        color: red;
+        float: right;
+    }
+}

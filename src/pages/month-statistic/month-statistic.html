@@ -1,0 +1,63 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <span class="month">{{ selectedMonth }}</span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content *ngIf="!noData" padding>
+
+  <ion-card class="box">
+    <ion-card-header>
+      <h2 class="money-header">Wydane pieniadze w miesiacu:</h2>
+      <h2 class="money-header all-money">{{ allMonthlyMoneySpent }} zł</h2>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-card class="box">
+    <ion-card-header>
+      <h2 class="money-header">Wydane pieniadze na:</h2>
+    </ion-card-header>
+
+    <ion-item *ngFor="let category of expensesService.categories; let i = index">
+        <h3 class="money-header category-name">{{ category }}:</h3>
+        <h3 class="money-header all-money"> {{ expensesService.allMonthlyMoneySpentForCategories[i] }} zł</h3>
+      </ion-item>
+
+    <!-- <ion-item>
+      <h3 class="money-header">Rachunki:</h3>
+      <h3 class="money-header all-money"> {{ allMonthlyMoneySpentForBills }} zł</h3>
+    </ion-item>
+    <ion-item>
+      <h3 class="money-header">Dzieci:</h3>
+      <h3 class="money-header all-money">{{ allMonthlyMoneySpentForKids }} zł</h3>
+    </ion-item>
+    <ion-item>
+      <h3 class="money-header">Zakupy:</h3>
+      <h3 class="money-header all-money">{{ allMonthlyMoneySpentForShopping }} zł</h3>
+    </ion-item>
+    <ion-item>
+      <h3 class="money-header">Osobiste:</h3>
+      <h3 class="money-header all-money"> {{ allMonthlyMoneySpentForPersonal }} zł</h3>
+    </ion-item>
+    <ion-item>
+      <h3 class="money-header">Prezenty:</h3>
+      <h3 class="money-header all-money"> {{ allMonthlyMoneySpentForGifts }} zł</h3>
+    </ion-item> -->
+  </ion-card>
+
+  <canvas [ngClass]="{'chart': chartOpen}" id="myChart" width="0" height="0"></canvas>
+
+</ion-content>
+
+<ion-content *ngIf="noData" padding>
+  <ion-card class="box">
+    <ion-card-header>
+      <h2 class="money-header">Brak danych z tego miesiąca</h2>
+    </ion-card-header>
+  </ion-card>
+</ion-content>

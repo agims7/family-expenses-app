@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Wydatki dzienne</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card class="box">
+    <ion-card-header>
+      <h1 class="money-header">Dzienne wydatki:</h1>
+      <h1 class="money-header all-money">{{ allMoneySpent.toFixed(2) }} zł</h1>
+    </ion-card-header>
+  </ion-card>
+
+  <ion-card class="box" *ngFor="let expense of expenseListOfDay | async; let i = index">
+    <ion-card-header>
+      <h1>{{ i + 1 }}) {{ expense.expenseName }}</h1>
+    </ion-card-header>
+    <ion-card-content>
+      <h1 class="money">{{ expense.expenseValue }} zł</h1>
+      <p>{{ expense.expenseDescription }}</p>
+      <p>{{ showTime(expense.expenseDate) }}</p>
+    </ion-card-content>
+    <ion-row>
+      <ion-col text-right>
+        <button ion-button outline small color="primary" (click)="editExpense(expense.$key, expense.expenseName, expense.expenseDescription, expense.expenseValue, expense.expenseCategory)">Edytuj</button>
+      </ion-col>
+      <ion-col text-left>
+        <button ion-button outline small color="danger" (click)="deleteExpense(expense.$key)">Usuń</button>
+      </ion-col>
+    </ion-row>
+  </ion-card>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <button *ngIf="sortDateDown" class="box" ion-button icon-end small color="primary" (click)="dateAscending()">
+          Sortuj (data)
+          <ion-icon name="arrow-down"></ion-icon>
+        </button>
+        <button *ngIf="!sortDateDown" class="box" ion-button icon-end small color="primary" (click)="dateDescending()">
+          Sortuj (data)
+          <ion-icon name="arrow-up"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button *ngIf="sortPriceDown" class="box" ion-button icon-end small color="primary" (click)="priceAscending()">
+          Sortuj (cena)
+          <ion-icon name="arrow-up"></ion-icon>
+        </button>
+        <button *ngIf="!sortPriceDown" class="box" ion-button icon-end small color="primary" (click)="priceDescending()">
+          Sortuj (cena)
+          <ion-icon name="arrow-down"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col>
+        <button class="box" ion-button icon-end block color="primary" (click)="filter()">
+          Filtruj
+          <ion-icon name="settings"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

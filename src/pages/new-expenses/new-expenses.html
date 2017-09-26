@@ -1,0 +1,38 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Dodaj nowy wydatek</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <form #item="ngForm" (ngSubmit)="addExpenseItem(expenseItem)">
+    <ion-item>
+      <ion-label floating>Nazwa</ion-label>
+      <ion-input class="input-field" type="text" name="name" [(ngModel)]="expenseItem.expenseName" ngModel required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Opis</ion-label>
+      <ion-input class="input-field" type="text" name="description" [(ngModel)]="expenseItem.expenseDescription" ngModel required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Wydane (zł)</ion-label>
+      <ion-input class="input-field" type="number" name="value" [(ngModel)]="expenseItem.expenseValue" ngModel required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Kategoria</ion-label>
+      <ion-select interface="popover" name="category" [(ngModel)]="expenseItem.expenseCategory" ngModel required>
+        <ion-option *ngFor="let category of expensesService.categories" [value]="category">{{ category }}</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <div padding>
+      <button ion-button block [disabled]="!item.valid" type="submit">Dodaj</button>
+    </div>
+  </form>
+
+</ion-content>

@@ -1,0 +1,23 @@
+page-month-statistic {
+    .money-header {
+        display: inline-block;
+    }
+    .all-money {
+        color: red;
+        float: right;
+    }
+    .box {
+        margin: 7px;
+        width: calc(100% - 14px);
+    }
+    .chart {
+        width: 400px;
+        height: 400px;
+    }
+    .month {
+        text-transform: capitalize;
+    }
+    .category-name {
+        text-transform: capitalize;
+    }
+}

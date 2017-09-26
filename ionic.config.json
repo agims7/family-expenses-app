@@ -1,0 +1,8 @@
+{
+  "name": "ionic-wydatki",
+  "app_id": "66196c4b",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
