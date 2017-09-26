@@ -5,14 +5,14 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import * as moment from 'moment';
 import { ExpensesService } from "../../services/expenses";
 import { ExpenseItem } from '../../models/expense-item.interface';
-import { EditCategoriesPage } from '../edit-categories/edit-categories';
+import { CategoriesPage } from '../categories/categories';
 
 @Component({
   selector: 'page-new-expenses',
   templateUrl: 'new-expenses.html',
 })
 export class NewExpensesPage implements OnInit {
-  editCategoriesPage = EditCategoriesPage;
+  categoriesPage = CategoriesPage;
   public expenseItem = {} as ExpenseItem;
   public expenseItemsList: FirebaseListObservable<ExpenseItem[]>
 

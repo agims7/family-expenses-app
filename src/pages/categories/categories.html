@@ -22,9 +22,9 @@
   </form>
 
   <ion-list>
-      <ion-item ion-item *ngFor="let category of categoriesItemsList | async; let i = index">
+      <ion-item ion-item *ngFor="let category of categoriesItemsList | async">
         <h2 class="category-name">{{ category.name }}</h2>
-        <ion-icon name="trash" color="danger" item-end (click)="deleteCategory(category, i, category.$key)"></ion-icon>
+        <ion-icon name="trash" color="danger" item-end (click)="deleteCategory(category.$key)"></ion-icon>
         <ion-icon name="settings" color="primary" item-end (click)="editCategory()"></ion-icon>
       </ion-item>
     </ion-list>
