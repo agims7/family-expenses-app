@@ -14,7 +14,7 @@ import { ExpensesService } from "../../services/expenses";
 export class DayPage implements OnInit {
   private currentYear: string = moment().format('YYYY');
   public selectedMonth: string;
-  private dbList = 'expenseItems/' + this.currentYear;
+  private dbList = 'dydo/expenseItems/' + this.currentYear;
   public dayList;
   public expensesListArray: any = [];
   public expenseListOfDay: FirebaseListObservable<any[]>
@@ -116,7 +116,7 @@ export class DayPage implements OnInit {
   }
 
   dateAscending() {
-    this.expenseListOfDay = this.database.list('expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
       query: {
         orderByChild: 'expenseDate'
       }
@@ -126,7 +126,7 @@ export class DayPage implements OnInit {
   }
 
   dateDescending() {
-    this.expenseListOfDay = this.database.list('expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
       query: {
         orderByChild: 'expenseDate'
       }
@@ -136,7 +136,7 @@ export class DayPage implements OnInit {
   }
 
   priceAscending() {
-    this.expenseListOfDay = this.database.list('expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
       query: {
         orderByChild: 'expenseValue'
       }
@@ -146,7 +146,7 @@ export class DayPage implements OnInit {
   }
 
   priceDescending() {
-    this.expenseListOfDay = this.database.list('expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
       query: {
         orderByChild: 'expenseValue'
       }
@@ -194,22 +194,10 @@ export class DayPage implements OnInit {
     return moment.unix(time).format('LTS');
   }
 
-  // setRadioSigns() {
-  //   for (let category of this.expensesService.categories) {
-  //     this.radioSign.push(
-  //       {
-  //         name: category,
-  //         checked: false
-  //       }
-  //     )
-  //   }
-  //   console.log('this.radioSign ', this.radioSign)
-  // }
-
   ngOnInit() {
     this.dayList = this.navParams.data;
     this.expensesService.selectedDay = this.dayList.$key
-    this.dbList = 'expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
     this.expenseListOfDay = this.database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.expenseListOfDay.subscribe(x => {
       this.allMoneySpent = this.getFullSpentMoney(x);

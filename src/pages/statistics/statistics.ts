@@ -5,7 +5,6 @@ import * as moment from 'moment';
 
 
 import { MonthStatisticPage } from "../month-statistic/month-statistic";
-import { ExpensesService } from "../../services/expenses";
 
 @Component({
   selector: 'page-statistics',
@@ -22,7 +21,6 @@ export class StatisticsPage implements OnInit {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    public expensesService: ExpensesService,
     public database: AngularFireDatabase,
   ) {
   }

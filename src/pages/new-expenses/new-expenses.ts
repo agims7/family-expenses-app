@@ -38,7 +38,7 @@ export class NewExpensesPage implements OnInit {
   }
 
   addExpenseItem(expenseItem: ExpenseItem) {
-    this.expenseItemsList = this.database.list('expenseItems/' + this.getYear() + '/' + this.getMonth() + '/' + this.getDay());
+    this.expenseItemsList = this.database.list('dydo/expenseItems/' + this.getYear() + '/' + this.getMonth() + '/' + this.getDay());
     this.expenseItemsList.push({
       expenseName: this.expenseItem.expenseName,
       expenseDescription: this.expenseItem.expenseDescription,

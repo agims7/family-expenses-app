@@ -12,7 +12,7 @@ import Chart from 'chart.js';
 export class MonthStatisticPage implements OnInit {
   public selectedMonth;
   private currentYear: string = moment().format('YYYY');
-  private dbList = 'expenseItems/' + this.currentYear;
+  private dbList = 'dydo/expenseItems/' + this.currentYear;
   public daysList;
   public expenseListOfDays: FirebaseListObservable<any[]>
 
@@ -38,7 +38,7 @@ export class MonthStatisticPage implements OnInit {
   ngOnInit() {
     this.selectedMonth = this.navParams.data;
     this.daysList = this.selectedMonth;
-    this.dbList = 'expenseItems/' + this.currentYear + '/' + this.selectedMonth;
+    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth;
 
     this.expenseListOfDays = this.database.list(this.dbList);
     this.expenseListOfDays.subscribe(x => {
@@ -80,7 +80,7 @@ export class MonthStatisticPage implements OnInit {
 
   getDayMoneyByCategory(category) {
     for (let day of this.days) {
-      let listOfDay = this.database.list('expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day, {
+      let listOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day, {
         query: {
           orderByChild: 'expenseCategory',
           equalTo: category
@@ -102,7 +102,7 @@ export class MonthStatisticPage implements OnInit {
 
   getDayMoney() {
     for (let day of this.days) {
-      let databaseAddress = 'expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
+      let databaseAddress = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
       let listOfDay = this.database.list(databaseAddress);
       listOfDay.subscribe(x => {
         this.dayWithExpenses[day] = this.getFullSpentMoney(x);

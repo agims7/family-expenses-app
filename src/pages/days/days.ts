@@ -16,7 +16,7 @@ import { ExpensesService } from "../../services/expenses";
 export class DaysPage implements OnInit {
   dayPage = DayPage;
   private currentYear: string = moment().format('YYYY');
-  private dbList = 'expenseItems/' + this.currentYear;
+  private dbList = 'dydo/expenseItems/' + this.currentYear;
   public daysList;
   public expenseListOfDays: FirebaseListObservable<any[]>
   public days = [];
@@ -48,7 +48,7 @@ export class DaysPage implements OnInit {
 
   getDayMoney() {
     for (let day of this.days) {
-      let databaseAddress = 'expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + day;
+      let databaseAddress = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + day;
       let listOfDay = this.database.list(databaseAddress);
       listOfDay.subscribe(x => {
         this.dayWithExpenses[day] = this.getFullSpentMoney(x);
@@ -90,7 +90,7 @@ export class DaysPage implements OnInit {
     this.daysList = this.navParams.data;
     this.expensesService.selectedMonth = this.daysList.$key;
     this.getMonthNumber(this.daysList.$key);
-    this.dbList = 'expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth;
+    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth;
     this.expenseListOfDays = this.database.list(this.dbList);
     this.expenseListOfDays.subscribe(x => {
       this.getDays(x);

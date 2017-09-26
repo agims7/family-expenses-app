@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { ExpensesService } from "../../services/expenses";
 
 @Component({
   selector: 'page-categories',
@@ -17,19 +16,14 @@ export class CategoriesPage implements OnInit {
     public navCtrl: NavController,
     public navParams: NavParams,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
   ) {
   }
 
   ngOnInit() {
-    this.categoriesItemsList = this.database.list('categoriesItems');
+    this.categoriesItemsList = this.database.list('dydo/categoriesItems');
     this.categoriesItemsList.subscribe(x => {
       console.log(x);
     });
-  }
-
-  changeColor() {
-    console.log(this.color)
   }
 
   clearInput() {
