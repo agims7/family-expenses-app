@@ -20,4 +20,9 @@ page-month-statistic {
     .category-name {
         text-transform: capitalize;
     }
+    #chartdiv {
+        width: 100%;
+        height: 500px;
+        margin-bottom: 40px;
+      }
 }

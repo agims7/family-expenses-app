@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { ExpensesService } from "../../services/expenses";
 import * as moment from 'moment';
-import Chart from 'chart.js';
+
+declare var AmCharts: any;
 
 @Component({
   selector: 'page-month-statistic',
@@ -26,6 +27,21 @@ export class MonthStatisticPage implements OnInit {
   public categoriesDataTable = [];
   public categoriesColorTable = [];
   public categoriesLabelTable = [];
+
+  public categoriesTable = [];
+
+  public chart: any;
+
+  @HostListener('init')
+  handleInit(){
+    this.chart.legend.addListener("rollOverItem", this.handleRollOver);
+  }
+
+  @HostListener('rollOverSlice', ['$event'])
+  handleRollOver(event){
+    var wedge = event.dataItem.wedge.node;
+    wedge.parentNode.appendChild(wedge);
+  }
 
   constructor(
     public navCtrl: NavController,
@@ -130,32 +146,57 @@ export class MonthStatisticPage implements OnInit {
     this.categoriesColorTable = [];
     this.categoriesLabelTable = [];
     this.categoriesDataTable = [];
+
+    this.categoriesTable = []
+
     for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
+      this.categoriesTable.push({
+        "name": this.expensesService.categoriesData[i].name,
+        "value": this.expensesService.categoriesData[i].allMonthlyMoneySpent
+      })
       this.categoriesColorTable.push(this.expensesService.categoriesData[i].color);
-      this.categoriesLabelTable.push(this.expensesService.categoriesData[i].name);
-      this.categoriesDataTable.push(this.expensesService.categoriesData[i].allMonthlyMoneySpent);
+      // this.categoriesLabelTable.push(this.expensesService.categoriesData[i].name);
+      // this.categoriesDataTable.push(this.expensesService.categoriesData[i].allMonthlyMoneySpent);
     }
+    this.categoriesTable.splice(0, 1);
     this.categoriesColorTable.splice(0, 1);
-    this.categoriesLabelTable.splice(0, 1);
-    this.categoriesDataTable.splice(0, 1);
+    // this.categoriesLabelTable.splice(0, 1);
+    // this.categoriesDataTable.splice(0, 1);
+
+    console.log(this.categoriesTable)
   }
 
 
   setChart() {
     this.getChartInfo();
-    this.chartOpen = true;
-    var ctx = document.getElementById("myChart");
-    var myChart = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: this.categoriesLabelTable,
-        datasets: [{
-          backgroundColor: this.categoriesColorTable,
-          data: this.categoriesDataTable
-        }]
+    this.chart = AmCharts.makeChart("chartdiv", {
+      "type": "pie",
+      "language": "pl",
+      "dataProvider": this.categoriesTable,
+      "autoDisplay": true,
+      "valueField": "value",
+      "titleField": "name",
+      "colors": this.categoriesColorTable,
+      "addClassNames": true,
+      "innerRadius": "10%",
+      "labelRadius": -35,
+      "labelText": "[[percents]]% <br> [[name]]",
+      "marginTop": -50,
+      "marginBottom": -50,
+      "balloon": {
+        "fixedPosition": true
+      },
+      "legend": {
+        "position": "bottom",
+        "align": "center",
+        "autoMargins": true,
+        "fontSize": 11,
+        "valueText": "[[value]] zł",
+      },
+      "export": {
+        "enabled": false
       }
     });
   }
-
 
 }
