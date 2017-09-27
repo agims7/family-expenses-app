@@ -24,6 +24,8 @@ import { ExpensesService } from "../services/expenses";
 
 import { ColorPickerModule } from 'ngx-color-picker';
 
+import { Camera } from '@ionic-native/camera';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -64,6 +66,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ExpensesService,
+    Camera
   ]
 })
 export class AppModule {}

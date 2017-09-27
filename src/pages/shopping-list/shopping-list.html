@@ -8,7 +8,6 @@
 <ion-content padding>
   <button ion-button block (click)="addItem()">Dodaj</button>
   <ion-item-group>
-    <ion-item>
       <ion-grid>
         <ion-row class="header-row">
           <ion-col col-4 align-self-center>
@@ -54,6 +53,14 @@
 
       </ion-grid>
 
-    </ion-item>
+
+      <button ion-button block (click)="takePicture()">Take a Picture</button>
+      
+            Latest Picture:
+            <div *ngIf="base64Image">
+                <img [src]="base64Image.image"/>
+            </div>
+            
+
   </ion-item-group>
 </ion-content>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 
+import { Camera, CameraOptions } from '@ionic-native/camera';
+
 
 @Component({
   selector: 'page-shopping-list',
@@ -12,12 +14,36 @@ export class ShoppingListPage implements OnInit {
   public dbList;
   public shoppingListArray: any = [];
 
+  public base64Image = {
+    image: "",
+    name: ""
+  };
+  public options: any;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
-    public database: AngularFireDatabase
+    public database: AngularFireDatabase,
+    public camera: Camera
   ) {
+  }
+  
+
+  takePicture(){
+    const options: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+      this.base64Image.image = 'data:image/jpeg;base64,' + imageData;
+      this.base64Image.image = 'Zdjęcie';
+     }, (err) => {
+      console.log('error')
+     });
   }
 
   ngOnInit() {
