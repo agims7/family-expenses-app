@@ -24,10 +24,7 @@ export class MonthStatisticPage implements OnInit {
   public chartOpen: boolean = false;
   public noData: boolean = true;
 
-  public categoriesDataTable = [];
   public categoriesColorTable = [];
-  public categoriesLabelTable = [];
-
   public categoriesTable = [];
 
   public chart: any;
@@ -144,9 +141,6 @@ export class MonthStatisticPage implements OnInit {
 
   getChartInfo() {
     this.categoriesColorTable = [];
-    this.categoriesLabelTable = [];
-    this.categoriesDataTable = [];
-
     this.categoriesTable = []
 
     for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
@@ -155,13 +149,9 @@ export class MonthStatisticPage implements OnInit {
         "value": this.expensesService.categoriesData[i].allMonthlyMoneySpent
       })
       this.categoriesColorTable.push(this.expensesService.categoriesData[i].color);
-      // this.categoriesLabelTable.push(this.expensesService.categoriesData[i].name);
-      // this.categoriesDataTable.push(this.expensesService.categoriesData[i].allMonthlyMoneySpent);
     }
     this.categoriesTable.splice(0, 1);
     this.categoriesColorTable.splice(0, 1);
-    // this.categoriesLabelTable.splice(0, 1);
-    // this.categoriesDataTable.splice(0, 1);
 
     console.log(this.categoriesTable)
   }
@@ -179,7 +169,7 @@ export class MonthStatisticPage implements OnInit {
       "colors": this.categoriesColorTable,
       "addClassNames": true,
       "innerRadius": "10%",
-      "labelRadius": -35,
+      "labelRadius": -55,
       "labelText": "[[percents]]% <br> [[name]]",
       "marginTop": -50,
       "marginBottom": -50,

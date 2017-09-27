@@ -1,3 +1,24 @@
 page-shopping-list {
-
+    ion-col {
+        padding: 0 !important;
+        text-align: center;
+    }
+    ion-item,
+    .item-inner {
+        padding: 0 !important;
+        text-align: center;
+    }
+    
+    .checkbox  {
+        position: relative !important;
+        margin: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+    .header-row {
+    border-bottom: 1px solid black;
+    }
+    .header-left {
+        font-size: 20px !important;
+    }
 }
