@@ -1,0 +1,63 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Lista paragonów</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <button ion-button block color="primary" [navPush]="newReceiptPage">Dodaj paragon</button>
+
+  <ion-card class="box" *ngFor="let receipt of receiptsList | async; let i = index">
+    <ion-card-header>
+      <h1>{{ receipt.name }}</h1>
+    </ion-card-header>
+    <ion-card-content>
+      <h1 class="receipt-value">{{ expensesService.valueFixed(receipt.value) }} zł</h1>
+      <p>{{ receipt.description }}</p>
+      <p>{{ showTime(receipt.date) }}</p>
+      <button ion-button block small color="primary" (click)="showImage(receipt.$key, receipt.showImage)">Pokaż zdjęcie paragonu</button>
+      <img [src]="receipt.image" *ngIf="receipt.showImage" />
+      <ion-row>
+        <ion-col text-right>
+          <button ion-button outline small color="primary" (click)="editReceipt(receipt.$key, receipt.name, receipt.description, receipt.value)">Edytuj</button>
+        </ion-col>
+        <ion-col text-left>
+          <button ion-button outline small color="danger" (click)="receiptExpense(receipt.$key)">Usuń</button>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+  <!--   
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <button *ngIf="sortDateDown" class="box" ion-button icon-end small color="primary" (click)="dateAscending()">
+            Sortuj (data)
+            <ion-icon name="arrow-down"></ion-icon>
+          </button>
+          <button *ngIf="!sortDateDown" class="box" ion-button icon-end small color="primary" (click)="dateDescending()">
+            Sortuj (data)
+            <ion-icon name="arrow-up"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button *ngIf="sortPriceDown" class="box" ion-button icon-end small color="primary" (click)="priceAscending()">
+            Sortuj (cena)
+            <ion-icon name="arrow-up"></ion-icon>
+          </button>
+          <button *ngIf="!sortPriceDown" class="box" ion-button icon-end small color="primary" (click)="priceDescending()">
+            Sortuj (cena)
+            <ion-icon name="arrow-down"></ion-icon>
+          </button>
+        </ion-col>
+        <ion-col>
+          <button class="box" ion-button icon-end block color="primary" (click)="filter()">
+            Filtruj
+            <ion-icon name="settings"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
+
+</ion-content>

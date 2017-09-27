@@ -1,0 +1,42 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Dodaj nowy paragon</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <form #receipt="ngForm" (ngSubmit)="addExpenseItem(expenseItem)">
+    <ion-item>
+      <ion-label floating>Nazwa</ion-label>
+      <ion-input class="input-field" type="text" name="name" [(ngModel)]="receiptName" ngModel required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Opis</ion-label>
+      <ion-input class="input-field" type="text" name="description" [(ngModel)]="receiptDescription" ngModel required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Cena</ion-label>
+      <ion-input class="input-field" type="number" name="value" [(ngModel)]="receiptValue" ngModel required></ion-input>
+    </ion-item>
+
+    <ion-item [hidden]="!receiptImage">
+      <ion-label floating>Zdjęcie</ion-label>
+      <ion-input class="input-field" type="text" name="image" [(ngModel)]="receiptImage" ngModel required></ion-input>
+    </ion-item>
+
+    <button ion-button block (click)="takePicture()">Zrób zdjęcie paragonu</button>
+
+    <div padding>
+      <button ion-button block [disabled]="!receipt.valid" type="submit">Dodaj</button>
+    </div>
+  </form>
+
+  <!-- <div padding>
+             <button ion-button block [navPush]="categoriesPage">Edytuj kategorie</button>
+             </div> -->
+
+</ion-content>

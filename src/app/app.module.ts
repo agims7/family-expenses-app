@@ -19,6 +19,8 @@ import { MonthStatisticPage } from "../pages/month-statistic/month-statistic";
 import { CategoriesPage } from "../pages/categories/categories";
 import { EditCategoryPage } from "../pages/edit-category/edit-category";
 import { ShoppingListPage } from "../pages/shopping-list/shopping-list";
+import { ReceiptsPage } from "../pages/receipts/receipts";
+import { NewReceiptPage } from "../pages/new-receipt/new-receipt";
 
 import { ExpensesService } from "../services/expenses";
 
@@ -38,7 +40,9 @@ import { Camera } from '@ionic-native/camera';
     MonthStatisticPage,
     CategoriesPage,
     EditCategoryPage,
-    ShoppingListPage
+    ShoppingListPage,
+    ReceiptsPage,
+    NewReceiptPage
   ],
   imports: [
     BrowserModule,
@@ -59,7 +63,9 @@ import { Camera } from '@ionic-native/camera';
     MonthStatisticPage,
     CategoriesPage,
     EditCategoryPage,
-    ShoppingListPage
+    ShoppingListPage,
+    ReceiptsPage,
+    NewReceiptPage
   ],
   providers: [
     StatusBar,

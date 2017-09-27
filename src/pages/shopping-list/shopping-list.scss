@@ -12,8 +12,11 @@ page-shopping-list {
     .checkbox  {
         position: relative !important;
         margin: 0 !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
+        width: 100% !important;
+        display: inline-block !important;
+    }
+    .checkbox-icon {
+        left: 40% !important;
     }
     .header-row {
     border-bottom: 1px solid black;
