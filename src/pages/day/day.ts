@@ -34,6 +34,16 @@ export class DayPage implements OnInit {
 
   }
 
+  ngOnInit() {
+    this.dayList = this.navParams.data;
+    this.expensesService.selectedDay = this.dayList.$key
+    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+    this.expenseListOfDay = this.database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.expenseListOfDay.subscribe(x => {
+      this.allMoneySpent = this.getFullSpentMoney(x);
+    });
+  }
+
   getFullSpentMoney(data) {
     let allMoney: number = 0;
     for (let expense of data) {
@@ -192,16 +202,6 @@ export class DayPage implements OnInit {
 
   showTime(time) {
     return moment.unix(time).format('LTS');
-  }
-
-  ngOnInit() {
-    this.dayList = this.navParams.data;
-    this.expensesService.selectedDay = this.dayList.$key
-    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
-    this.expenseListOfDay = this.database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
-    this.expenseListOfDay.subscribe(x => {
-      this.allMoneySpent = this.getFullSpentMoney(x);
-    });
   }
 
 }

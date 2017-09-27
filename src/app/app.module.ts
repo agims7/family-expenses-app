@@ -16,8 +16,10 @@ import { DaysPage } from "../pages/days/days";
 import { DayPage } from "../pages/day/day";
 import { NewExpensesPage } from "../pages/new-expenses/new-expenses";
 import { MonthStatisticPage } from "../pages/month-statistic/month-statistic";
-
 import { CategoriesPage } from "../pages/categories/categories";
+import { EditCategoryPage } from "../pages/edit-category/edit-category";
+import { ShoppingListPage } from "../pages/shopping-list/shopping-list";
+
 import { ExpensesService } from "../services/expenses";
 
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -32,7 +34,9 @@ import { ColorPickerModule } from 'ngx-color-picker';
     DayPage,
     NewExpensesPage,
     MonthStatisticPage,
-    CategoriesPage
+    CategoriesPage,
+    EditCategoryPage,
+    ShoppingListPage
   ],
   imports: [
     BrowserModule,
@@ -51,7 +55,9 @@ import { ColorPickerModule } from 'ngx-color-picker';
     DayPage,
     NewExpensesPage,
     MonthStatisticPage,
-    CategoriesPage
+    CategoriesPage,
+    EditCategoryPage,
+    ShoppingListPage
   ],
   providers: [
     StatusBar,

@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { EditCategoryPage } from "../edit-category/edit-category";
 
 @Component({
   selector: 'page-categories',
   templateUrl: 'categories.html',
 })
 export class CategoriesPage implements OnInit {
+  editCategoryPage = EditCategoryPage;
   public newCategoryName: string;
   public color: string = '#ffffff';
   public categoriesItemsList: FirebaseListObservable<any[]>
@@ -21,9 +24,6 @@ export class CategoriesPage implements OnInit {
 
   ngOnInit() {
     this.categoriesItemsList = this.database.list('dydo/categoriesItems');
-    this.categoriesItemsList.subscribe(x => {
-      console.log(x);
-    });
   }
 
   clearInput() {

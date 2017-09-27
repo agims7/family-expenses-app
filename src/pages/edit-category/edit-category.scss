@@ -1,0 +1,38 @@
+page-edit-category {
+    .color-container {
+        padding-left: 16px;
+        padding-right: 0;
+        position: relative;
+        font-size: 1.6rem;
+        font-weight: normal;
+        text-transform: none;
+        color: #000;
+        background-color: #fff;
+        label {
+            margin: 24px 10px 8px 0;
+            display: inline-block;
+        }
+        .color-picker-input {
+            display: inline-block;
+            height: 2.8em;
+            width: calc(100% - 72px);
+            outline: none;
+            border: none;
+            border: 1px solid black;
+            border-radius: 4px;
+        }
+    }
+    color-picker {
+        .button-area {
+            padding: 0 16px 5px !important;
+            .color-picker-button {
+                background-color: #488aff;
+                color: white;
+                width: 47px;
+                height: 29px;
+                margin: 0 auto !important;
+                display: block !important;
+            }
+        }
+    }
+}
