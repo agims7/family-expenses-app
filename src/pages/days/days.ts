@@ -67,24 +67,24 @@ export class DaysPage implements OnInit {
 
   getMonthNumber(month) {
     switch (month) {
-      case ('styczeń'): {this.expensesService.selectedMonthNumber = 1; break;}
-      case ('luty'): {this.expensesService.selectedMonthNumber = 2; break;}
-      case ('marzec'): {this.expensesService.selectedMonthNumber = 3; break;}
-      case ('kwiecień'): {this.expensesService.selectedMonthNumber = 4; break;}
-      case ('maj'): {this.expensesService.selectedMonthNumber = 5; break;}
-      case ('czerwiec'): {this.expensesService.selectedMonthNumber = 6; break;}
-      case ('lipiec'): {this.expensesService.selectedMonthNumber = 7; break;}
-      case ('sierpień'): {this.expensesService.selectedMonthNumber = 8; break;}
-      case ('wrzesień'): {this.expensesService.selectedMonthNumber = 9; break;}
-      case ('październik'): {this.expensesService.selectedMonthNumber = 10; break;}
-      case ('listopad'): {this.expensesService.selectedMonthNumber = 11; break;}
-      case ('grudzień'): {this.expensesService.selectedMonthNumber = 12; break;}
+      case ('styczeń'): { this.expensesService.selectedMonthNumber = 1; break; }
+      case ('luty'): { this.expensesService.selectedMonthNumber = 2; break; }
+      case ('marzec'): { this.expensesService.selectedMonthNumber = 3; break; }
+      case ('kwiecień'): { this.expensesService.selectedMonthNumber = 4; break; }
+      case ('maj'): { this.expensesService.selectedMonthNumber = 5; break; }
+      case ('czerwiec'): { this.expensesService.selectedMonthNumber = 6; break; }
+      case ('lipiec'): { this.expensesService.selectedMonthNumber = 7; break; }
+      case ('sierpień'): { this.expensesService.selectedMonthNumber = 8; break; }
+      case ('wrzesień'): { this.expensesService.selectedMonthNumber = 9; break; }
+      case ('październik'): { this.expensesService.selectedMonthNumber = 10; break; }
+      case ('listopad'): { this.expensesService.selectedMonthNumber = 11; break; }
+      case ('grudzień'): { this.expensesService.selectedMonthNumber = 12; break; }
     }
   }
 
   monthNumber(d) {
     return (d < 10) ? '0' + d.toString() : d.toString();
-}
+  }
 
   ngOnInit() {
     this.daysList = this.navParams.data;

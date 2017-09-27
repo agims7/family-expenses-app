@@ -75,6 +75,10 @@ export class ExpensesService {
         public database: AngularFireDatabase
     ) { }
 
+    valueFixed(value: number) {
+        return value.toFixed(2);
+    }
+
     getCategories() {
         console.log('wykonano')
         this.dbList = 'dydo/categoriesItems/';

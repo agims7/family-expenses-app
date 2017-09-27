@@ -12,7 +12,7 @@
       <ion-card class="box">
         <ion-card-header>
           <h2 class="money-header">Miesięczne wydatki:</h2>
-          <h2 class="money-header all-money">{{ allMonthlyMoneySpent }} zł</h2>
+          <h2 class="money-header all-money">{{ expensesService.valueFixed(allMonthlyMoneySpent) }} zł</h2>
         </ion-card-header>
       </ion-card>
 
@@ -22,7 +22,7 @@
           <ion-icon name="calendar" item-left></ion-icon>
           <h2 class="list-item">{{ day.$key }}.{{ monthNumber(expensesService.selectedMonthNumber) }}</h2>
           <span class="list-item spent">
-            <h2>{{ dayWithExpenses[day.$key] }} zł</h2>
+            <h2>{{ expensesService.valueFixed(dayWithExpenses[day.$key]) }} zł</h2>
           </span>
         </button>
       </ion-list>

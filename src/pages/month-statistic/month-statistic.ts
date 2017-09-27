@@ -79,6 +79,7 @@ export class MonthStatisticPage implements OnInit {
   }
 
   getDayMoneyByCategory(category) {
+    this.createEmptyDaysObjects();
     for (let day of this.days) {
       let listOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day, {
         query: {
@@ -97,6 +98,12 @@ export class MonthStatisticPage implements OnInit {
           }
         }
       });
+    }
+  }
+
+  createEmptyDaysObjects() {
+    for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
+      this.expensesService.categoriesData[i].days = {};
     }
   }
 

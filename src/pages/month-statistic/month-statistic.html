@@ -14,7 +14,7 @@
   <ion-card class="box">
     <ion-card-header>
       <h2 class="money-header">Wydane pieniadze w miesiacu:</h2>
-      <h2 class="money-header all-money">{{ allMonthlyMoneySpent }} zł</h2>
+      <h2 class="money-header all-money">{{ expensesService.valueFixed(allMonthlyMoneySpent) }} zł</h2>
     </ion-card-header>
   </ion-card>
 
@@ -25,7 +25,7 @@
 
     <ion-item *ngFor="let category of expensesService.categoriesData; let i = index">
         <h3 class="money-header category-name">{{ category.name }}:</h3>
-        <h3 class="money-header all-money"> {{ category.allMonthlyMoneySpent }} zł</h3>
+        <h3 class="money-header all-money"> {{ expensesService.valueFixed(category.allMonthlyMoneySpent) }} zł</h3>
       </ion-item>
   </ion-card>
 

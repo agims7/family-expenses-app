@@ -8,7 +8,7 @@
   <ion-card class="box">
     <ion-card-header>
       <h1 class="money-header">Dzienne wydatki:</h1>
-      <h1 class="money-header all-money">{{ allMoneySpent.toFixed(2) }} zł</h1>
+      <h1 class="money-header all-money">{{ expensesService.valueFixed(allMoneySpent) }} zł</h1>
     </ion-card-header>
   </ion-card>
 
@@ -17,7 +17,7 @@
       <h1>{{ i + 1 }}) {{ expense.expenseName }}</h1>
     </ion-card-header>
     <ion-card-content>
-      <h1 class="money">{{ expense.expenseValue }} zł</h1>
+      <h1 class="money">{{ expensesService.valueFixed(expense.expenseValue) }} zł</h1>
       <p>{{ expense.expenseDescription }}</p>
       <p>{{ showTime(expense.expenseDate) }}</p>
     </ion-card-content>
