@@ -32,6 +32,17 @@ export class DaysPage implements OnInit {
 
   }
 
+  ngOnInit() {
+    this.daysList = this.navParams.data;
+    this.expensesService.selectedMonth = this.daysList.$key;
+    this.getMonthNumber(this.daysList.$key);
+    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth;
+    this.expenseListOfDays = this.database.list(this.dbList);
+    this.expenseListOfDays.subscribe(x => {
+      this.getDays(x);
+    });
+  }
+
   getMonthlySpentMoney() {
     this.allMonthlyMoneySpent = 0;
     for (let money in this.dayWithExpenses) {
@@ -84,17 +95,6 @@ export class DaysPage implements OnInit {
 
   monthNumber(d) {
     return (d < 10) ? '0' + d.toString() : d.toString();
-  }
-
-  ngOnInit() {
-    this.daysList = this.navParams.data;
-    this.expensesService.selectedMonth = this.daysList.$key;
-    this.getMonthNumber(this.daysList.$key);
-    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth;
-    this.expenseListOfDays = this.database.list(this.dbList);
-    this.expenseListOfDays.subscribe(x => {
-      this.getDays(x);
-    });
   }
 
 }

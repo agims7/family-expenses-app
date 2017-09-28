@@ -1,39 +1,44 @@
-import { DatabaseQuery } from 'angularfire2/database/interfaces';
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { NavController, NavParams } from 'ionic-angular';
+import { NgForm } from '@angular/forms';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import * as moment from 'moment';
-import { ReceiptsPage } from "../receipts/receipts";
 import { Camera, CameraOptions } from '@ionic-native/camera';
 
+
 @Component({
-  selector: 'page-new-receipt',
-  templateUrl: 'new-receipt.html',
+  selector: 'page-edit-receipt',
+  templateUrl: 'edit-receipt.html',
 })
-export class NewReceiptPage implements OnInit {
+export class EditReceiptPage implements OnInit {
   public dbList: any;
   public receiptsList: FirebaseListObservable<any[]>
-  public receiptName: string;
-  public receiptDescription: string;
-  public receiptValue: number;
+  private receiptKey: any;
+  private receipt: any;
   public receiptImage: string;
-  public receiptShowImage: boolean;
-  public receiptDate: number;
-
   public imageTaken: boolean = false;
 
   constructor(
-    public navCtrl: NavController,
+    public navCtrl: NavController, 
     public navParams: NavParams,
     public database: AngularFireDatabase,
     public camera: Camera
+    
   ) {
   }
 
   ngOnInit() {
+    this.receiptKey = this.navParams.data;
     this.dbList = 'dydo/receiptsItems/';
     this.receiptsList = this.database.list(this.dbList);
+    this.receiptsList.subscribe(data => {
+      console.log(data);
+      for (let receipt of data) {
+        if (receipt.$key === this.receiptKey) {
+          this.receipt = receipt;
+          console.log('rec ', this.receipt)
+        }
+      }
+    });
   }
 
   ionViewDidEnter() {
@@ -56,16 +61,12 @@ export class NewReceiptPage implements OnInit {
      });
   }
 
-  addReceipt() {
-    this.receiptsList.push({
-      date: moment().unix(),
-      description: this.receiptDescription,
-      image: this.receiptImage,
-      name: this.receiptName,
-      showImage: false,
-      value: Number(this.receiptValue)
-    });
-    this.navCtrl.push(ReceiptsPage);
+  editReceipt() {
+    console.log(this.receipt.$key)
+    // this.receiptsList.update(key, {
+    //   bought: !status
+    // });
+
   }
 
 }

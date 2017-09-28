@@ -3,4 +3,12 @@ page-receipts {
         text-align: right;
         float: right;
     }
+    .text,
+    .icon {
+        display: inline-block;
+    }
+    .icon {
+       margin-left: 10px;
+       cursor: pointer;
+    }
 }

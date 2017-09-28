@@ -1,0 +1,33 @@
+<ion-header>
+  
+    <ion-navbar color="primary">
+      <ion-title>Edytuj paragon</ion-title>
+    </ion-navbar>
+  </ion-header>
+  
+  
+  <ion-content padding>
+    <form #receipt="ngForm" (ngSubmit)="editReceipt()">
+      <ion-item>
+        <ion-label floating>Nazwa</ion-label>
+        <ion-input class="input-field" type="text" name="name" [(ngModel)]="receipt.name" ngModel required></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label floating>Opis</ion-label>
+        <ion-input class="input-field" type="text" name="description" [(ngModel)]="receipt.description" ngModel required></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label floating>Cena</ion-label>
+        <ion-input class="input-field" type="text" name="value" [(ngModel)]="receipt.value" ngModel required></ion-input>
+      </ion-item>
+  
+      <button ion-button block (click)="takePicture()">Zrób nowe zdjęcie paragonu</button>
+  
+      <div padding>
+        <button ion-button block [disabled]="!receipt.valid && !imageTaken" type="submit">Zapisz</button>
+      </div>
+    </form>
+  
+  </ion-content>

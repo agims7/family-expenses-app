@@ -43,7 +43,7 @@ export class NewExpensesPage implements OnInit {
       expenseValue: Number(this.expenseItem.expenseValue),
       expenseCategory: this.expenseItem.expenseCategory,
       expenseDate: moment().unix()
-    })    
+    });    
     this.expenseItem = {
       expenseName: null,
       expenseDescription: null,

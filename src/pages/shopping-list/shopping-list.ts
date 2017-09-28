@@ -8,8 +8,8 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 })
 export class ShoppingListPage implements OnInit {
   public bought: boolean;;
-  public dbList;
-  public shoppingListArray: any = [];
+  public dbList: any;
+  public shoppingListArray: FirebaseListObservable<any[]>
 
   constructor(
     public navCtrl: NavController,
@@ -65,6 +65,7 @@ export class ShoppingListPage implements OnInit {
       bought: !status
     });
   }
+  
   deleteItem(key: string) {
     this.shoppingListArray.remove(key);
   }

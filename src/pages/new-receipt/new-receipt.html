@@ -7,7 +7,7 @@
 
 
 <ion-content padding>
-  <form #receipt="ngForm" (ngSubmit)="addExpenseItem(expenseItem)">
+  <form #receipt="ngForm" (ngSubmit)="addReceipt()">
     <ion-item>
       <ion-label floating>Nazwa</ion-label>
       <ion-input class="input-field" type="text" name="name" [(ngModel)]="receiptName" ngModel required></ion-input>
@@ -23,20 +23,11 @@
       <ion-input class="input-field" type="number" name="value" [(ngModel)]="receiptValue" ngModel required></ion-input>
     </ion-item>
 
-    <ion-item [hidden]="!receiptImage">
-      <ion-label floating>Zdjęcie</ion-label>
-      <ion-input class="input-field" type="text" name="image" [(ngModel)]="receiptImage" ngModel required></ion-input>
-    </ion-item>
-
     <button ion-button block (click)="takePicture()">Zrób zdjęcie paragonu</button>
 
     <div padding>
-      <button ion-button block [disabled]="!receipt.valid" type="submit">Dodaj</button>
+      <button ion-button block [disabled]="!receipt.valid && !imageTaken" type="submit">Dodaj</button>
     </div>
   </form>
-
-  <!-- <div padding>
-             <button ion-button block [navPush]="categoriesPage">Edytuj kategorie</button>
-             </div> -->
 
 </ion-content>
