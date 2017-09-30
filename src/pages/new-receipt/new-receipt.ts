@@ -42,10 +42,32 @@ export class NewReceiptPage implements OnInit {
 
   takePicture(){
     const options: CameraOptions = {
-      quality: 100,
+      quality: 35,
+      correctOrientation: true,
+      saveToPhotoAlbum: true,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.CAMERA
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+      this.receiptImage = 'data:image/jpeg;base64,' + imageData;
+      this.imageTaken = true;
+     }, (err) => {
+      console.log('error')
+     });
+  }
+
+  takePicture2(){
+    const options: CameraOptions = {
+      quality: 35,
+      correctOrientation: true,
+      saveToPhotoAlbum: true,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
     }
 
     this.camera.getPicture(options).then((imageData) => {
