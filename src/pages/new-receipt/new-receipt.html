@@ -23,12 +23,12 @@
       <ion-input class="input-field" type="number" name="value" [(ngModel)]="receiptValue" ngModel required></ion-input>
     </ion-item>
 
-    <button ion-button block (click)="takePicture()">Zrób zdjęcie paragonu</button>
-    <button ion-button block (click)="takePicture2()">Zrób zdjęcie paragonu</button>
     
-
+    <button class="button" ion-button block (click)="takePicture()">Zrób zdjęcie paragonu</button>
+    <button class="button" ion-button block (click)="getPicture()">Wybierz zdjęcie z urządzenia</button>
+    
     <div padding>
-      <button ion-button block [disabled]="!receipt.valid && !imageTaken" type="submit">Dodaj</button>
+      <button ion-button block [disabled]="!imageTaken || !receipt.valid" type="submit">Dodaj</button>
     </div>
   </form>
 

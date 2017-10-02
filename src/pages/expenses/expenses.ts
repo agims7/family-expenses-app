@@ -19,7 +19,7 @@ export class ExpensesPage implements OnInit {
     public navCtrl: NavController,
     public database: AngularFireDatabase,
   ) {
-    this.expenseListOfMonths = database.list(this.dbList);
+    this.expenseListOfMonths = database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
   }
 
   ngOnInit() {

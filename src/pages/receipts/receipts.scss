@@ -3,12 +3,33 @@ page-receipts {
         text-align: right;
         float: right;
     }
+    .item {
+        padding-left: 0 !important;
+    }
+    .card-content {
+        padding: 10px 10px 5px !important;
+    }
     .text,
     .icon {
         display: inline-block;
     }
-    .icon {
-       margin-left: 10px;
-       cursor: pointer;
+    .icon-description {
+        width: 40%;
+    }
+    .icon-description {
+        font-size: 2rem;
+    }
+    .input-field {
+        width: 50%;
+        font-size: 2rem;
+        border-bottom: 1px solid rgb(200, 199, 204);
+    }
+    .date {
+        margin: 10px auto;
+    }
+    .time-middle {
+        text-align: center;
+        margin: 15px auto;
+        font-size: 2rem;
     }
 }

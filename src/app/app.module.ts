@@ -28,6 +28,9 @@ import { ExpensesService } from "../services/expenses";
 import { ColorPickerModule } from 'ngx-color-picker';
 
 import { Camera } from '@ionic-native/camera';
+import { EmailComposer } from '@ionic-native/email-composer';
+import { Base64ToGallery } from '@ionic-native/base64-to-gallery';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 @NgModule({
   declarations: [
@@ -75,7 +78,10 @@ import { Camera } from '@ionic-native/camera';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ExpensesService,
-    Camera
+    Camera,
+    EmailComposer,
+    Base64ToGallery,
+    PhotoViewer
   ]
 })
 export class AppModule {}

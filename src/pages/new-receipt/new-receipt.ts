@@ -31,6 +31,7 @@ export class NewReceiptPage implements OnInit {
   ) {
   }
 
+
   ngOnInit() {
     this.dbList = 'dydo/receiptsItems/';
     this.receiptsList = this.database.list(this.dbList);
@@ -42,13 +43,15 @@ export class NewReceiptPage implements OnInit {
 
   takePicture(){
     const options: CameraOptions = {
-      quality: 35,
+      quality: 30,
       correctOrientation: true,
       saveToPhotoAlbum: true,
+      targetWidth: 600,
+      targetHeight: 600,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      sourceType: this.camera.PictureSourceType.CAMERA
+      sourceType: this.camera.PictureSourceType.CAMERA,
     }
 
     this.camera.getPicture(options).then((imageData) => {
@@ -59,12 +62,32 @@ export class NewReceiptPage implements OnInit {
      });
   }
 
-  takePicture2(){
+  getPicture(){
     const options: CameraOptions = {
-      quality: 35,
+      quality: 30,
       correctOrientation: true,
       saveToPhotoAlbum: true,
+      targetWidth: 600,
+      targetHeight: 600,
       destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
+    }
+
+    this.camera.getPicture(options).then((imageData) => {
+      this.receiptImage = 'data:image/jpeg;base64,' + imageData;
+      this.imageTaken = true;
+     }, (err) => {
+      console.log('error')
+     });
+  }
+
+  downloadPicture(){
+    const options: CameraOptions = {
+      correctOrientation: true,
+      saveToPhotoAlbum: true,
+      destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
       sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
