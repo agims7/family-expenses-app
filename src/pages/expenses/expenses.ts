@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { ExpenseItem } from '../../models/expense-item.interface';
 import { MonthsPage } from "../months/months";
+import { ExpensesService } from "../../services/expenses";
 
 @Component({
   selector: 'page-expenses',
@@ -11,13 +12,14 @@ import { MonthsPage } from "../months/months";
 export class ExpensesPage implements OnInit {
   monthsPage = MonthsPage;
   private dbList = 'dydo/expenseItems/';
-  public expenseListOfMonths: FirebaseListObservable<any[]>
+  public expenseListOfYears: FirebaseListObservable<any[]>
 
   constructor(
     public navCtrl: NavController,
     public database: AngularFireDatabase,
+    public expensesService: ExpensesService
   ) {
-    this.expenseListOfMonths = database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.expenseListOfYears = database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
   }
 
   ngOnInit() {
@@ -25,3 +27,6 @@ export class ExpensesPage implements OnInit {
   }
 
 }
+
+
+

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { NewReceiptPage } from "../new-receipt/new-receipt";
-import { EditReceiptPage } from "../edit-receipt/edit-receipt";
 import * as moment from 'moment';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 
@@ -14,7 +13,6 @@ import { ExpensesService } from "../../services/expenses";
 })
 export class ReceiptsPage implements OnInit {
   newReceiptPage = NewReceiptPage;
-  editReceiptPage = EditReceiptPage;
   public receiptsList: FirebaseListObservable<any[]>
   public dbList;
 

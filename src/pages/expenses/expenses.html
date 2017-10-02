@@ -9,7 +9,7 @@
     <ion-content padding>
       <h3 text-center>Wybierz rok</h3>
       <ion-list>
-        <button ion-item *ngFor="let years of expenseListOfMonths | async; let i = index" [navPush]="monthsPage" [navParams]="years">
+        <button ion-item *ngFor="let years of expenseListOfYears | async; let i = index" [navPush]="monthsPage" [navParams]="years">
           <ion-icon name="calendar" item-left></ion-icon>
           <h3 class="years">{{ years.$key }}</h3>
         </button>

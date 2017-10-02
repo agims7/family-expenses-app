@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
+import { Subscription } from 'rxjs/Subscription';
 import "rxjs/add/operator/map";
 
 import { ExpenseItem } from '../../models/expense-item.interface';
@@ -12,12 +13,12 @@ import { ExpensesService } from "../../services/expenses";
   templateUrl: 'day.html',
 })
 export class DayPage implements OnInit {
-  private currentYear: string = moment().format('YYYY');
   public selectedMonth: string;
-  private dbList = 'dydo/expenseItems/' + this.currentYear;
+  private dbList;
   public dayList;
   public expensesListArray: any = [];
   public expenseListOfDay: FirebaseListObservable<any[]>
+  public expenseListSubscription: Subscription;
   public allMoneySpent: number;
   public equal: string;
 
@@ -34,12 +35,17 @@ export class DayPage implements OnInit {
 
   }
 
+  ionViewDidLeave() {
+    console.log('leave');
+    this.expensesService.safeUnsubscribe(this.expenseListSubscription);
+  }
+
   ngOnInit() {
     this.dayList = this.navParams.data;
     this.expensesService.selectedDay = this.dayList.$key
-    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+    this.dbList = 'dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
     this.expenseListOfDay = this.database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
-    this.expenseListOfDay.subscribe(x => {
+    this.expenseListSubscription = this.expenseListOfDay.subscribe(x => {
       this.allMoneySpent = this.getFullSpentMoney(x);
     });
   }
@@ -126,7 +132,7 @@ export class DayPage implements OnInit {
   }
 
   dateAscending() {
-    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
       query: {
         orderByChild: 'expenseDate'
       }
@@ -136,7 +142,7 @@ export class DayPage implements OnInit {
   }
 
   dateDescending() {
-    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
       query: {
         orderByChild: 'expenseDate'
       }
@@ -146,7 +152,7 @@ export class DayPage implements OnInit {
   }
 
   priceAscending() {
-    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
       query: {
         orderByChild: 'expenseValue'
       }
@@ -156,7 +162,7 @@ export class DayPage implements OnInit {
   }
 
   priceDescending() {
-    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
       query: {
         orderByChild: 'expenseValue'
       }
@@ -180,13 +186,13 @@ export class DayPage implements OnInit {
         this.equal = this.expensesService.categoriesData[data].name;
         this.setChecked(data)
         if (data == 0) {
-          this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+          this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
             query: {
               orderByChild: 'expenseCategory'
             }
           });
         } else {
-          this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
+          this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
             query: {
               orderByChild: 'expenseCategory',
               equalTo: this.equal

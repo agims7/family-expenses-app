@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
 import * as moment from 'moment';
 
@@ -16,17 +17,16 @@ export class MonthStatisticPage implements OnInit {
   private dbList = 'dydo/expenseItems/' + this.currentYear;
   public daysList;
   public expenseListOfDays: FirebaseListObservable<any[]>
-
+  public expenseListSubscription: Subscription;
+  public listOfDaySubscription: Subscription;
+  public listOfDayTwoSubscription: Subscription;
   public allMonthlyMoneySpent: number;
   public dayWithExpenses = {};
   public days = [];
-
   public chartOpen: boolean = false;
   public noData: boolean = true;
-
   public categoriesColorTable = [];
   public categoriesTable = [];
-
   public chart: any;
 
   @HostListener('init')
@@ -48,13 +48,21 @@ export class MonthStatisticPage implements OnInit {
   ) {
   }
 
+  ionViewDidLeave() {
+    console.log('leave');
+    this.expensesService.safeUnsubscribe(this.expenseListSubscription);
+    this.expensesService.safeUnsubscribe(this.listOfDaySubscription);
+    this.expensesService.safeUnsubscribe(this.listOfDayTwoSubscription);
+    
+  }
+
   ngOnInit() {
     this.selectedMonth = this.navParams.data;
     this.daysList = this.selectedMonth;
     this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth;
 
     this.expenseListOfDays = this.database.list(this.dbList);
-    this.expenseListOfDays.subscribe(x => {
+    this.expenseListSubscription = this.expenseListOfDays.subscribe(x => {
       if (x == null) {
         this.noData = true;
         return;
@@ -100,7 +108,7 @@ export class MonthStatisticPage implements OnInit {
           equalTo: category
         }
       });
-      listOfDay.subscribe(x => {
+      this.listOfDaySubscription = listOfDay.subscribe(x => {
         for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
           if (category == this.expensesService.categoriesData[i].name) {
             this.expensesService.categoriesData[i].days[day] = this.getFullSpentMoney(x);
@@ -124,7 +132,7 @@ export class MonthStatisticPage implements OnInit {
     for (let day of this.days) {
       let databaseAddress = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
       let listOfDay = this.database.list(databaseAddress);
-      listOfDay.subscribe(x => {
+      this.listOfDayTwoSubscription = listOfDay.subscribe(x => {
         this.dayWithExpenses[day] = this.getFullSpentMoney(x);
         this.getMonthlySpentMoney();
       });

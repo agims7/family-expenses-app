@@ -9,22 +9,20 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 export class ShoppingListPage implements OnInit {
   public bought: boolean;;
   public dbList: any;
-  public shoppingListArray: FirebaseListObservable<any[]>
+  public shoppingListArray: FirebaseListObservable<any[]>;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
     public database: AngularFireDatabase
-  ) {
+    ) {
   }
+
 
   ngOnInit() {
     this.dbList = 'dydo/shoppingItems/';
     this.shoppingListArray = this.database.list(this.dbList)
-    this.shoppingListArray.subscribe(x => {
-      console.log(x);
-    });
   }
 
   addItem() {

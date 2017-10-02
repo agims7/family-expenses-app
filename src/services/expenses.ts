@@ -30,4 +30,15 @@ export class ExpensesService {
           });
     }
 
+    safeUnsubscribe(subscription) {
+        try {
+            subscription.unsubscribe();
+        }
+        catch (err) {
+            if (typeof subscription !== 'undefined') {
+                console.log('unsubscribe error: ', err);
+            }
+        }
+    }
+
 }

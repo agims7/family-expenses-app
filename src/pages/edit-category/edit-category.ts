@@ -34,7 +34,6 @@ export class EditCategoryPage implements OnInit {
 
   changeName() {
     this.categoryName = this.categoryName.toLowerCase();
-    console.log(this.categoryName)
   }
 
   setDbList() {

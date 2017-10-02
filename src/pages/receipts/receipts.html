@@ -6,7 +6,7 @@
 
 <ion-content padding>
   <ion-item>
-    <button ion-button block color="primaryDark" [navPush]="newReceiptPage">Dodaj paragon</button>
+    <button class="add-button"ion-button block color="primaryDark" [navPush]="newReceiptPage">Dodaj paragon</button>
   </ion-item>
 
   <ion-card class="box" *ngFor="let receipt of receiptsList | async; let i = index">

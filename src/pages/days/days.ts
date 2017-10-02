@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { ExpenseItem } from '../../models/expense-item.interface';
 import { DayPage } from "../day/day";
 
+import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
 
 @Component({
@@ -19,6 +20,7 @@ export class DaysPage implements OnInit {
   private dbList = 'dydo/expenseItems/' + this.currentYear;
   public daysList;
   public expenseListOfDays: FirebaseListObservable<any[]>
+  public expenseListSubscription: Subscription;
   public days = [];
   public dayWithExpenses = {};
   public allMonthlyMoneySpent: number;
@@ -32,13 +34,18 @@ export class DaysPage implements OnInit {
 
   }
 
+  ionViewDidLeave() {
+    console.log('leave');
+    this.expensesService.safeUnsubscribe(this.expenseListSubscription);
+  }
+
   ngOnInit() {
     this.daysList = this.navParams.data;
     this.expensesService.selectedMonth = this.daysList.$key;
     this.getMonthNumber(this.daysList.$key);
     this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth;
     this.expenseListOfDays = this.database.list(this.dbList);
-    this.expenseListOfDays.subscribe(x => {
+    this.expenseListSubscription = this.expenseListOfDays.subscribe(x => {
       this.getDays(x);
     });
   }

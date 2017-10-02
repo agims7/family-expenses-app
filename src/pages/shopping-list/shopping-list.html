@@ -42,8 +42,6 @@
         <ion-col col-3 align-self-center>
           <ion-item>
             <ion-checkbox class="checkbox" (ngModelChange)="changeItemStatus(item.$key, item.bought)" [(ngModel)]="item.bought"></ion-checkbox>
-            <!-- <ion-label class="label" *ngIf="item.bought === false">Tak</ion-label>
-            <ion-label class="label" *ngIf="item.bought === true">Nie</ion-label> -->
           </ion-item>
         </ion-col>
         <ion-col col-2 align-self-center>
