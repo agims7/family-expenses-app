@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { EditCategoryPage } from "../edit-category/edit-category";
 
@@ -18,6 +18,7 @@ export class CategoriesPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public alertCtrl: AlertController,
     public database: AngularFireDatabase,
   ) {
   }
@@ -44,6 +45,22 @@ export class CategoriesPage implements OnInit {
   }
 
   deleteCategory(key) {
-    this.categoriesItemsList.remove(key);
+    const alert = this.alertCtrl.create({
+      title: 'Usuwanie kategorii',
+      message: 'Czy na pewno chcesz usunąć tą kategorie?',
+      buttons: [
+        {
+          text: 'Tak',
+          handler: () => {
+            this.categoriesItemsList.remove(key);
+          }
+        },
+        {
+          text: 'Nie',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
   }
 }

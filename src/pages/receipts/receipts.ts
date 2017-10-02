@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { NewReceiptPage } from "../new-receipt/new-receipt";
 import * as moment from 'moment';
@@ -21,6 +21,7 @@ export class ReceiptsPage implements OnInit {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public alertCtrl: AlertController,
     public database: AngularFireDatabase,
     public expensesService: ExpensesService,
     private photoViewer: PhotoViewer
@@ -34,7 +35,7 @@ export class ReceiptsPage implements OnInit {
   ngOnInit() {
     this.dbList = 'dydo/receiptsItems/';
     this.receiptsList = this.database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
-}
+  }
 
   showImage(key: string) {
     this.receiptsList.update(key, {
@@ -53,7 +54,23 @@ export class ReceiptsPage implements OnInit {
   }
 
   deleteReceipt(key: string) {
-    this.receiptsList.remove(key);
+    const alert = this.alertCtrl.create({
+      title: 'Usuwanie paragonu',
+      message: 'Czy na pewno chcesz usunąć ten paragon?',
+      buttons: [
+        {
+          text: 'Tak',
+          handler: () => {
+            this.receiptsList.remove(key);
+          }
+        },
+        {
+          text: 'Nie',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
   }
 
   saveEdition(key, name, value, description) {
