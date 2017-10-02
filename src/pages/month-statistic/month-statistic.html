@@ -12,9 +12,9 @@
 <ion-content *ngIf="!noData" padding>
 
   <ion-card class="box">
-    <ion-card-header>
-      <h2 class="money-header">Wydane pieniadze w miesiacu:</h2>
-      <h2 class="money-header all-money">{{ expensesService.valueFixed(allMonthlyMoneySpent) }} zł</h2>
+    <ion-card-header class="header-box">
+      <h2 class="money-header big-text">Wydane pieniadze:</h2>
+      <h2 class="money-header big-text all-money">{{ expensesService.valueFixed(allMonthlyMoneySpent) }} zł</h2>
     </ion-card-header>
   </ion-card>
 

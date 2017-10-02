@@ -1,0 +1,17 @@
+<ion-header>
+  
+    <ion-navbar color="primary">
+      <ion-title>Lista wydatkow</ion-title>
+    </ion-navbar>
+  </ion-header>
+
+
+  <ion-content padding>
+    <h3 text-center>Wybierz miesiąc</h3>
+    <ion-list>
+      <button ion-item *ngFor="let months of expenseListOfMonths | async; let i = index" [navPush]="daysPage" [navParams]="months">
+        <ion-icon name="calendar" item-left></ion-icon>
+        <h3 class="months">{{ months.$key }}</h3>
+      </button>
+    </ion-list>
+  </ion-content>

@@ -7,6 +7,7 @@ export class ExpensesService {
     private currentYear: string = moment().format('YYYY');
     public selectedMonth;
     public selectedMonthNumber: number;
+    public selectedYear: number;
     public selectedDay;
     public categoriesData;
     public categoriesDataObservable: FirebaseListObservable<any[]>;
@@ -25,7 +26,6 @@ export class ExpensesService {
         this.dbList = 'dydo/categoriesItems/';
         this.categoriesDataObservable = this.database.list(this.dbList);
         this.categoriesDataObservable.subscribe(data => {
-            console.log(data)
             this.categoriesData = data;
           });
     }

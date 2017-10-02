@@ -12,6 +12,7 @@ import { MyApp } from './app.component';
 import { TabsPage } from '../pages/tabs/tabs';
 import { StatisticsPage } from "../pages/statistics/statistics";
 import { ExpensesPage } from "../pages/expenses/expenses";
+import { MonthsPage } from "../pages/months/months";
 import { DaysPage } from "../pages/days/days";
 import { DayPage } from "../pages/day/day";
 import { NewExpensesPage } from "../pages/new-expenses/new-expenses";
@@ -38,6 +39,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     TabsPage,
     StatisticsPage,
     ExpensesPage,
+    MonthsPage,
     DaysPage,
     DayPage,
     NewExpensesPage,
@@ -62,6 +64,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     TabsPage,
     StatisticsPage,
     ExpensesPage,
+    MonthsPage,
     DaysPage,
     DayPage,
     NewExpensesPage,

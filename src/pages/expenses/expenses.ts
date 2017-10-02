@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import * as moment from 'moment';
 import { ExpenseItem } from '../../models/expense-item.interface';
-import { DaysPage } from "../days/days";
+import { MonthsPage } from "../months/months";
 
 @Component({
   selector: 'page-expenses',
   templateUrl: 'expenses.html',
 })
 export class ExpensesPage implements OnInit {
-  daysPage = DaysPage;
-  private currentYear: string = moment().format('YYYY');
-  private dbList = 'dydo/expenseItems/' + this.currentYear;
+  monthsPage = MonthsPage;
+  private dbList = 'dydo/expenseItems/';
   public expenseListOfMonths: FirebaseListObservable<any[]>
 
   constructor(

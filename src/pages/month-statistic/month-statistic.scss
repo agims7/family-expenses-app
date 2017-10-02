@@ -2,6 +2,9 @@ page-month-statistic {
     .money-header {
         display: inline-block;
     }
+    .big-text {
+        font-size: 2rem;
+    }
     .all-money {
         color: red;
         float: right;
@@ -9,6 +12,9 @@ page-month-statistic {
     .box {
         margin: 7px;
         width: calc(100% - 14px);
+    }
+    .header-box {
+        padding: 20px 10px 14px !important;
     }
     .chart {
         width: 400px;
