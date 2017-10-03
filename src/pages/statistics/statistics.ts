@@ -19,7 +19,7 @@ export class StatisticsPage {
   public dbList;
 
   // public dateFrom: string = moment().startOf('year').format('YYYY-MM-DD'); // do zmiany
-  public dateFrom: string = moment("2017-09-01").format('YYYY-MM-DD');
+  public dateFrom: string = moment().startOf('month').format('YYYY-MM-DD');
   public dateTo: string = moment().endOf('month').format('YYYY-MM-DD');
 
   constructor(
