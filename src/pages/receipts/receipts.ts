@@ -36,7 +36,6 @@ export class ReceiptsPage {
   }
 
   ionViewDidLeave() {
-    console.log('leave');
     this.expensesService.safeUnsubscribe(this.receiptsListSubscription);
   }
 

@@ -43,7 +43,6 @@ export class DayPage {
   }
 
   ionViewDidLeave() {
-    console.log('leave');
     this.expensesService.safeUnsubscribe(this.expenseListSubscription);
   }
 

@@ -24,4 +24,17 @@ page-shopping-list {
     .header-left {
         font-size: 20px !important;
     }
+    .row {
+        border-bottom: 1px solid #cccccc;
+    }
+    .label-md {
+        margin: 2px 0 !important;
+    }
+    ion-icon {
+        font-size: 1.8em;
+    }
+    .checkbox-icon {
+        width: 20px !important;
+        height: 20px !important;
+    }
 }

@@ -1,5 +1,5 @@
 import { DatabaseQuery } from 'angularfire2/database/interfaces';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
@@ -11,7 +11,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
   selector: 'page-new-receipt',
   templateUrl: 'new-receipt.html',
 })
-export class NewReceiptPage implements OnInit {
+export class NewReceiptPage {
   public dbList: any;
   public receiptsList: FirebaseListObservable<any[]>
   public receiptName: string;
@@ -29,15 +29,11 @@ export class NewReceiptPage implements OnInit {
     public camera: Camera
   ) {
   }
-
-
-  ngOnInit() {
-    this.dbList = 'dydo/receiptsItems/';
-    this.receiptsList = this.database.list(this.dbList);
-  }
-
+  
   ionViewDidEnter() {
     this.imageTaken = false;
+    this.dbList = 'dydo/receiptsItems/';
+    this.receiptsList = this.database.list(this.dbList);
   }
 
   takePicture() {

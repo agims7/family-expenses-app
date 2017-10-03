@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs/Subscription';
   selector: 'page-categories',
   templateUrl: 'categories.html',
 })
-export class CategoriesPage implements OnInit {
+export class CategoriesPage {
   editCategoryPage = EditCategoryPage;
   public newCategoryName: string;
   public color: string = '#ffffff';
@@ -29,7 +29,7 @@ export class CategoriesPage implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.categoriesItemsList = this.expensesService.getItemsList(this.dbList);
     this.categoriesItemsListSubscription = this.categoriesItemsList.subscribe(() => {
       this.showSpinner = false

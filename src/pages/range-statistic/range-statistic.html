@@ -1,21 +1,48 @@
 <ion-header>
-    
-      <ion-navbar>
-        <ion-title>
-          <span class="month">Statystyki zakresu</span>
-        </ion-title>
-      </ion-navbar>
-    
-    </ion-header>
+
+  <ion-navbar>
+    <ion-title>
+      <span class="month">Statystyki zakresu</span>
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
 
 
 <ion-content padding>
+  <loader *ngIf="showSpinner"></loader>
 
+  <div *ngIf="!showSpinner">
     <ion-card class="box">
-        <ion-card-header class="header-box">
-          <h2 class="money-header big-text">Wydane pieniadze:</h2>
-          <h2 class="money-header big-text all-money">{{ expensesService.valueFixed(allSpentMoney) }} zł</h2>
+      <ion-card-header class="header-box">
+        <h2 class="money-header big-text">Wydane pieniadze:</h2>
+        <h2 class="money-header big-text all-money">{{ expensesService.valueFixed(allSpentMoney) }} zł</h2>
+      </ion-card-header>
+    </ion-card>
+
+    <div>
+      <ion-card class="box">
+        <ion-card-header>
+          <h2 class="money-header">Wydane pieniadze na:</h2>
         </ion-card-header>
+
+        <ion-item class="row" *ngFor="let category of categoriesAllSpentMoney; let i = index">
+          <h3 class="money-header category-name">{{ category.name }}:</h3>
+          <h3 class="money-header all-money">{{ expensesService.valueFixed(category.allMoney) }} zł</h3>
+        </ion-item>
       </ion-card>
+      <div id="chartdiv"></div>
+    </div>
+  </div>
 
 </ion-content>
+
+
+<!-- <div *ngIf="noData">
+  <ion-card class="box">
+    <ion-card-header>
+      <h2 class="money-header">Brak danych z tego miesiąca</h2>
+    </ion-card-header>
+  </ion-card>
+</div>
+</div> -->

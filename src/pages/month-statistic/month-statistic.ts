@@ -24,8 +24,6 @@ export class MonthStatisticPage {
   public dayWithExpenses = {};
   public days = [];
   public chartOpen: boolean = false;
-  public categoriesColorTable = [];
-  public categoriesTable = [];
   public chart: any;
   public showSpinner: boolean = true;
   public noData: boolean = true;
@@ -50,7 +48,6 @@ export class MonthStatisticPage {
   }
 
   ionViewDidLeave() {
-    console.log('leave');
     this.expensesService.safeUnsubscribe(this.expenseListSubscription);
     this.expensesService.safeUnsubscribe(this.listOfDaySubscription);
     this.expensesService.safeUnsubscribe(this.listOfDayTwoSubscription);
@@ -145,32 +142,16 @@ export class MonthStatisticPage {
     return allMoney;
   }
 
-  getChartInfo() {
-    this.categoriesColorTable = [];
-    this.categoriesTable = []
-
-    for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
-      this.categoriesTable.push({
-        "name": this.expensesService.categoriesData[i].name,
-        "value": this.expensesService.categoriesData[i].allMonthlyMoneySpent
-      })
-      this.categoriesColorTable.push(this.expensesService.categoriesData[i].color);
-    }
-    this.categoriesTable.splice(0, 1);
-    this.categoriesColorTable.splice(0, 1);
-  }
-
-
   setChart() {
-    this.getChartInfo();
+    this.expensesService.getChartInfoMonths();
     this.chart = AmCharts.makeChart("chartdiv", {
       "type": "pie",
       "language": "pl",
-      "dataProvider": this.categoriesTable,
+      "dataProvider": this.expensesService.categoriesTable,
       "autoDisplay": true,
       "valueField": "value",
       "titleField": "name",
-      "colors": this.categoriesColorTable,
+      "colors": this.expensesService.categoriesColorTable,
       "addClassNames": true,
       "innerRadius": "10%",
       "labelRadius": "-40%",

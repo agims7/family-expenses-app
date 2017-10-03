@@ -30,7 +30,6 @@ export class NewExpensesPage {
   }
 
   ionViewDidLeave() {
-    console.log('leave');
     this.expensesService.safeUnsubscribe(this.categoriesDataListSubscription);
   }
 

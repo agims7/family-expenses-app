@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
@@ -9,7 +9,7 @@ import { CategoriesPage } from '../categories/categories';
   selector: 'page-edit-category',
   templateUrl: 'edit-category.html',
 })
-export class EditCategoryPage implements OnInit {
+export class EditCategoryPage {
   public categoryName: string;
   public categoryColor: string;
   public categoryKey: string;
@@ -24,7 +24,7 @@ export class EditCategoryPage implements OnInit {
   ) {
   }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.setDbList();
     this.selectedCategory = this.navParams.data;
     this.categoryName = this.selectedCategory.name;

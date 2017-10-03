@@ -12,17 +12,18 @@ export class ExpensesService {
     public categoriesData;
     public categoriesDataObservable: FirebaseListObservable<any[]>;
     public dbList: string;
-
+    public categoriesColorTable = [];
+    public categoriesTable = [];
 
     constructor(
         public database: AngularFireDatabase
     ) { }
 
-    getItemsList( path, query = {} ): FirebaseListObservable<any[]> {
+    getItemsList(path, query = {}): FirebaseListObservable<any[]> {
         return this.database.list(path, {
-          query: query
+            query: query
         });
-      }
+    }
 
     valueFixed(value: any) {
         return Number(value).toFixed(2);
@@ -37,6 +38,21 @@ export class ExpensesService {
                 console.log('unsubscribe error: ', err);
             }
         }
+    }
+
+    getChartInfoMonths() {
+        this.categoriesColorTable = [];
+        this.categoriesTable = []
+
+        for (let i = 0; i < this.categoriesData.length; i++) {
+            this.categoriesTable.push({
+                "name": this.categoriesData[i].name,
+                "value": this.categoriesData[i].allMonthlyMoneySpent
+            })
+            this.categoriesColorTable.push(this.categoriesData[i].color);
+        }
+        this.categoriesTable.splice(0, 1);
+        this.categoriesColorTable.splice(0, 1);
     }
 
 }

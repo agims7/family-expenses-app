@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
@@ -9,7 +9,7 @@ import { MonthStatisticPage } from "../month-statistic/month-statistic";
   selector: 'page-statistics',
   templateUrl: 'statistics.html',
 })
-export class StatisticsPage implements OnInit {
+export class StatisticsPage {
   rangeStatisticPage = RangeStatisticPage;
   monthStatisticPage = MonthStatisticPage;
   public expenseFullList: FirebaseListObservable<any[]>
@@ -27,11 +27,6 @@ export class StatisticsPage implements OnInit {
     public navParams: NavParams,
     public database: AngularFireDatabase,
   ) {
-  }
-
-
-  ngOnInit() {
-    console.log('start', this.dateFrom, this.dateTo)
   }
 
 }

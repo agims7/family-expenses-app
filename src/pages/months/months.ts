@@ -29,7 +29,6 @@ export class MonthsPage {
   }
 
   ionViewDidLeave() {
-    console.log('leave');
     this.expensesService.safeUnsubscribe(this.expenseListOfMonthsSubscription);
   }
 

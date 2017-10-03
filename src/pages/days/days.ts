@@ -37,7 +37,6 @@ export class DaysPage implements OnInit {
   }
 
   ionViewDidLeave() {
-    console.log('leave');
     this.expensesService.safeUnsubscribe(this.expenseListSubscription);
   }
 
@@ -94,7 +93,7 @@ export class DaysPage implements OnInit {
     for (let expense of data) {
       allMoney += Number(expense.expenseValue);
     }
-    return allMoney;
+    return Number(allMoney);
   }
 
   getMonthNumber(month) {

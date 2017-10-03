@@ -3,6 +3,9 @@ import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
+import * as _ from 'lodash';
+
+declare var AmCharts: any;
 
 @Component({
   selector: 'page-range-statistic',
@@ -28,17 +31,17 @@ export class RangeStatisticPage {
   public dbList: string;
   public dbMonthsList: string;
   public dbDaysList: string;
-  public statisticYearsListSubscription: Subscription;
   public statisticMonthsListtSubscription: Subscription;
   public statisticDaysListtSubscription: Subscription;
   public noData: boolean = true;
   public monthsDays = [];
-
+  public chart: any;
   public categories: any = [];
   public categoriesLength: number;
-
   public allSpentMoney: number = 0;
   public categoriesAllSpentMoney: any = [];
+  public categoriesTable: any = [];
+  public showSpinner: boolean = true;
 
   constructor(
     public navCtrl: NavController,
@@ -49,8 +52,6 @@ export class RangeStatisticPage {
   }
 
   ionViewDidLeave() {
-    console.log('leave');
-    this.expensesService.safeUnsubscribe(this.statisticYearsListSubscription);
     this.expensesService.safeUnsubscribe(this.statisticMonthsListtSubscription);
     this.expensesService.safeUnsubscribe(this.statisticDaysListtSubscription);
   }
@@ -64,13 +65,15 @@ export class RangeStatisticPage {
     this.getSelectedMonths();
     this.getSelectedDays();
     this.getMoneySpent();
-    console.log('years:', this.yearsRange, 'months:', this.monthsRange)
-    console.log('first day / last day: ', this.firstDay, this.lastDay)
   }
 
   getCategories() {
     for (var category of this.expensesService.categoriesData) {
       this.categories.push(category.name);
+      this.categoriesAllSpentMoney.push({
+        allMoney: 0,
+        name: category.name
+      });
     }
     this.categoriesLength = this.categories.length;
   }
@@ -119,15 +122,13 @@ export class RangeStatisticPage {
     for (let year of this.yearsRange) {
       for (let month of this.monthsRange) {
         this.dbMonthsList = 'dydo/expenseItems/' + year + '/' + this.getMonthFromNumber(month);
-        console.log(this.dbMonthsList)
         this.statisticMonthsList = this.expensesService.getItemsList(this.dbMonthsList);
         this.statisticMonthsListtSubscription = this.statisticMonthsList.subscribe(data => {
-          console.log(data);
           this.getDays(data, month, year);
         });
       }
     }
-  }
+    } 
 
   getDays(data, month, year) {
     let monthName = this.getMonthFromNumber(month)
@@ -147,26 +148,23 @@ export class RangeStatisticPage {
         this.getDayMoney(day)
         this.monthsDays[monthName].push(day.$key)
       }
-    }
+    }    
   }
 
   getDayMoney(day) {
     for (let expenses in day) {
-      console.log(expenses)
       let money = day[expenses].expenseValue;
       this.allSpentMoney = this.allSpentMoney + Number(money);
-      // console.log(money, this.allSpentMoney)
-      // console.log(day[expenses]);
       for (let i = 0; i < this.categoriesLength; i++) {
-        let name = day[expenses].expenseCategory;
-        console.log(name, day.$key, this.categories[i], day[expenses].expenseValue)
+         let name = day[expenses].expenseCategory;
         if (name === this.categories[i]) {
-          this.categoriesAllSpentMoney[name] =+ Number(money);
+          this.categoriesAllSpentMoney[i].allMoney += Number(money);
         }
       }
     }
-    console.log(' this.categoriesAllSpentMoney',  this.categoriesAllSpentMoney);
-  }
+    this.showSpinner = false
+    this.setChart();
+    }
 
 
   getMonthFromNumber(monthIndex) {
@@ -184,6 +182,53 @@ export class RangeStatisticPage {
       case (11): { return 'listopad'; }
       case (12): { return 'grudzień'; }
     }
+  }
+
+  getChartInfoRange() {
+    this.expensesService.categoriesColorTable = [];
+    this.categoriesTable = []
+
+    for (let i = 0; i < this.categories.length; i++) {
+        this.categoriesTable.push({
+            "name": this.categoriesAllSpentMoney[i].name,
+            "value": this.expensesService.valueFixed(this.categoriesAllSpentMoney[i].allMoney)
+        });
+        this.expensesService.categoriesColorTable.push(this.expensesService.categoriesData[i].color);
+    }
+    this.categoriesTable.splice(0, 1);
+    this.expensesService.categoriesColorTable.splice(0, 1);
+}
+
+  setChart() {
+    this.getChartInfoRange();
+    this.chart = AmCharts.makeChart("chartdiv", {
+      "type": "pie",
+      "language": "pl",
+      "dataProvider": this.categoriesTable,
+      "autoDisplay": true,
+      "valueField": "value",
+      "titleField": "name",
+      "colors": this.expensesService.categoriesColorTable,
+      "addClassNames": true,
+      "innerRadius": "10%",
+      "labelRadius": "-40%",
+      "labelText": "[[percents]]% <br> [[name]]",
+      "marginTop": -50,
+      "marginBottom": -50,
+      "balloon": {
+        "fixedPosition": true
+      },
+      "legend": {
+        "position": "bottom",
+        "align": "center",
+        "autoMargins": true,
+        "fontSize": 11,
+        "valueText": "[[value]] zł",
+      },
+      "export": {
+        "enabled": false
+      }
+    });
   }
 
 }

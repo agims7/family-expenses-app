@@ -25,7 +25,6 @@ export class ShoppingListPage {
   }
 
   ionViewDidLeave() {
-    console.log('leave');
     this.expensesService.safeUnsubscribe(this.shoppingListSubscription);
   }
 

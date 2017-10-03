@@ -27,7 +27,6 @@ export class ExpensesPage {
   }
 
   ionViewDidLeave() {
-    console.log('leave');
     this.expensesService.safeUnsubscribe(this.expenseListOfYearsSubscription);
   }
 

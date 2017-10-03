@@ -35,7 +35,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-row *ngFor="let item of shoppingListArray | async">
+        <ion-row class="row" *ngFor="let item of shoppingListArray | async">
           <ion-col col-4 align-self-center>
             <ion-item text-wrap>{{ item.name }}</ion-item>
           </ion-col>
