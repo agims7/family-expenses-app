@@ -18,7 +18,6 @@ export class NewReceiptPage implements OnInit {
   public receiptDescription: string;
   public receiptValue: number;
   public receiptImage: string;
-  public receiptShowImage: boolean;
   public receiptDate: number;
   public showSpinner: boolean = false;
   public imageTaken: boolean = false;
@@ -96,7 +95,6 @@ export class NewReceiptPage implements OnInit {
       description: this.receiptDescription,
       image: this.receiptImage,
       name: this.receiptName,
-      showImage: false,
       value: Number(this.receiptValue)
     });
     promise

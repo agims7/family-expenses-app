@@ -14,6 +14,7 @@ import { ExpensesService } from "../../services/expenses";
 export class ReceiptsPage {
   newReceiptPage = NewReceiptPage;
   public receiptsList: FirebaseListObservable<any[]>
+  public receiptsListLength: number;
   public dbList;
   public sortDateDown: boolean = true;
   public sortPriceDown: boolean = true;
@@ -21,6 +22,8 @@ export class ReceiptsPage {
   public receiptsListSubscription: Subscription;
   public noData: boolean = true;
   public showSpinner: boolean = true;
+
+  public selectedIndex: any = [];
 
   constructor(
     public navCtrl: NavController,
@@ -41,6 +44,8 @@ export class ReceiptsPage {
     this.dbList = 'dydo/receiptsItems/';
     this.receiptsList = this.expensesService.getItemsList(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.receiptsListSubscription = this.receiptsList.subscribe((data) => {
+      this.receiptsListLength = data.length;
+      this.createSelectedIndexObject();
       this.showSpinner = false
       if (data == null) {
         this.noData = true;
@@ -54,22 +59,25 @@ export class ReceiptsPage {
         }
       }
     });
+
+  }
+
+  createSelectedIndexObject() {
+    for (let i = 0; i < this.receiptsListLength; i++) {
+      this.selectedIndex.push({index: null})
+    }
   }
 
   showImageFullScreen(image, text) {
     this.photoViewer.show(image, text);
   }
 
-  showImage(key: string) {
-    this.receiptsList.update(key, {
-      showImage: true
-    });
+  showImage(index: number) {
+    this.selectedIndex[index].index = index;
   }
 
-  hideImage(key: string) {
-    this.receiptsList.update(key, {
-      showImage: false
-    });
+  hideImage(index: number) {
+    this.selectedIndex[index].index = null;
   }
 
   showTime(time) {

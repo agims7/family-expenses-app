@@ -35,11 +35,11 @@
 
         <p class="date" [ngClass]="{'time-middle': edit}">{{ showTime(receipt.date) }}</p>
 
-        <button *ngIf="!receipt.showImage && !edit" ion-button block small color="primary" (click)="showImage(receipt.$key)">Pokaż zdjęcie paragonu</button>
+        <button *ngIf="selectedIndex[i].index !== i" ion-button block small color="primary" (click)="showImage(i)">Pokaż zdjęcie paragonu</button>
 
-        <button *ngIf="receipt.showImage && !edit" ion-button block small color="primary" (click)="hideImage(receipt.$key)">Ukryj zdjęcie paragonu</button>
+        <button *ngIf="selectedIndex[i].index === i" ion-button block small color="primary" (click)="hideImage(i)">Ukryj zdjęcie paragonu</button>
 
-        <img [src]="receipt.image" *ngIf="receipt.showImage" (click)="showImageFullScreen(receipt.image, receipt.name)" />
+        <img [src]="receipt.image" *ngIf="selectedIndex[i].index === i" (click)="showImageFullScreen(receipt.image, receipt.name)" />
         <ion-row>
           <ion-col text-right>
             <button *ngIf="!edit" ion-button outline small color="primary" (click)="editReceipt()">Edytuj</button>
