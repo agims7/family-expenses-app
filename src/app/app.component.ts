@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -15,7 +15,7 @@ import { ExpensesService } from "../services/expenses";
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp implements OnInit {
+export class MyApp {
   rootPage:any = ExpensesPage;
   tabsPage = TabsPage;
   @ViewChild('nav') nav: NavController;
@@ -25,7 +25,7 @@ export class MyApp implements OnInit {
     private menuCtrl: MenuController, 
     statusBar: StatusBar, 
     splashScreen: SplashScreen,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
   ) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -40,8 +40,5 @@ export class MyApp implements OnInit {
     this.menuCtrl.close();
   }
 
-  ngOnInit() {
-    this.expensesService.getCategories();
-  }
 }
 

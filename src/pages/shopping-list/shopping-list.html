@@ -6,52 +6,57 @@
 
 
 <ion-content padding>
-  <button ion-button block (click)="addItem()">Dodaj</button>
-  <ion-item-group>
-    <ion-grid>
-      <ion-row class="header-row">
-        <ion-col col-4 align-self-center>
-          <ion-item>
-            <p class="header-text">Nazwa</p>
-          </ion-item>
-        </ion-col>
-        <ion-col col-3 align-self-center>
-          <ion-item>
-            <p class="header-text">Ilość</p>
-          </ion-item>
-        </ion-col>
-        <ion-col col-3 align-self-center>
-          <ion-item>
-            <p class="header-text">Kupione</p>
-          </ion-item>
-        </ion-col>
-        <ion-col col-2 align-self-center>
-          <ion-item>
-            <p class="header-text">Usuń</p>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+  <loader *ngIf="showSpinner"></loader>
+  
+  <div *ngIf="!showSpinner">
+    <button ion-button block (click)="addItem()">Dodaj</button>
+    <ion-item-group>
+      <ion-grid>
+        <ion-row class="header-row">
+          <ion-col col-4 align-self-center>
+            <ion-item>
+              <p class="header-text">Nazwa</p>
+            </ion-item>
+          </ion-col>
+          <ion-col col-3 align-self-center>
+            <ion-item>
+              <p class="header-text">Ilość</p>
+            </ion-item>
+          </ion-col>
+          <ion-col col-3 align-self-center>
+            <ion-item>
+              <p class="header-text">Kupione</p>
+            </ion-item>
+          </ion-col>
+          <ion-col col-2 align-self-center>
+            <ion-item>
+              <p class="header-text">Usuń</p>
+            </ion-item>
+          </ion-col>
+        </ion-row>
 
-      <ion-row *ngFor="let item of shoppingListArray | async">
-        <ion-col col-4 align-self-center>
-          <ion-item text-wrap>{{ item.name }}</ion-item>
-        </ion-col>
-        <ion-col col-3 align-self-center>
-          <ion-item text-wrap>{{ item.amount }}</ion-item>
-        </ion-col>
-        <ion-col col-3 align-self-center>
-          <ion-item>
-            <ion-checkbox class="checkbox" (ngModelChange)="changeItemStatus(item.$key, item.bought)" [(ngModel)]="item.bought"></ion-checkbox>
-          </ion-item>
-        </ion-col>
-        <ion-col col-2 align-self-center>
-          <ion-item>
-            <ion-icon name="trash" color="danger" (click)="deleteItem(item.$key)"></ion-icon>
-          </ion-item>
-        </ion-col>
-      </ion-row>
+        <ion-row *ngFor="let item of shoppingListArray | async">
+          <ion-col col-4 align-self-center>
+            <ion-item text-wrap>{{ item.name }}</ion-item>
+          </ion-col>
+          <ion-col col-3 align-self-center>
+            <ion-item text-wrap>{{ item.amount }}</ion-item>
+          </ion-col>
+          <ion-col col-3 align-self-center>
+            <ion-item>
+              <ion-checkbox class="checkbox" (ngModelChange)="changeItemStatus(item.$key, item.bought)" [(ngModel)]="item.bought"></ion-checkbox>
+            </ion-item>
+          </ion-col>
+          <ion-col col-2 align-self-center>
+            <ion-item>
+              <ion-icon name="trash" color="danger" (click)="deleteItem(item.$key)"></ion-icon>
+            </ion-item>
+          </ion-col>
+        </ion-row>
 
-    </ion-grid>
+      </ion-grid>
 
-  </ion-item-group>
+    </ion-item-group>
+
+  </div>
 </ion-content>

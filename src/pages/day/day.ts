@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
@@ -12,7 +12,7 @@ import { ExpensesService } from "../../services/expenses";
   selector: 'page-day',
   templateUrl: 'day.html',
 })
-export class DayPage implements OnInit {
+export class DayPage {
   public selectedMonth: string;
   private dbList;
   public dayList;
@@ -21,6 +21,8 @@ export class DayPage implements OnInit {
   public expenseListSubscription: Subscription;
   public allMoneySpent: number;
   public equal: string;
+  public showSpinner: boolean = true;
+  public noData: boolean = true;
 
   public sortDateDown: boolean = true;
   public sortPriceDown: boolean = true;
@@ -40,15 +42,28 @@ export class DayPage implements OnInit {
     this.expensesService.safeUnsubscribe(this.expenseListSubscription);
   }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.dayList = this.navParams.data;
     this.expensesService.selectedDay = this.dayList.$key
     this.dbList = 'dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
-    this.expenseListOfDay = this.database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
-    this.expenseListSubscription = this.expenseListOfDay.subscribe(x => {
-      this.allMoneySpent = this.getFullSpentMoney(x);
+    this.expenseListOfDay = this.expensesService.getItemsList(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.expenseListSubscription = this.expenseListOfDay.subscribe((data) => {
+      this.showSpinner = false
+      if (data == null) {
+        this.noData = true;
+        return;
+      } else {
+        if (data.length < 1) {
+          this.noData = true;
+          return;
+        } else {
+          this.allMoneySpent = this.getFullSpentMoney(data);
+          this.noData = false;
+        }
+      }
     });
   }
+
 
   getFullSpentMoney(data) {
     let allMoney: number = 0;

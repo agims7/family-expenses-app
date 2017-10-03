@@ -3,6 +3,8 @@ import { NgForm } from '@angular/forms';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { EditCategoryPage } from "../edit-category/edit-category";
+import { ExpensesService } from "../../services/expenses";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'page-categories',
@@ -13,6 +15,9 @@ export class CategoriesPage implements OnInit {
   public newCategoryName: string;
   public color: string = '#ffffff';
   public categoriesItemsList: FirebaseListObservable<any[]>
+  public categoriesItemsListSubscription: Subscription;
+  public dbList: string = 'dydo/categoriesItems';
+  public showSpinner: boolean = true;
   public categoriesTable;
 
   constructor(
@@ -20,11 +25,15 @@ export class CategoriesPage implements OnInit {
     public navParams: NavParams,
     public alertCtrl: AlertController,
     public database: AngularFireDatabase,
+    public expensesService: ExpensesService
   ) {
   }
 
   ngOnInit() {
-    this.categoriesItemsList = this.database.list('dydo/categoriesItems');
+    this.categoriesItemsList = this.expensesService.getItemsList(this.dbList);
+    this.categoriesItemsListSubscription = this.categoriesItemsList.subscribe(() => {
+      this.showSpinner = false
+    });
   }
 
   clearInput() {

@@ -1,28 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { ExpensesService } from "../../services/expenses";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'page-shopping-list',
   templateUrl: 'shopping-list.html',
 })
-export class ShoppingListPage implements OnInit {
+export class ShoppingListPage {
   public bought: boolean;;
   public dbList: any;
   public shoppingListArray: FirebaseListObservable<any[]>;
+  public shoppingListSubscription: Subscription;
+  public showSpinner: boolean = true;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
-    public database: AngularFireDatabase
+    public database: AngularFireDatabase,
+    public expensesService: ExpensesService
     ) {
   }
 
+  ionViewDidLeave() {
+    console.log('leave');
+    this.expensesService.safeUnsubscribe(this.shoppingListSubscription);
+  }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.dbList = 'dydo/shoppingItems/';
-    this.shoppingListArray = this.database.list(this.dbList)
+    this.shoppingListArray = this.expensesService.getItemsList(this.dbList)
+    this.shoppingListSubscription = this.shoppingListArray.subscribe((data) => {
+      this.showSpinner = false
+    });
   }
 
   addItem() {

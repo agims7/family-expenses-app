@@ -24,6 +24,8 @@ export class DaysPage implements OnInit {
   public days = [];
   public dayWithExpenses = {};
   public allMonthlyMoneySpent: number;
+  public showSpinner: boolean = true;
+  public noData: boolean = true;
 
   constructor(
     public navParams: NavParams,
@@ -44,9 +46,21 @@ export class DaysPage implements OnInit {
     this.expensesService.selectedMonth = this.daysList.$key;
     this.getMonthNumber(this.daysList.$key);
     this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth;
-    this.expenseListOfDays = this.database.list(this.dbList);
-    this.expenseListSubscription = this.expenseListOfDays.subscribe(x => {
-      this.getDays(x);
+    this.expenseListOfDays = this.expensesService.getItemsList(this.dbList)
+    this.expenseListSubscription = this.expenseListOfDays.subscribe(data => {
+      this.showSpinner = false
+      if (data == null) {
+        this.noData = true;
+        return;
+      } else {
+        if (data.length < 1) {
+          this.noData = true;
+          return;
+        } else {
+          this.getDays(data);
+          this.noData = false;
+        }
+      }
     });
   }
 

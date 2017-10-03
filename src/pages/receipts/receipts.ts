@@ -1,22 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { NewReceiptPage } from "../new-receipt/new-receipt";
 import * as moment from 'moment';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
-
+import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
 
 @Component({
   selector: 'page-receipts',
   templateUrl: 'receipts.html',
 })
-export class ReceiptsPage implements OnInit {
+export class ReceiptsPage {
   newReceiptPage = NewReceiptPage;
   public receiptsList: FirebaseListObservable<any[]>
   public dbList;
-
+  public sortDateDown: boolean = true;
+  public sortPriceDown: boolean = true;
   public edit: boolean = false;
+  public receiptsListSubscription: Subscription;
+  public noData: boolean = true;
+  public showSpinner: boolean = true;
 
   constructor(
     public navCtrl: NavController,
@@ -28,13 +32,32 @@ export class ReceiptsPage implements OnInit {
   ) {
   }
 
-  showImageFullScreen(image, text) {
-    this.photoViewer.show(image, text);
+  ionViewDidLeave() {
+    console.log('leave');
+    this.expensesService.safeUnsubscribe(this.receiptsListSubscription);
   }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.dbList = 'dydo/receiptsItems/';
-    this.receiptsList = this.database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.receiptsList = this.expensesService.getItemsList(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.receiptsListSubscription = this.receiptsList.subscribe((data) => {
+      this.showSpinner = false
+      if (data == null) {
+        this.noData = true;
+        return;
+      } else {
+        if (data.length < 1) {
+          this.noData = true;
+          return;
+        } else {
+          this.noData = false;
+        }
+      }
+    });
+  }
+
+  showImageFullScreen(image, text) {
+    this.photoViewer.show(image, text);
   }
 
   showImage(key: string) {
@@ -84,6 +107,42 @@ export class ReceiptsPage implements OnInit {
 
   editReceipt() {
     this.edit = !this.edit;
+  }
+
+  dateAscending() {
+    this.receiptsList = this.database.list('dydo/receiptsItems/', {
+      query: {
+        orderByChild: 'date'
+      }
+    });
+    this.sortDateDown = false;
+  }
+
+  dateDescending() {
+    this.receiptsList = this.database.list('dydo/receiptsItems/', {
+      query: {
+        orderByChild: 'date'
+      }
+    }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.sortDateDown = true;
+  }
+
+  priceAscending() {
+    this.receiptsList = this.database.list('dydo/receiptsItems/', {
+      query: {
+        orderByChild: 'value'
+      }
+    });
+    this.sortPriceDown = false;
+  }
+
+  priceDescending() {
+    this.receiptsList = this.database.list('dydo/receiptsItems/', {
+      query: {
+        orderByChild: 'value'
+      }
+    }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.sortPriceDown = true;
   }
 
 }

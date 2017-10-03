@@ -7,7 +7,8 @@
 
 
 <ion-content padding>
-  <form #receipt="ngForm" (ngSubmit)="addReceipt()">
+  <loader *ngIf="showSpinner"></loader>
+  <form *ngIf="!showSpinner" #receipt="ngForm" (ngSubmit)="addReceipt()">
     <ion-item>
       <ion-label floating>Nazwa</ion-label>
       <ion-input class="input-field" type="text" name="name" [(ngModel)]="receiptName" ngModel required></ion-input>
@@ -23,10 +24,14 @@
       <ion-input class="input-field" type="number" name="value" [(ngModel)]="receiptValue" ngModel required></ion-input>
     </ion-item>
 
-    
+    <ion-item>
+      <ion-label>Dodane zdjęcie {{ imageTaken }} </ion-label>
+      <ion-checkbox item-right color="primary" [checked]="imageTaken" disabled="true"></ion-checkbox>
+    </ion-item>
+
     <button class="button" ion-button block (click)="takePicture()">Zrób zdjęcie paragonu</button>
     <button class="button" ion-button block (click)="getPicture()">Wybierz zdjęcie z urządzenia</button>
-    
+
     <div padding>
       <button ion-button block [disabled]="!imageTaken || !receipt.valid" type="submit">Dodaj</button>
     </div>

@@ -20,7 +20,7 @@ export class NewReceiptPage implements OnInit {
   public receiptImage: string;
   public receiptShowImage: boolean;
   public receiptDate: number;
-
+  public showSpinner: boolean = false;
   public imageTaken: boolean = false;
 
   constructor(
@@ -41,13 +41,14 @@ export class NewReceiptPage implements OnInit {
     this.imageTaken = false;
   }
 
-  takePicture(){
+  takePicture() {
+    this.showSpinner = true;
     const options: CameraOptions = {
-      quality: 30,
+      quality: 80,
       correctOrientation: true,
       saveToPhotoAlbum: true,
-      targetWidth: 600,
-      targetHeight: 600,
+      targetWidth: 700,
+      targetHeight: 700,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
@@ -57,18 +58,21 @@ export class NewReceiptPage implements OnInit {
     this.camera.getPicture(options).then((imageData) => {
       this.receiptImage = 'data:image/jpeg;base64,' + imageData;
       this.imageTaken = true;
-     }, (err) => {
-      console.log('error')
-     });
+      this.showSpinner = false;
+    }, (err) => {
+      console.log('error');
+      this.showSpinner = false;
+    });
   }
 
-  getPicture(){
+  getPicture() {
+    this.showSpinner = true;
     const options: CameraOptions = {
-      quality: 30,
+      quality: 80,
       correctOrientation: true,
       saveToPhotoAlbum: true,
-      targetWidth: 600,
-      targetHeight: 600,
+      targetWidth: 700,
+      targetHeight: 700,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
@@ -78,31 +82,16 @@ export class NewReceiptPage implements OnInit {
     this.camera.getPicture(options).then((imageData) => {
       this.receiptImage = 'data:image/jpeg;base64,' + imageData;
       this.imageTaken = true;
-     }, (err) => {
-      console.log('error')
-     });
-  }
-
-  downloadPicture(){
-    const options: CameraOptions = {
-      correctOrientation: true,
-      saveToPhotoAlbum: true,
-      destinationType: this.camera.DestinationType.FILE_URI,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
-    }
-
-    this.camera.getPicture(options).then((imageData) => {
-      this.receiptImage = 'data:image/jpeg;base64,' + imageData;
-      this.imageTaken = true;
-     }, (err) => {
-      console.log('error')
-     });
+      this.showSpinner = false;
+    }, (err) => {
+      console.log('error');
+      this.showSpinner = false;
+    });
   }
 
   addReceipt() {
-    this.receiptsList.push({
+    this.showSpinner = true;
+    let promise = this.receiptsList.push({
       date: moment().unix(),
       description: this.receiptDescription,
       image: this.receiptImage,
@@ -110,6 +99,15 @@ export class NewReceiptPage implements OnInit {
       showImage: false,
       value: Number(this.receiptValue)
     });
+    promise
+      .then(_ => {
+        this.showSpinner = false;
+        console.log('success');
+      })
+      .catch(err => {
+        this.showSpinner = false;
+        console.log(err, 'Something went wrong!');
+      });
     this.navCtrl.push(ReceiptsPage);
   }
 

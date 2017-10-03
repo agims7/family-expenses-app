@@ -1,13 +1,15 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>Dodaj nowy wydatek</ion-title>
+    <ion-title>Dodaj wydatek</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-  <form #item="ngForm" (ngSubmit)="addExpenseItem(expenseItem)">
+  <loader *ngIf="showSpinner"></loader>
+
+  <form *ngIf="!showSpinner" #item="ngForm" (ngSubmit)="addExpenseItem(expenseItem)">
     <ion-item>
       <ion-label floating>Nazwa</ion-label>
       <ion-input class="input-field" type="text" name="name" [(ngModel)]="expenseItem.expenseName" ngModel required></ion-input>
@@ -34,9 +36,5 @@
       <button ion-button block [disabled]="!item.valid" type="submit">Dodaj</button>
     </div>
   </form>
-
-  <!-- <div padding>
-         <button ion-button block [navPush]="categoriesPage">Edytuj kategorie</button>
-         </div> -->
 
 </ion-content>

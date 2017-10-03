@@ -1,4 +1,4 @@
-page-month-statistic {
+page-range-statistic {
     .money-header {
         display: inline-block;
     }
@@ -30,9 +30,5 @@ page-month-statistic {
         width: 100%;
         height: 500px;
         margin-bottom: 40px;
-    }
-    .box {
-        margin: 7px;
-        width: calc(100% - 14px);
-    }
+      }
 }

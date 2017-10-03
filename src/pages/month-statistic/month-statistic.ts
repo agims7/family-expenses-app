@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Subscription } from 'rxjs/Subscription';
@@ -11,7 +11,7 @@ declare var AmCharts: any;
   selector: 'page-month-statistic',
   templateUrl: 'month-statistic.html',
 })
-export class MonthStatisticPage implements OnInit {
+export class MonthStatisticPage {
   public selectedMonth;
   private currentYear: string = moment().format('YYYY');
   private dbList = 'dydo/expenseItems/' + this.currentYear;
@@ -24,10 +24,11 @@ export class MonthStatisticPage implements OnInit {
   public dayWithExpenses = {};
   public days = [];
   public chartOpen: boolean = false;
-  public noData: boolean = true;
   public categoriesColorTable = [];
   public categoriesTable = [];
   public chart: any;
+  public showSpinner: boolean = true;
+  public noData: boolean = true;
 
   @HostListener('init')
   handleInit(){
@@ -53,26 +54,26 @@ export class MonthStatisticPage implements OnInit {
     this.expensesService.safeUnsubscribe(this.expenseListSubscription);
     this.expensesService.safeUnsubscribe(this.listOfDaySubscription);
     this.expensesService.safeUnsubscribe(this.listOfDayTwoSubscription);
-    
   }
 
-  ngOnInit() {
+  ionViewDidEnter() {
     this.selectedMonth = this.navParams.data;
     this.daysList = this.selectedMonth;
     this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth;
 
-    this.expenseListOfDays = this.database.list(this.dbList);
-    this.expenseListSubscription = this.expenseListOfDays.subscribe(x => {
-      if (x == null) {
+    this.expenseListOfDays = this.expensesService.getItemsList(this.dbList);
+    this.expenseListSubscription = this.expenseListOfDays.subscribe(data => {
+      this.showSpinner = false
+      if (data == null) {
         this.noData = true;
         return;
       } else {
-        if (x.length < 1) {
+        if (data.length < 1) {
           this.noData = true;
           return;
         } else {
           this.noData = false;
-          this.getDays(x);
+          this.getDays(data);
           setTimeout(() => {
             this.setChart()
           }, 500);
@@ -102,16 +103,12 @@ export class MonthStatisticPage implements OnInit {
   getDayMoneyByCategory(category) {
     this.createEmptyDaysObjects();
     for (let day of this.days) {
-      let listOfDay = this.database.list('dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day, {
-        query: {
-          orderByChild: 'expenseCategory',
-          equalTo: category
-        }
-      });
-      this.listOfDaySubscription = listOfDay.subscribe(x => {
+      let dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
+      let listOfDay = this.expensesService.getItemsList(dbList, {orderByChild: 'expenseCategory', equalTo: category});
+      this.listOfDaySubscription = listOfDay.subscribe(data => {
         for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
           if (category == this.expensesService.categoriesData[i].name) {
-            this.expensesService.categoriesData[i].days[day] = this.getFullSpentMoney(x);
+            this.expensesService.categoriesData[i].days[day] = this.getFullSpentMoney(data);
             this.expensesService.categoriesData[i].allMonthlyMoneySpent = 0;
             for (let money in this.expensesService.categoriesData[i].days) {
               this.expensesService.categoriesData[i].allMonthlyMoneySpent = this.expensesService.categoriesData[i].allMonthlyMoneySpent + this.expensesService.categoriesData[i].days[money];
@@ -131,9 +128,10 @@ export class MonthStatisticPage implements OnInit {
   getDayMoney() {
     for (let day of this.days) {
       let databaseAddress = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
-      let listOfDay = this.database.list(databaseAddress);
-      this.listOfDayTwoSubscription = listOfDay.subscribe(x => {
-        this.dayWithExpenses[day] = this.getFullSpentMoney(x);
+      let listOfDay = this.expensesService.getItemsList(databaseAddress);
+
+      this.listOfDayTwoSubscription = listOfDay.subscribe(data => {
+        this.dayWithExpenses[day] = this.getFullSpentMoney(data);
         this.getMonthlySpentMoney();
       });
     }
@@ -175,7 +173,7 @@ export class MonthStatisticPage implements OnInit {
       "colors": this.categoriesColorTable,
       "addClassNames": true,
       "innerRadius": "10%",
-      "labelRadius": -55,
+      "labelRadius": "-40%",
       "labelText": "[[percents]]% <br> [[name]]",
       "marginTop": -50,
       "marginBottom": -50,

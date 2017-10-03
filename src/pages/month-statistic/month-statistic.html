@@ -9,36 +9,38 @@
 </ion-header>
 
 
-<ion-content *ngIf="!noData" padding>
+<ion-content padding>
+  <loader *ngIf="showSpinner"></loader>
 
-  <ion-card class="box">
-    <ion-card-header class="header-box">
-      <h2 class="money-header big-text">Wydane pieniadze:</h2>
-      <h2 class="money-header big-text all-money">{{ expensesService.valueFixed(allMonthlyMoneySpent) }} zł</h2>
-    </ion-card-header>
-  </ion-card>
+  <div *ngIf="!showSpinner">
+    <ion-card class="box">
+      <ion-card-header class="header-box">
+        <h2 class="money-header big-text">Wydane pieniadze:</h2>
+        <h2 class="money-header big-text all-money">{{ expensesService.valueFixed(allMonthlyMoneySpent) }} zł</h2>
+      </ion-card-header>
+    </ion-card>
 
-  <ion-card class="box">
-    <ion-card-header>
-      <h2 class="money-header">Wydane pieniadze na:</h2>
-    </ion-card-header>
+    <div *ngIf="!noData">
+      <ion-card class="box">
+        <ion-card-header>
+          <h2 class="money-header">Wydane pieniadze na:</h2>
+        </ion-card-header>
 
-    <ion-item *ngFor="let category of expensesService.categoriesData; let i = index">
-        <h3 class="money-header category-name">{{ category.name }}:</h3>
-        <h3 class="money-header all-money"> {{ expensesService.valueFixed(category.allMonthlyMoneySpent) }} zł</h3>
-      </ion-item>
-  </ion-card>
+        <ion-item *ngFor="let category of expensesService.categoriesData; let i = index">
+          <h3 class="money-header category-name">{{ category.name }}:</h3>
+          <h3 class="money-header all-money"> {{ expensesService.valueFixed(category.allMonthlyMoneySpent) }} zł</h3>
+        </ion-item>
+      </ion-card>
+      <div id="chartdiv"></div>
+    </div>
 
-  <!-- <canvas [ngClass]="{'chart': chartOpen}" id="myChart" width="0" height="0"></canvas> -->
-  <div id="chartdiv"></div>
+    <div *ngIf="noData">
+      <ion-card class="box">
+        <ion-card-header>
+          <h2 class="money-header">Brak danych z tego miesiąca</h2>
+        </ion-card-header>
+      </ion-card>
+    </div>
+  </div>
 
-
-</ion-content>
-
-<ion-content *ngIf="noData" padding>
-  <ion-card class="box">
-    <ion-card-header>
-      <h2 class="money-header">Brak danych z tego miesiąca</h2>
-    </ion-card-header>
-  </ion-card>
 </ion-content>

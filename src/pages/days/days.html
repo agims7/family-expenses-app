@@ -1,12 +1,16 @@
 <ion-header>
-    
-      <ion-navbar color="primary">
-        <ion-title>Lista dnia miesiaca</ion-title>
-      </ion-navbar>
-    </ion-header>
-    
-    
-    <ion-content padding>
+
+  <ion-navbar color="primary">
+    <ion-title>Lista dnia miesiaca</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <loader *ngIf="showSpinner"></loader>
+
+  <div *ngIf="!showSpinner">
+    <div *ngIf="!noData">
       <h3 text-center>Wybierz dzień</h3>
 
       <ion-card class="box">
@@ -17,13 +21,25 @@
       </ion-card>
 
       <ion-list>
-        <button ion-item *ngFor="let day of expenseListOfDays | async" [navPush]="dayPage"
-        [navParams]="day">
-          <ion-icon name="calendar" item-left></ion-icon>
-          <h2 class="list-item">{{ day.$key }}.{{ monthNumber(expensesService.selectedMonthNumber) }}</h2>
-          <span class="list-item spent">
-            <h2>{{ expensesService.valueFixed(dayWithExpenses[day.$key]) }} zł</h2>
-          </span>
-        </button>
+        <button ion-item *ngFor="let day of expenseListOfDays | async" [navPush]="dayPage" [navParams]="day">
+                        <ion-icon name="calendar" item-left></ion-icon>
+                        <h2 class="list-item">{{ day.$key }}.{{ monthNumber(expensesService.selectedMonthNumber) }}</h2>
+                        <span class="list-item spent">
+                          <h2>{{ expensesService.valueFixed(dayWithExpenses[day.$key]) }} zł</h2>
+                        </span>
+                      </button>
       </ion-list>
-    </ion-content>
+      <div *ngIf="noData">
+        <ion-list>
+          <ion-card class="box">
+            <ion-card-header>
+              <h2 class="money-header">Brak danych</h2>
+            </ion-card-header>
+          </ion-card>
+        </ion-list>
+      </div>
+
+    </div>
+
+  </div>
+</ion-content>

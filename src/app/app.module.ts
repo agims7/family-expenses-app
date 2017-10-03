@@ -17,6 +17,7 @@ import { DaysPage } from "../pages/days/days";
 import { DayPage } from "../pages/day/day";
 import { NewExpensesPage } from "../pages/new-expenses/new-expenses";
 import { MonthStatisticPage } from "../pages/month-statistic/month-statistic";
+import { RangeStatisticPage } from "../pages/range-statistic/range-statistic";
 import { CategoriesPage } from "../pages/categories/categories";
 import { EditCategoryPage } from "../pages/edit-category/edit-category";
 import { ShoppingListPage } from "../pages/shopping-list/shopping-list";
@@ -25,15 +26,15 @@ import { NewReceiptPage } from "../pages/new-receipt/new-receipt";
 
 import { ExpensesService } from "../services/expenses";
 
-import { ColorPickerModule } from 'ngx-color-picker';
+import { LoaderComponent } from "../components/loader/loader";
 
+import { ColorPickerModule } from 'ngx-color-picker';
 import { Camera } from '@ionic-native/camera';
-import { EmailComposer } from '@ionic-native/email-composer';
-import { Base64ToGallery } from '@ionic-native/base64-to-gallery';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 
 @NgModule({
   declarations: [
+    //Pages:
     MyApp,
     TabsPage,
     StatisticsPage,
@@ -43,11 +44,14 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     DayPage,
     NewExpensesPage,
     MonthStatisticPage,
+    RangeStatisticPage,
     CategoriesPage,
     EditCategoryPage,
     ShoppingListPage,
     ReceiptsPage,
-    NewReceiptPage
+    NewReceiptPage,
+    //Components:
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
@@ -67,6 +71,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     DayPage,
     NewExpensesPage,
     MonthStatisticPage,
+    RangeStatisticPage,
     CategoriesPage,
     EditCategoryPage,
     ShoppingListPage,
@@ -79,8 +84,6 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ExpensesService,
     Camera,
-    EmailComposer,
-    Base64ToGallery,
     PhotoViewer
   ]
 })

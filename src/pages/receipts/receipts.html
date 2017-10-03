@@ -5,47 +5,85 @@
 </ion-header>
 
 <ion-content padding>
-  <button class="add-button" ion-button block color="primaryDark" [navPush]="newReceiptPage">Dodaj paragon</button>
 
-  <ion-card class="box" *ngFor="let receipt of receiptsList | async; let i = index">
-    <ion-card-header>
-      <h1 *ngIf="!edit" class="text">{{ receipt.name }}</h1>
+  <loader *ngIf="showSpinner"></loader>
+
+  <div *ngIf="!showSpinner">
+    <button class="add-button" ion-button block color="primaryDark" [navPush]="newReceiptPage">Dodaj paragon</button>
+
+    <ion-card class="box" *ngFor="let receipt of receiptsList | async; let i = index">
+      <ion-card-header>
+        <h1 *ngIf="!edit" class="text">{{ receipt.name }}</h1>
         <ion-item *ngIf="edit">
-            <ion-icon class="icon-description" name="settings" item-left color="primaryDark"> Nazwa:</ion-icon>
-          <ion-input class="input-field" type="text" name="name" [(ngModel)]="receipt.name" ngModel required></ion-input>   
+          <ion-icon class="icon-description" name="settings" item-left color="primaryDark"> Nazwa:</ion-icon>
+          <ion-input class="input-field" type="text" name="name" [(ngModel)]="receipt.name" ngModel required></ion-input>
         </ion-item>
-    </ion-card-header>
+      </ion-card-header>
 
-    <ion-card-content>  
-      <h1 *ngIf="!edit" class="receipt-value text">{{ expensesService.valueFixed(receipt.value) }} zł</h1>
-      <ion-item *ngIf="edit">
+      <ion-card-content>
+        <h1 *ngIf="!edit" class="receipt-value text">{{ expensesService.valueFixed(receipt.value) }} zł</h1>
+        <ion-item *ngIf="edit">
           <ion-icon class="icon-description" name="settings" item-left color="primary"> Cena (zł):</ion-icon>
-        <ion-input class="input-field" type="number" name="value" [(ngModel)]="receipt.value" ngModel required></ion-input>
-      </ion-item>
+          <ion-input class="input-field" type="number" name="value" [(ngModel)]="receipt.value" ngModel required></ion-input>
+        </ion-item>
 
-      <p *ngIf="!edit" class="text">{{ receipt.description }}</p>
-      <ion-item *ngIf="edit">
+        <p *ngIf="!edit" class="text">{{ receipt.description }}</p>
+        <ion-item *ngIf="edit">
           <ion-icon class="icon-description" name="settings" item-left color="primaryDark"> Opis:</ion-icon>
-        <ion-input class="input-field" type="text" name="description" [(ngModel)]="receipt.description" ngModel required></ion-input>
-      </ion-item>
+          <ion-input class="input-field" type="text" name="description" [(ngModel)]="receipt.description" ngModel required></ion-input>
+        </ion-item>
 
-      <p class="date" [ngClass]="{'time-middle': edit}">{{ showTime(receipt.date) }}</p>
+        <p class="date" [ngClass]="{'time-middle': edit}">{{ showTime(receipt.date) }}</p>
 
-      <button *ngIf="!receipt.showImage && !edit" ion-button block small color="primary" (click)="showImage(receipt.$key)">Pokaż zdjęcie paragonu</button>
+        <button *ngIf="!receipt.showImage && !edit" ion-button block small color="primary" (click)="showImage(receipt.$key)">Pokaż zdjęcie paragonu</button>
 
-      <button *ngIf="receipt.showImage && !edit" ion-button block small color="primary" (click)="hideImage(receipt.$key)">Ukryj zdjęcie paragonu</button>     
-      
-      <img [src]="receipt.image" *ngIf="receipt.showImage" (click)="showImageFullScreen(receipt.image, receipt.name)"/>
+        <button *ngIf="receipt.showImage && !edit" ion-button block small color="primary" (click)="hideImage(receipt.$key)">Ukryj zdjęcie paragonu</button>
+
+        <img [src]="receipt.image" *ngIf="receipt.showImage" (click)="showImageFullScreen(receipt.image, receipt.name)" />
+        <ion-row>
+          <ion-col text-right>
+            <button *ngIf="!edit" ion-button outline small color="primary" (click)="editReceipt()">Edytuj</button>
+            <button *ngIf="edit" ion-button outline small color="primary" (click)="saveEdition(receipt.$key, receipt.name, receipt.value, receipt.description)">Zapisz</button>
+
+          </ion-col>
+          <ion-col text-left>
+            <button ion-button outline small color="danger" (click)="deleteReceipt(receipt.$key)">Usuń</button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-grid *ngIf="!noData">
       <ion-row>
-        <ion-col text-right>
-          <button *ngIf="!edit" ion-button outline small color="primary" (click)="editReceipt()">Edytuj</button>
-          <button *ngIf="edit" ion-button outline small color="primary" (click)="saveEdition(receipt.$key, receipt.name, receipt.value, receipt.description)">Zapisz</button>
-          
+        <ion-col>
+          <button *ngIf="sortDateDown" class="box" ion-button icon-end small color="primary" (click)="dateAscending()">
+              Sortuj (data)
+              <ion-icon name="arrow-down"></ion-icon>
+            </button>
+          <button *ngIf="!sortDateDown" class="box" ion-button icon-end small color="primary" (click)="dateDescending()">
+              Sortuj (data)
+              <ion-icon name="arrow-up"></ion-icon>
+            </button>
         </ion-col>
-        <ion-col text-left>
-          <button ion-button outline small color="danger" (click)="deleteReceipt(receipt.$key)">Usuń</button>
+        <ion-col>
+          <button *ngIf="sortPriceDown" class="box" ion-button icon-end small color="primary" (click)="priceAscending()">
+              Sortuj (cena)
+              <ion-icon name="arrow-up"></ion-icon>
+            </button>
+          <button *ngIf="!sortPriceDown" class="box" ion-button icon-end small color="primary" (click)="priceDescending()">
+              Sortuj (cena)
+              <ion-icon name="arrow-down"></ion-icon>
+            </button>
         </ion-col>
       </ion-row>
-    </ion-card-content>
+    </ion-grid>
+
+  </div>
+
+  <ion-card *ngIf="!showSpinner && noData" class="box">
+    <ion-card-header>
+      <h2 class="money-header">Brak paragonów</h2>
+    </ion-card-header>
   </ion-card>
+
 </ion-content>

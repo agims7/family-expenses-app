@@ -13,21 +13,19 @@ export class ExpensesService {
     public categoriesDataObservable: FirebaseListObservable<any[]>;
     public dbList: string;
 
+
     constructor(
         public database: AngularFireDatabase
     ) { }
 
+    getItemsList( path, query = {} ): FirebaseListObservable<any[]> {
+        return this.database.list(path, {
+          query: query
+        });
+      }
+
     valueFixed(value: any) {
         return Number(value).toFixed(2);
-    }
-
-    getCategories() {
-        console.log('wykonano')
-        this.dbList = 'dydo/categoriesItems/';
-        this.categoriesDataObservable = this.database.list(this.dbList);
-        this.categoriesDataObservable.subscribe(data => {
-            this.categoriesData = data;
-          });
     }
 
     safeUnsubscribe(subscription) {
