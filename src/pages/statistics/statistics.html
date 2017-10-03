@@ -22,7 +22,7 @@
   <h1 text-center>lub</h1>
 
   <ion-list>
-    <button ion-item *ngFor="let month of polishMonth" [navPush]="monthStatisticPage" [navParams]="month">
+    <button ion-item *ngFor="let month of polishMonths" [navPush]="monthStatisticPage" [navParams]="month">
       <ion-icon name="calendar" item-left></ion-icon>
       <h3 class="months">{{ month }}</h3>
     </button>

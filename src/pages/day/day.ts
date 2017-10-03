@@ -1,9 +1,10 @@
+import { DatabaseQuery } from 'angularfire2/database/interfaces';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs/Subscription';
-import "rxjs/add/operator/map";
+import 'rxjs/add/operator/map';
 
 import { ExpenseItem } from '../../models/expense-item.interface';
 import { ExpensesService } from "../../services/expenses";
@@ -26,6 +27,10 @@ export class DayPage {
 
   public sortDateDown: boolean = true;
   public sortPriceDown: boolean = true;
+
+  public statisticDaysList: FirebaseListObservable<any[]>;
+  public statisticDaysListtSubscription: Subscription;
+  public dbDaysList;
 
   constructor(
     public navParams: NavParams,
@@ -62,7 +67,7 @@ export class DayPage {
         }
       }
     });
-  }
+}
 
 
   getFullSpentMoney(data) {
