@@ -20,7 +20,7 @@ export class MonthStatisticPage {
   public expenseListSubscription: Subscription;
   public listOfDaySubscription: Subscription;
   public listOfDayTwoSubscription: Subscription;
-  public allMonthlyMoneySpent: number;
+  public allMonthlyMoneySpent: number = 0;
   public dayWithExpenses = {};
   public days = [];
   public chartOpen: boolean = false;
