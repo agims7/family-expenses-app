@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { ExpensesService } from "../../services/expenses";
 import { ExpenseItem } from '../../models/expense-item.interface';
 import { Subscription } from 'rxjs/Subscription';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'page-new-expenses',
@@ -19,6 +20,7 @@ export class NewExpensesPage {
   public expensesDbList: string;
   public categoriesDataListSubscription: Subscription;
   public showSpinner: boolean = true;
+  public localCategoriesData: any = [];
 
   constructor(
     public navCtrl: NavController, 
@@ -38,6 +40,8 @@ export class NewExpensesPage {
     this.categoriesDataList = this.expensesService.getItemsList(this.categoriesDbList);
     this.categoriesDataListSubscription = this.categoriesDataList.subscribe((data) => {
       this.expensesService.categoriesData = data;
+      this.localCategoriesData = _.clone(this.expensesService.categoriesData);
+      this.localCategoriesData.shift();
       this.showSpinner = false
     });
   }

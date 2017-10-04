@@ -23,6 +23,7 @@ import { EditCategoryPage } from "../pages/edit-category/edit-category";
 import { ShoppingListPage } from "../pages/shopping-list/shopping-list";
 import { ReceiptsPage } from "../pages/receipts/receipts";
 import { NewReceiptPage } from "../pages/new-receipt/new-receipt";
+import { StatisticByCategoryPage } from "../pages/statistic-by-category/statistic-by-category";
 
 import { ExpensesService } from "../services/expenses";
 
@@ -50,6 +51,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     ShoppingListPage,
     ReceiptsPage,
     NewReceiptPage,
+    StatisticByCategoryPage,
     //Components:
     LoaderComponent
   ],
@@ -76,7 +78,8 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     EditCategoryPage,
     ShoppingListPage,
     ReceiptsPage,
-    NewReceiptPage
+    NewReceiptPage,
+    StatisticByCategoryPage
   ],
   providers: [
     StatusBar,

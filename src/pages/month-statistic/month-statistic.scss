@@ -38,4 +38,12 @@ page-month-statistic {
     .row {
         border-bottom: 1px solid #cccccc;
     }
+    .label-md {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    ion-label {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
 }

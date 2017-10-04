@@ -28,7 +28,7 @@
     <ion-item>
       <ion-label floating>Kategoria</ion-label>
       <ion-select interface="popover" name="category" [(ngModel)]="expenseItem.expenseCategory" ngModel required>
-        <ion-option *ngFor="let category of expensesService.categoriesData" [value]="category.name">{{ category.name }}</ion-option>
+        <ion-option *ngFor="let category of localCategoriesData" [value]="category.name">{{ category.name }}</ion-option>
       </ion-select>
     </ion-item>
 

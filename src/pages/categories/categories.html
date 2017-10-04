@@ -30,8 +30,8 @@
       <ion-item ion-item *ngFor="let category of categoriesItemsList | async">
         <ion-icon name="albums" [style.color]="category.color" item-start></ion-icon>
         <h2 class="category-name">{{ category.name }}</h2>
-        <ion-icon name="trash" color="danger" item-end (click)="deleteCategory(category.$key)"></ion-icon>
-        <ion-icon name="settings" color="primary" item-end [navPush]="editCategoryPage" [navParams]="category"></ion-icon>
+        <ion-icon *ngIf="category.removable" name="trash" color="danger" item-end (click)="deleteCategory(category.$key)"></ion-icon>
+        <ion-icon *ngIf="category.removable" name="settings" color="primary" item-end [navPush]="editCategoryPage" [navParams]="category"></ion-icon>
       </ion-item>
     </ion-list>
   </div>

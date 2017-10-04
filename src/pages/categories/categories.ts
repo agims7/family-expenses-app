@@ -48,7 +48,8 @@ export class CategoriesPage {
       days: {},
       color: this.color,
       allMonthlyMoneySpent: 0,
-      radioSign: false
+      radioSign: false,
+      removable: true
     });
     this.clearInput();
   }

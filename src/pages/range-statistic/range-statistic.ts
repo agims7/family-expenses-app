@@ -41,6 +41,7 @@ export class RangeStatisticPage {
   public allSpentMoney: number = 0;
   public categoriesAllSpentMoney: any = [];
   public categoriesTable: any = [];
+  public localCategoriesData: any = [];
   public showSpinner: boolean = true;
 
   @HostListener('init')
@@ -79,6 +80,8 @@ export class RangeStatisticPage {
     setTimeout(() => {
       this.setChart()
     }, 500);
+    this.localCategoriesData = _.clone(this.categoriesAllSpentMoney);
+    this.localCategoriesData.shift();
   }
 
   getCategories() {

@@ -2,8 +2,10 @@ import { Component, HostListener } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Subscription } from 'rxjs/Subscription';
+import { StatisticByCategoryPage } from "../statistic-by-category/statistic-by-category";
 import { ExpensesService } from "../../services/expenses";
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 declare var AmCharts: any;
 
@@ -12,10 +14,10 @@ declare var AmCharts: any;
   templateUrl: 'month-statistic.html',
 })
 export class MonthStatisticPage {
+  statisticByCategoryPage = StatisticByCategoryPage;
   public selectedMonth;
   private currentYear: string = moment().format('YYYY');
   private dbList = 'dydo/expenseItems/' + this.currentYear;
-  public daysList;
   public expenseListOfDays: FirebaseListObservable<any[]>
   public expenseListSubscription: Subscription;
   public listOfDaySubscription: Subscription;
@@ -26,6 +28,7 @@ export class MonthStatisticPage {
   public chart: any;
   public showSpinner: boolean = true;
   public noData: boolean = true;
+  public localCategoriesData: any = [];
 
   @HostListener('init')
   handleInit() {
@@ -54,7 +57,6 @@ export class MonthStatisticPage {
 
   ionViewDidEnter() {
     this.selectedMonth = this.navParams.data;
-    this.daysList = this.selectedMonth;
     this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth;
 
     this.expenseListOfDays = this.expensesService.getItemsList(this.dbList);
