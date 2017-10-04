@@ -27,8 +27,10 @@
         </ion-card-header>
 
         <ion-item class="row" *ngFor="let category of localCategoriesData; let i = index">
-          <h3 class="money-header category-name">{{ category.name }}:</h3>
-          <h3 class="money-header all-money">{{ expensesService.valueFixed(category.allMoney) }} zł</h3>
+          <button ion-item [navPush]="rangeStatisticByCategoryPage" [navParams]="[category.name, firstYear, lastYear, yearsRange, firstMonth, lastMonth, monthsRange, firstDay, lastDay]">
+              <h3 class="money-header category-name">{{ category.name }}:</h3>
+              <h3 class="money-header all-money">{{ expensesService.valueFixed(category.allMoney) }} zł</h3>
+              </button>
         </ion-item>
       </ion-card>
       <div id="chartdiv"></div>

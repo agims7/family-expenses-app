@@ -24,6 +24,7 @@ import { ShoppingListPage } from "../pages/shopping-list/shopping-list";
 import { ReceiptsPage } from "../pages/receipts/receipts";
 import { NewReceiptPage } from "../pages/new-receipt/new-receipt";
 import { StatisticByCategoryPage } from "../pages/statistic-by-category/statistic-by-category";
+import { RangeStatisticByCategoryPage } from "../pages/range-statistic-by-category/range-statistic-by-category";
 
 import { ExpensesService } from "../services/expenses";
 
@@ -52,6 +53,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     ReceiptsPage,
     NewReceiptPage,
     StatisticByCategoryPage,
+    RangeStatisticByCategoryPage,
     //Components:
     LoaderComponent
   ],
@@ -79,7 +81,8 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     ShoppingListPage,
     ReceiptsPage,
     NewReceiptPage,
-    StatisticByCategoryPage
+    StatisticByCategoryPage,
+    RangeStatisticByCategoryPage
   ],
   providers: [
     StatusBar,

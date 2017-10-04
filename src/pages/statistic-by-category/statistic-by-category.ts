@@ -43,6 +43,10 @@ export class StatisticByCategoryPage {
     });
   }
 
+  ionViewDidLeave() {
+    this.expensesService.safeUnsubscribe(this.categoryStatisticListSubscription);
+  }
+
   getDays(data) {
     for (let day of data) {
       let filter = _.filter(day, {'expenseCategory': this.category});

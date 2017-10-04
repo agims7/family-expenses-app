@@ -1,6 +1,8 @@
 import { Component, HostListener } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { RangeStatisticByCategoryPage } from "../range-statistic-by-category/range-statistic-by-category";
+
 import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
 import * as _ from 'lodash';
@@ -12,6 +14,7 @@ declare var AmCharts: any;
   templateUrl: 'range-statistic.html',
 })
 export class RangeStatisticPage {
+  rangeStatisticByCategoryPage = RangeStatisticByCategoryPage;
   public polishMonths = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień',]
   public selectedDateFrom: string;
   public selectedDateTo: string;
@@ -85,6 +88,7 @@ export class RangeStatisticPage {
   }
 
   getCategories() {
+    this.categories = [];
     for (var category of this.expensesService.categoriesData) {
       this.categories.push(category.name);
       this.categoriesAllSpentMoney.push({
@@ -213,11 +217,9 @@ export class RangeStatisticPage {
     }
     this.categoriesTable.splice(0, 1);
     this.expensesService.categoriesColorTable.splice(0, 1);
-    console.log(this.categoriesTable, this.expensesService.categoriesColorTable)
   }
 
   setChart() {
-    console.log('setchart')
     this.getChartInfoRange();
 
     this.chart = AmCharts.makeChart("chartdiv", {

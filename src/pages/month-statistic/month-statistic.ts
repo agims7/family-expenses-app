@@ -78,6 +78,8 @@ export class MonthStatisticPage {
         }
       }
     });
+    this.localCategoriesData = _.clone(this.expensesService.categoriesData);
+    this.localCategoriesData.shift();
   }
 
   getMonthlySpentMoney() {

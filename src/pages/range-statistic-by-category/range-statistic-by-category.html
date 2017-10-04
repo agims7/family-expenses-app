@@ -1,0 +1,45 @@
+<ion-header>
+    <ion-navbar>
+      <ion-title>
+        <span class="big-letter">Kategoria</span>
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <ion-grid>
+      <!-- <loader *ngIf="showSpinner"></loader> -->
+  
+      <div >
+        <ion-list>
+          <ion-item *ngFor="let item of categoryData; let i = index">
+            <ion-row>
+              <ion-col>
+                <h2 text-left>{{ item.expenseName }}</h2>
+              </ion-col>
+              <ion-col>
+                <h2 class="price" text-right>{{ item.expenseValue }} zł</h2>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col col-8>
+                <p class="description" text-left text-wrap>{{ item.expenseDescription }}</p>
+              </ion-col>
+              <ion-col col-4>
+                <p class="date" text-right>{{ showTime(item.expenseDate) }}</p>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-list>
+  
+        <!-- <div *ngIf="noData">
+            <ion-card class="box">
+              <ion-card-header>
+                <h2>Brak danych</h2>
+              </ion-card-header>
+            </ion-card>
+          </div> -->
+      </div>
+  
+    </ion-grid>
+  </ion-content>
