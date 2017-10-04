@@ -53,6 +53,8 @@ export class ExpensesService {
         }
         this.categoriesTable.splice(0, 1);
         this.categoriesColorTable.splice(0, 1);
+
+        console.log(this.categoriesTable, this.categoriesColorTable)
     }
 
 }

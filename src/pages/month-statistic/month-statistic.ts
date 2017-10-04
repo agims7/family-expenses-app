@@ -23,18 +23,17 @@ export class MonthStatisticPage {
   public allMonthlyMoneySpent: number = 0;
   public dayWithExpenses = {};
   public days = [];
-  public chartOpen: boolean = false;
   public chart: any;
   public showSpinner: boolean = true;
   public noData: boolean = true;
 
   @HostListener('init')
-  handleInit(){
+  handleInit() {
     this.chart.legend.addListener("rollOverItem", this.handleRollOver);
   }
 
   @HostListener('rollOverSlice', ['$event'])
-  handleRollOver(event){
+  handleRollOver(event) {
     var wedge = event.dataItem.wedge.node;
     wedge.parentNode.appendChild(wedge);
   }
@@ -101,7 +100,7 @@ export class MonthStatisticPage {
     this.createEmptyDaysObjects();
     for (let day of this.days) {
       let dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
-      let listOfDay = this.expensesService.getItemsList(dbList, {orderByChild: 'expenseCategory', equalTo: category});
+      let listOfDay = this.expensesService.getItemsList(dbList, { orderByChild: 'expenseCategory', equalTo: category });
       this.listOfDaySubscription = listOfDay.subscribe(data => {
         for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
           if (category == this.expensesService.categoriesData[i].name) {
@@ -147,19 +146,29 @@ export class MonthStatisticPage {
     this.chart = AmCharts.makeChart("chartdiv", {
       "type": "pie",
       "language": "pl",
-      "dataProvider": this.expensesService.categoriesTable,
       "autoDisplay": true,
+      "colors": this.expensesService.categoriesColorTable,
+      "dataProvider": this.expensesService.categoriesTable,
       "valueField": "value",
       "titleField": "name",
-      "colors": this.expensesService.categoriesColorTable,
       "addClassNames": true,
-      "innerRadius": "10%",
-      "labelRadius": "-40%",
+      "theme": "light",
+      "outlineAlpha": 1,
+      "outlineThickness": 2,
+      "outlineColor": "#fff",
+      "innerRadius": "30%",
+      "radius": 100,
       "labelText": "[[percents]]% <br> [[name]]",
+      "fontSize": 12,
+      "autoMargins": false,
       "marginTop": -50,
       "marginBottom": -50,
       "balloon": {
-        "fixedPosition": true
+        "fixedPosition": true,
+        "adjustBorderColor": true,
+        "color": "#000000",
+        "cornerRadius": 2,
+        "fillColor": "#FFFFFF"
       },
       "legend": {
         "position": "bottom",

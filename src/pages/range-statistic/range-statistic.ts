@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { Subscription } from 'rxjs/Subscription';
@@ -43,6 +43,17 @@ export class RangeStatisticPage {
   public categoriesTable: any = [];
   public showSpinner: boolean = true;
 
+  @HostListener('init')
+  handleInit() {
+    this.chart.legend.addListener("rollOverItem", this.handleRollOver);
+  }
+
+  @HostListener('rollOverSlice', ['$event'])
+  handleRollOver(event) {
+    var wedge = event.dataItem.wedge.node;
+    wedge.parentNode.appendChild(wedge);
+  }
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -65,6 +76,9 @@ export class RangeStatisticPage {
     this.getSelectedMonths();
     this.getSelectedDays();
     this.getMoneySpent();
+    setTimeout(() => {
+      this.setChart()
+    }, 500);
   }
 
   getCategories() {
@@ -128,7 +142,7 @@ export class RangeStatisticPage {
         });
       }
     }
-    } 
+  }
 
   getDays(data, month, year) {
     let monthName = this.getMonthFromNumber(month)
@@ -148,7 +162,7 @@ export class RangeStatisticPage {
         this.getDayMoney(day)
         this.monthsDays[monthName].push(day.$key)
       }
-    }    
+    }
   }
 
   getDayMoney(day) {
@@ -156,15 +170,14 @@ export class RangeStatisticPage {
       let money = day[expenses].expenseValue;
       this.allSpentMoney = this.allSpentMoney + Number(money);
       for (let i = 0; i < this.categoriesLength; i++) {
-         let name = day[expenses].expenseCategory;
+        let name = day[expenses].expenseCategory;
         if (name === this.categories[i]) {
           this.categoriesAllSpentMoney[i].allMoney += Number(money);
         }
       }
     }
     this.showSpinner = false
-    this.setChart();
-    }
+  }
 
 
   getMonthFromNumber(monthIndex) {
@@ -189,34 +202,47 @@ export class RangeStatisticPage {
     this.categoriesTable = []
 
     for (let i = 0; i < this.categories.length; i++) {
-        this.categoriesTable.push({
-            "name": this.categoriesAllSpentMoney[i].name,
-            "value": this.expensesService.valueFixed(this.categoriesAllSpentMoney[i].allMoney)
-        });
-        this.expensesService.categoriesColorTable.push(this.expensesService.categoriesData[i].color);
+      this.categoriesTable.push({
+        "name": this.categoriesAllSpentMoney[i].name,
+        "value": Number(this.expensesService.valueFixed(this.categoriesAllSpentMoney[i].allMoney))
+      });
+      this.expensesService.categoriesColorTable.push(this.expensesService.categoriesData[i].color);
     }
     this.categoriesTable.splice(0, 1);
     this.expensesService.categoriesColorTable.splice(0, 1);
-}
+    console.log(this.categoriesTable, this.expensesService.categoriesColorTable)
+  }
 
   setChart() {
+    console.log('setchart')
     this.getChartInfoRange();
+
     this.chart = AmCharts.makeChart("chartdiv", {
       "type": "pie",
       "language": "pl",
-      "dataProvider": this.categoriesTable,
       "autoDisplay": true,
+      "colors": this.expensesService.categoriesColorTable,
+      "dataProvider": this.categoriesTable,
       "valueField": "value",
       "titleField": "name",
-      "colors": this.expensesService.categoriesColorTable,
       "addClassNames": true,
-      "innerRadius": "10%",
-      "labelRadius": "-40%",
+      "theme": "light",
+      "outlineAlpha": 1,
+      "outlineThickness": 2,
+      "outlineColor": "#fff",
+      "innerRadius": "30%",
+      "radius": 100,
       "labelText": "[[percents]]% <br> [[name]]",
+      "fontSize": 12,
+      "autoMargins": false,
       "marginTop": -50,
       "marginBottom": -50,
       "balloon": {
-        "fixedPosition": true
+        "fixedPosition": true,
+        "adjustBorderColor": true,
+        "color": "#000000",
+        "cornerRadius": 2,
+        "fillColor": "#FFFFFF"
       },
       "legend": {
         "position": "bottom",
