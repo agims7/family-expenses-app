@@ -42,7 +42,7 @@ export class NewExpensesPage {
       this.expensesService.categoriesData = data;
       this.localCategoriesData = _.clone(this.expensesService.categoriesData);
       this.localCategoriesData.shift();
-      // this.showSpinner = false
+      this.showSpinner = false
     });
   }
 
