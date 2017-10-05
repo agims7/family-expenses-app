@@ -27,10 +27,10 @@ import { StatisticByCategoryPage } from "../pages/statistic-by-category/statisti
 import { RangeStatisticByCategoryPage } from "../pages/range-statistic-by-category/range-statistic-by-category";
 
 import { ExpensesService } from "../services/expenses";
-
 import { LoaderComponent } from "../components/loader/loader";
 
 import { ColorPickerModule } from 'ngx-color-picker';
+import { DatePickerModule } from 'ionic3-datepicker';
 import { Camera } from '@ionic-native/camera';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 
@@ -62,7 +62,8 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(config),
     AngularFireDatabaseModule,
-    ColorPickerModule
+    ColorPickerModule,
+    DatePickerModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -5,26 +5,57 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-grid>
 
-  <h3 text-center>Podaj zakres:</h3>
+    <h3 text-center>Podaj zakres:</h3>
 
-  <ion-item>
-    <ion-label>Data od:</ion-label>
-    <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD/MM/YYYY" [(ngModel)]="dateFrom"></ion-datetime>
-  </ion-item>
-  <ion-item>
-    <ion-label>Data do:</ion-label>
-    <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD/MM/YYYY" [(ngModel)]="dateTo"></ion-datetime>
-  </ion-item>
+    <ion-row align-items-center class="date-section date-section-first">
+      <ion-col>
+        <p class="date-header">Data od:</p>
+      </ion-col>
+      <ion-col>
+        <button ion-button outline icon-left ion-datepicker (ionChanged)="setDateFrom($event);" [max]="dateTo" [value]="dateFrom"
+          [showMaxAndMin]="true" [localeStrings]="object">
+          <span>{{ showTime(dateFrom) }}</span>
+          <ion-icon name="calendar"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
 
-  <button ion-button block [navPush]="rangeStatisticPage" [navParams]="[dateFrom, dateTo]">Przejdź</button>
+    <ion-row align-items-center class="date-section">
+      <ion-col>
+        <p class="date-header">Data do:</p>
+      </ion-col>
+      <ion-col>
+        <button ion-button outline icon-left ion-datepicker (ionChanged)="setDateTo($event);" [max]="dateTo" [value]="dateTo" [showMaxAndMin]="true"
+          [localeStrings]="object">
+          <span>{{ showTime(dateTo) }}</span>
+          <ion-icon name="calendar"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
 
-  <h1 text-center>lub</h1>
 
-  <ion-list>
-    <button ion-item *ngFor="let month of polishMonths" [navPush]="monthStatisticPage" [navParams]="month">
-      <ion-icon name="calendar" item-left></ion-icon>
-      <h3 class="months">{{ month }}</h3>
-    </button>
-  </ion-list>
+
+    <!-- <ion-item>
+          <ion-label>Data od:</ion-label>
+          <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD/MM/YYYY" [(ngModel)]="dateFrom"></ion-datetime>
+        </ion-item>
+        <ion-item>
+          <ion-label>Data do:</ion-label>
+          <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD/MM/YYYY" [(ngModel)]="dateTo"></ion-datetime>
+        </ion-item> -->
+
+    <button ion-button block [navPush]="rangeStatisticPage" [navParams]="[dateFrom, dateTo]">Przejdź</button>
+
+    <h1 text-center>lub</h1>
+
+    <ion-list>
+      <button ion-item *ngFor="let month of polishMonths" [navPush]="monthStatisticPage" [navParams]="month">
+            <ion-icon name="calendar" item-left></ion-icon>
+            <h3 class="months">{{ month }}</h3>
+          </button>
+    </ion-list>
+
+  </ion-grid>
 </ion-content>

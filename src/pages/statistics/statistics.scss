@@ -5,4 +5,66 @@ page-statistics {
     h1 {
         margin-bottom: 15px;
     }
+    .date-section {
+        ion-icon {
+            margin-left: 10px;
+        }
+        .date-header {
+            font-size: 16px;
+        }
+        button {
+            height: 36px !important;
+        }
+    }
+    .date-section-first {
+        border-bottom: 1px solid #c8c7cc;
+    }
+}
+
+.datepicker-wrapper {    
+    select {
+        font-family: 'Arial';
+        display: inline-block;
+        width: 30%;
+        cursor: pointer;
+        padding: 10px 15px;
+        outline: 0;
+        border: 1px solid #fff;
+        border-radius: 5px;
+        background: #488aff;
+        color: #fff;
+        text-align: center;
+        -moz-appearance: none;
+        &::-ms-expand {
+            display: none;
+        }
+        &:hover,
+        &:focus {
+            color: #FFFFFF;
+            background: #488aff;
+        }
+        &:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        option {
+            background: #fff;        
+            color: #000;
+            text-align: center;
+        }
+    }
+    .datepicker-header {
+        background-color: #488aff !important;
+        .weekday-header {
+            background-color: #004bcc !important;
+        }
+    }
+    .datepicker-current {
+        background-color: #ccdfff !important;
+        color: #fff !important;
+    }
+    .datepicker-selected {
+        background-color: #488aff !important;
+        color: #fff !important;
+    }
 }

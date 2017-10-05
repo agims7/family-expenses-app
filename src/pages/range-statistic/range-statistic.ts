@@ -6,6 +6,7 @@ import { RangeStatisticByCategoryPage } from "../range-statistic-by-category/ran
 import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 declare var AmCharts: any;
 
@@ -73,8 +74,8 @@ export class RangeStatisticPage {
 
   ionViewDidEnter() {
     this.monthsDays = [];
-    this.selectedDateFrom = this.navParams.data[0];
-    this.selectedDateTo = this.navParams.data[1];
+    this.selectedDateFrom = moment(this.navParams.data[0]).format('YYYY.MM.DD');
+    this.selectedDateTo = moment(this.navParams.data[1]).format('YYYY.MM.DD');
     this.getCategories();
     this.getSelectedYears();
     this.getSelectedMonths();

@@ -32,8 +32,8 @@ export class StatisticByCategoryPage {
   }
 
   ionViewDidEnter() {
-    this.month = this.navParams.data[1];
-    this.category = this.navParams.data[0];
+    this.month = this.navParams.data[0];
+    this.category = this.navParams.data[1];
 
     this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.month;
     this.categoryStatisticList = this.expensesService.getItemsList(this.dbList);
