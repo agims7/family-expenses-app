@@ -72,7 +72,10 @@
             "cordova-plugin-whitelist": {},
             "ionic-plugin-keyboard": {},
             "cordova-plugin-camera": {},
-            "com-sarriaroman-photoviewer": {}
+            "com-sarriaroman-photoviewer": {},
+            "cordova-base64-to-gallery": {},
+            "cordova-plugin-email": {},
+            "cordova-plugin-email-composer": {}
         },
         "platforms": [
             "android"
