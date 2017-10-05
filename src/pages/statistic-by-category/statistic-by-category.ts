@@ -38,7 +38,6 @@ export class StatisticByCategoryPage {
     this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.month;
     this.categoryStatisticList = this.expensesService.getItemsList(this.dbList);
     this.categoryStatisticListSubscription = this.categoryStatisticList.subscribe(data => {
-      this.showSpinner = false
       this.getDays(data);
     });
   }
@@ -47,7 +46,7 @@ export class StatisticByCategoryPage {
     this.expensesService.safeUnsubscribe(this.categoryStatisticListSubscription);
   }
 
-  getDays(data) {
+  getDays(data) {  
     for (let day of data) {
       let filter = _.filter(day, {'expenseCategory': this.category});
       for (let key of filter) {
@@ -58,7 +57,7 @@ export class StatisticByCategoryPage {
     if (this.categoryData.length < 1) {
       this.noData = true;
     }
-    console.log(this.categoryData)
+    this.showSpinner = false
   }
 
   showTime(time) {

@@ -31,12 +31,9 @@ export class RangeStatisticPage {
   public monthsRange = [];
   public statisticYearsList: FirebaseListObservable<any[]>
   public statisticMonthsList: FirebaseListObservable<any[]>;
-  public statisticDaysList: [FirebaseListObservable<any[]>];
   public dbList: string;
   public dbMonthsList: string;
-  public dbDaysList: string;
-  public statisticMonthsListtSubscription: Subscription;
-  public statisticDaysListtSubscription: Subscription;
+  public statisticMonthsListSubscription: Subscription;
   public noData: boolean = true;
   public monthsDays = [];
   public chart: any;
@@ -68,14 +65,19 @@ export class RangeStatisticPage {
   }
 
   ionViewDidLeave() {
-    this.expensesService.safeUnsubscribe(this.statisticMonthsListtSubscription);
-    this.expensesService.safeUnsubscribe(this.statisticDaysListtSubscription);
+    this.expensesService.safeUnsubscribe(this.statisticMonthsListSubscription);
+  }
+
+  clearValues() {
+    this.categories = [];
+    this.categoriesAllSpentMoney = [];
+    this.allSpentMoney = 0;
   }
 
   ionViewDidEnter() {
-    this.monthsDays = [];
-    this.selectedDateFrom = moment(this.navParams.data[0]).format('YYYY.MM.DD');
-    this.selectedDateTo = moment(this.navParams.data[1]).format('YYYY.MM.DD');
+    this.clearValues();
+    this.selectedDateFrom = moment(this.expensesService.dateFrom).format('YYYY.MM.DD');
+    this.selectedDateTo = moment(this.expensesService.dateTo).format('YYYY.MM.DD');
     this.getCategories();
     this.getSelectedYears();
     this.getSelectedMonths();
@@ -89,7 +91,6 @@ export class RangeStatisticPage {
   }
 
   getCategories() {
-    this.categories = [];
     for (var category of this.expensesService.categoriesData) {
       this.categories.push(category.name);
       this.categoriesAllSpentMoney.push({
@@ -143,9 +144,9 @@ export class RangeStatisticPage {
 
     for (let year of this.yearsRange) {
       for (let month of this.monthsRange) {
-        this.dbMonthsList = 'dydo/expenseItems/' + year + '/' + this.getMonthFromNumber(month);
+        this.dbMonthsList = 'dydo/expenseItems/' + year + '/' + this.expensesService.getMonthFromNumber(month);
         this.statisticMonthsList = this.expensesService.getItemsList(this.dbMonthsList);
-        this.statisticMonthsListtSubscription = this.statisticMonthsList.subscribe(data => {
+        this.statisticMonthsListSubscription = this.statisticMonthsList.subscribe(data => {
           this.getDays(data, month, year);
         });
       }
@@ -153,7 +154,7 @@ export class RangeStatisticPage {
   }
 
   getDays(data, month, year) {
-    let monthName = this.getMonthFromNumber(month)
+    let monthName = this.expensesService.getMonthFromNumber(month)
     this.monthsDays[monthName] = [];
     for (let day of data) {
       if (month == this.firstMonth) {
@@ -185,24 +186,6 @@ export class RangeStatisticPage {
       }
     }
     this.showSpinner = false
-  }
-
-
-  getMonthFromNumber(monthIndex) {
-    switch (monthIndex) {
-      case (1): { return 'styczeń'; }
-      case (2): { return 'luty'; }
-      case (3): { return 'marzec'; }
-      case (4): { return 'kwiecień'; }
-      case (5): { return 'maj'; }
-      case (6): { return 'czerwiec'; }
-      case (7): { return 'lipiec'; }
-      case (8): { return 'sierpień'; }
-      case (9): { return 'wrzesień'; }
-      case (10): { return 'październik'; }
-      case (11): { return 'listopad'; }
-      case (12): { return 'grudzień'; }
-    }
   }
 
   getChartInfoRange() {

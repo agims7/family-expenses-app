@@ -8,10 +8,10 @@
   
   <ion-content padding>
     <ion-grid>
-      <!-- <loader *ngIf="showSpinner"></loader> -->
+      <loader *ngIf="showSpinner"></loader>
   
-      <div >
-        <ion-list>
+      <div *ngIf="!showSpinner">
+          <ion-list *ngIf="!noData">
           <ion-item *ngFor="let item of categoryData; let i = index">
             <ion-row>
               <ion-col>
@@ -32,13 +32,13 @@
           </ion-item>
         </ion-list>
   
-        <!-- <div *ngIf="noData">
+        <div *ngIf="noData">
             <ion-card class="box">
               <ion-card-header>
                 <h2>Brak danych</h2>
               </ion-card-header>
             </ion-card>
-          </div> -->
+          </div>
       </div>
   
     </ion-grid>

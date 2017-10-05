@@ -14,9 +14,9 @@
         <p class="date-header">Data od:</p>
       </ion-col>
       <ion-col>
-        <button ion-button outline icon-left ion-datepicker (ionChanged)="setDateFrom($event);" [max]="dateTo" [value]="dateFrom"
+        <button ion-button outline icon-left ion-datepicker (ionChanged)="setDateFrom($event);" [max]="maxDate" [value]="expensesService.dateFrom"
           [showMaxAndMin]="true" [localeStrings]="object">
-          <span>{{ showTime(dateFrom) }}</span>
+          <span>{{ showTime(expensesService.dateFrom) }}</span>
           <ion-icon name="calendar"></ion-icon>
         </button>
       </ion-col>
@@ -27,9 +27,9 @@
         <p class="date-header">Data do:</p>
       </ion-col>
       <ion-col>
-        <button ion-button outline icon-left ion-datepicker (ionChanged)="setDateTo($event);" [max]="dateTo" [value]="dateTo" [showMaxAndMin]="true"
+        <button ion-button outline icon-left ion-datepicker (ionChanged)="setDateTo($event);" [max]="maxDate" [value]="expensesService.dateTo" [showMaxAndMin]="true"
           [localeStrings]="object">
-          <span>{{ showTime(dateTo) }}</span>
+          <span>{{ showTime(expensesService.dateTo) }}</span>
           <ion-icon name="calendar"></ion-icon>
         </button>
       </ion-col>
@@ -46,7 +46,7 @@
           <ion-datetime displayFormat="DD/MM/YYYY" pickerFormat="DD/MM/YYYY" [(ngModel)]="dateTo"></ion-datetime>
         </ion-item> -->
 
-    <button ion-button block [navPush]="rangeStatisticPage" [navParams]="[dateFrom, dateTo]">Przejdź</button>
+    <button ion-button block [navPush]="rangeStatisticPage">Przejdź</button>
 
     <h1 text-center>lub</h1>
 

@@ -1,3 +1,18 @@
 page-range-statistic-by-category {
-
+    .big-letter {
+        text-transform: capitalize;
+    }
+    .price {
+        color: #f53d3d;
+    }
+    .description {
+        font-size: 1.2rem !important;
+    }
+    .date {
+        font-size: 1.3rem !important;
+    }
+    ion-label {
+        margin: 0 !important;
+        padding: 2px 0 !important;
+    }
 }
