@@ -1,3 +1,4 @@
+import { Subscribable } from 'rxjs/Observable';
 import { Component, HostListener } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
@@ -17,18 +18,25 @@ export class MonthStatisticPage {
   statisticByCategoryPage = StatisticByCategoryPage;
   public selectedMonth;
   private currentYear: string = moment().format('YYYY');
-  private dbList = 'dydo/expenseItems/' + this.currentYear;
+  private dbList: string;
+  private bonusesDbList: string;
   public expenseListOfDays: FirebaseListObservable<any[]>
+  public bonusesItemsList: FirebaseListObservable<any[]>
+  public bonusesItemsListSubscription: Subscription;
+  public bonusListOfDaySubscription: Subscription;
   public expenseListSubscription: Subscription;
   public listOfDaySubscription: Subscription;
   public listOfDayTwoSubscription: Subscription;
   public allMonthlyMoneySpent: number = 0;
   public dayWithExpenses = {};
   public days = [];
+  public bonusDays = [];
   public chart: any;
+  public bonuses: number = 0;
   public showSpinner: boolean = true;
   public noData: boolean = true;
   public localCategoriesData: any = [];
+  public bonus: string = "bonuses";
 
   @HostListener('init')
   handleInit() {
@@ -53,12 +61,29 @@ export class MonthStatisticPage {
     this.expensesService.safeUnsubscribe(this.expenseListSubscription);
     this.expensesService.safeUnsubscribe(this.listOfDaySubscription);
     this.expensesService.safeUnsubscribe(this.listOfDayTwoSubscription);
+    this.expensesService.safeUnsubscribe(this.bonusListOfDaySubscription);
   }
 
   ionViewDidEnter() {
     this.selectedMonth = this.navParams.data;
-    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth;
+    this.clearAll();
+    this.getExpenseData();
+    this.getBonusData();
+    this.localCategoriesData = _.clone(this.expensesService.categoriesData);
+    this.localCategoriesData.shift();
+  }
 
+  clearAll() {
+    this.allMonthlyMoneySpent = 0;
+    this.dayWithExpenses = {};
+    this.days = [];
+    this.bonuses = 0;
+    this.bonusDays = [];
+    this.localCategoriesData = [];
+  }
+
+  getExpenseData() {
+    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth;
     this.expenseListOfDays = this.expensesService.getItemsList(this.dbList);
     this.expenseListSubscription = this.expenseListOfDays.subscribe(data => {
       this.showSpinner = false
@@ -78,8 +103,14 @@ export class MonthStatisticPage {
         }
       }
     });
-    this.localCategoriesData = _.clone(this.expensesService.categoriesData);
-    this.localCategoriesData.shift();
+  }
+
+  getBonusData() {
+    this.bonusesDbList = 'dydo/bonusItems/' + this.currentYear + '/' + this.selectedMonth;
+    this.bonusesItemsList = this.expensesService.getItemsList(this.bonusesDbList);
+    this.bonusesItemsListSubscription = this.bonusesItemsList.subscribe(data => {
+      this.getBonusDays(data);
+    });
   }
 
   getMonthlySpentMoney() {
@@ -94,10 +125,16 @@ export class MonthStatisticPage {
       this.days.push(day.$key);
     }
     this.getDayMoney();
-
     for (let category of this.expensesService.categoriesData) {
       this.getDayMoneyByCategory(category.name);
     }
+  }
+
+  getBonusDays(data) {
+    for (let day of data) {
+      this.bonusDays.push(day.$key);
+    }
+    this.getBonusMoney();
   }
 
   getDayMoneyByCategory(category) {
@@ -143,6 +180,19 @@ export class MonthStatisticPage {
       allMoney += Number(expense.expenseValue);
     }
     return allMoney;
+  }
+
+  getBonusMoney() {
+    for (let day of this.bonusDays) {
+      let bonusAddress = 'dydo/bonusItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
+      let bonusListOfDay = this.expensesService.getItemsList(bonusAddress);
+
+      this.bonusListOfDaySubscription = bonusListOfDay.subscribe(data => {
+        for (let bonusDay of data) {
+          this.bonuses = this.bonuses + bonusDay.bonusValue;
+        }
+      });
+    }
   }
 
   setChart() {

@@ -1,5 +1,5 @@
 import { DatabaseQuery } from 'angularfire2/database/interfaces';
-import { Component } from '@angular/core';
+import { Component, Query } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
 
 import { ExpenseItem } from '../../models/expense-item.interface';
+import { BonusItem } from '../../models/bonus-item.interface';
 import { ExpensesService } from "../../services/expenses";
 
 @Component({
@@ -14,23 +15,29 @@ import { ExpensesService } from "../../services/expenses";
   templateUrl: 'day.html',
 })
 export class DayPage {
+  private viewType: string;
+  public title: string;
   public selectedMonth: string;
-  private dbList;
-  public dayList;
+  private dbExpenseList: string;
+  private dbBonusList: string;
+  public dayList: any;
   public expensesListArray: any = [];
+  public bonusesListArray: any = [];
   public expenseListOfDay: FirebaseListObservable<any[]>
   public expenseListSubscription: Subscription;
-  public allMoneySpent: number;
+  public bonusListOfDay: FirebaseListObservable<any[]>
+  public bonusListSubscription: Subscription;
+  public allMoneySpent: number = 0;
+  public allBonuses: number = 0
   public equal: string;
-  public showSpinner: boolean = true;
-  public noData: boolean = true;
-
   public sortDateDown: boolean = true;
   public sortPriceDown: boolean = true;
-
-  public statisticDaysList: FirebaseListObservable<any[]>;
-  public statisticDaysListtSubscription: Subscription;
-  public dbDaysList;
+  public showSpinner: boolean = true;
+  public noExpenseData: boolean = true;
+  public noBonusData: boolean = true;
+  private dbStart: string;
+  private queryValue: string;
+  private queryDate: string;
 
   constructor(
     public navParams: NavParams,
@@ -44,30 +51,79 @@ export class DayPage {
 
   ionViewDidLeave() {
     this.expensesService.safeUnsubscribe(this.expenseListSubscription);
+    this.expensesService.safeUnsubscribe(this.bonusListSubscription);
   }
 
   ionViewDidEnter() {
-    this.dayList = this.navParams.data;
+    this.clearAll();
+    this.dayList = this.navParams.data[0];
     this.expensesService.selectedDay = this.dayList.$key
-    this.dbList = 'dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
-    this.expenseListOfDay = this.expensesService.getItemsList(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
-    this.expenseListSubscription = this.expenseListOfDay.subscribe((data) => {
-      this.showSpinner = false
-      if (data == null) {
-        this.noData = true;
-        return;
-      } else {
-        if (data.length < 1) {
-          this.noData = true;
-          return;
-        } else {
-          this.allMoneySpent = this.getFullSpentMoney(data);
-          this.noData = false;
-        }
-      }
-    });
+    this.viewType = this.navParams.data[1];
+    this.checkWhichBudget();
 }
 
+clearAll() {
+  this.expensesListArray = [];
+  this.bonusesListArray = [];
+  this.allMoneySpent = 0;
+  this.allBonuses = 0;
+}
+
+checkWhichBudget() {
+  if (this.viewType === 'bonuses') {
+    this.title = "Bonusy";
+    this.dbStart = 'dydo/bonusItems/';
+    this.queryValue = 'bonusValue';
+    this.queryDate = 'bonusDate';
+    this.getBonusData();
+  } else if(this.viewType === 'expenses') {
+    this.title = "Wydatki dzienne";
+    this.dbStart = 'dydo/expenseItems/';
+    this.queryValue = 'expenseValue';
+    this.queryDate = 'expenseDate';
+    this.getExpenseData();
+  }
+}
+
+getExpenseData() {
+  this.dbExpenseList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+  this.expenseListOfDay = this.expensesService.getItemsList(this.dbExpenseList);
+  this.expenseListSubscription = this.expenseListOfDay.subscribe((data) => {
+    if (data == null) {
+      this.noExpenseData = true;
+      return;
+    } else {
+      if (data.length < 1) {
+        this.noExpenseData = true;
+        return;
+      } else {
+        this.allMoneySpent = this.getFullSpentMoney(data);
+        this.noExpenseData = false;
+      }
+    }
+    this.showSpinner = false;
+  });
+}
+
+getBonusData() {
+  this.dbBonusList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+  this.bonusListOfDay = this.expensesService.getItemsList(this.dbBonusList);
+  this.bonusListSubscription = this.bonusListOfDay.subscribe((data) => {
+    if (data == null) {
+      this.noBonusData = true;
+      return;
+    } else {
+      if (data.length < 1) {
+        this.noBonusData = true;
+        return;
+      } else {
+        this.allBonuses = this.getFullBonuses(data);
+        this.noBonusData = false;
+      }
+    }
+    this.showSpinner = false;
+  });
+}
 
   getFullSpentMoney(data) {
     let allMoney: number = 0;
@@ -75,6 +131,14 @@ export class DayPage {
       allMoney += Number(expense.expenseValue);
     }
     return allMoney;
+  }
+
+  getFullBonuses(data) {
+    let allMoney: number = 0;
+    for (let bonus of data) {
+      allMoney += Number(bonus.bonusValue);
+    }
+    return Number(allMoney);
   }
 
   deleteExpense(key: string) {
@@ -97,7 +161,27 @@ export class DayPage {
     alert.present();
   }
 
-  editExpense(key: string, name, description, amount, category) {
+  deleteBonus(key: string) {
+    const alert = this.alertCtrl.create({
+      title: 'Usuwanie elementu',
+      message: 'Czy na pewno chcesz usunąć ten element?',
+      buttons: [
+        {
+          text: 'Tak',
+          handler: () => {
+            this.bonusListOfDay.remove(key);
+          }
+        },
+        {
+          text: 'Nie',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  editExpense(key: string, name: string, description: string, amount, category) {
     const alert = this.alertCtrl.create({
       title: 'Edycja elementu',
       inputs: [
@@ -143,6 +227,46 @@ export class DayPage {
     alert.present();
   }
 
+  editBonus(key: string, name: string, description: string, amount) {
+    const alert = this.alertCtrl.create({
+      title: 'Edycja elementu',
+      inputs: [
+        {
+          name: 'bonusName',
+          placeholder: 'Nazwa',
+          value: name
+        },
+        {
+          name: 'bonusDescription',
+          placeholder: 'Opis',
+          value: description
+        },
+        {
+          name: 'bonusValue',
+          placeholder: 'Wydane',
+          value: amount
+        }
+      ],
+      buttons: [
+        {
+          text: 'Wstecz',
+          role: 'cancel'
+        },
+        {
+          text: 'Zapisz',
+          handler: data => {
+            this.expenseListOfDay.update(key, {
+              bonusName: data.bonusName,
+              bonusDescription: data.bonusDescription,
+              bonusValue: data.bonusValue
+            });
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   setChecked(data) {
     for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
       this.expensesService.categoriesData[i].radioSign = false;
@@ -151,41 +275,29 @@ export class DayPage {
   }
 
   dateAscending() {
-    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
-      query: {
-        orderByChild: 'expenseDate'
-      }
-    });
+    let dbList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+    this.expenseListOfDay = this.expensesService.getItemsList(dbList, { orderByChild: this.queryDate });
     this.sortDateDown = false;
     this.setChecked(0);
   }
 
   dateDescending() {
-    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
-      query: {
-        orderByChild: 'expenseDate'
-      }
-    }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    let dbList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+    this.expenseListOfDay = this.expenseListOfDay = this.expensesService.getItemsList(dbList, { orderByChild: this.queryDate }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.sortDateDown = true;
     this.setChecked(0);
   }
 
   priceAscending() {
-    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
-      query: {
-        orderByChild: 'expenseValue'
-      }
-    });
+    let dbList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+    this.expenseListOfDay = this.expenseListOfDay = this.expensesService.getItemsList(dbList, { orderByChild: this.queryValue });
     this.sortPriceDown = false;
     this.setChecked(0);
   }
 
   priceDescending() {
-    this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
-      query: {
-        orderByChild: 'expenseValue'
-      }
-    }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    let dbList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+    this.expenseListOfDay = this.expenseListOfDay = this.expensesService.getItemsList(dbList, { orderByChild: this.queryValue }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.sortPriceDown = true;
     this.setChecked(0);
   }
@@ -204,19 +316,11 @@ export class DayPage {
       handler: data => {
         this.equal = this.expensesService.categoriesData[data].name;
         this.setChecked(data)
+        let dbList = 'dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
         if (data == 0) {
-          this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
-            query: {
-              orderByChild: 'expenseCategory'
-            }
-          });
+          this.expenseListOfDay = this.expenseListOfDay = this.expensesService.getItemsList(dbList, { orderByChild: 'expenseCategory' });
         } else {
-          this.expenseListOfDay = this.database.list('dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay, {
-            query: {
-              orderByChild: 'expenseCategory',
-              equalTo: this.equal
-            }
-          });
+          this.expenseListOfDay = this.expenseListOfDay = this.expensesService.getItemsList(dbList, { orderByChild: 'expenseCategory', equalTo: this.equal });
         }
       }
     });

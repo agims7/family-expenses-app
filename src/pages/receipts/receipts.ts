@@ -117,38 +117,22 @@ export class ReceiptsPage {
   }
 
   dateAscending() {
-    this.receiptsList = this.database.list('dydo/receiptsItems/', {
-      query: {
-        orderByChild: 'date'
-      }
-    });
+    this.receiptsList = this.expensesService.getItemsList('dydo/receiptsItems/', { orderByChild: 'date' });
     this.sortDateDown = false;
   }
 
   dateDescending() {
-    this.receiptsList = this.database.list('dydo/receiptsItems/', {
-      query: {
-        orderByChild: 'date'
-      }
-    }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.receiptsList = this.expensesService.getItemsList('dydo/receiptsItems/', { orderByChild: 'date' }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.sortDateDown = true;
   }
 
   priceAscending() {
-    this.receiptsList = this.database.list('dydo/receiptsItems/', {
-      query: {
-        orderByChild: 'value'
-      }
-    });
+    this.receiptsList = this.receiptsList = this.expensesService.getItemsList('dydo/receiptsItems/', { orderByChild: 'value' });
     this.sortPriceDown = false;
   }
 
   priceDescending() {
-    this.receiptsList = this.database.list('dydo/receiptsItems/', {
-      query: {
-        orderByChild: 'value'
-      }
-    }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.receiptsList = this.receiptsList = this.expensesService.getItemsList('dydo/receiptsItems/', { orderByChild: 'value' }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.sortPriceDown = true;
   }
 

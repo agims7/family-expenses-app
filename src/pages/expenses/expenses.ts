@@ -23,7 +23,6 @@ export class ExpensesPage {
     public database: AngularFireDatabase,
     public expensesService: ExpensesService
   ) {
-    this.expenseListOfYears = database.list(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
   }
 
   ionViewDidLeave() {
@@ -34,7 +33,6 @@ export class ExpensesPage {
     this.expenseListOfYears = this.expensesService.getItemsList(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
 
     this.expenseListOfYearsSubscription = this.expenseListOfYears.subscribe((data) => {
-      this.showSpinner = false
       if (data == null) {
         this.noData = true;
         return;
@@ -46,6 +44,7 @@ export class ExpensesPage {
           this.noData = false;
         }
       }
+      this.showSpinner = false
     });
   }
 

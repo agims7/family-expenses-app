@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      <span class="big-letter">Kategoria</span>
+      {{ title }}
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -12,33 +12,37 @@
 
     <div *ngIf="!showSpinner">
       <ion-list *ngIf="!noData">
-        <ion-item *ngFor="let item of categoryData; let i = index">
+        <ion-item *ngFor="let item of data; let i = index">
           <ion-row>
             <ion-col>
-              <h2 text-left>{{ item.expenseName }}</h2>
+              <h2 *ngIf="expenseView" text-left>{{ item.expenseName }}</h2>
+              <h2 *ngIf="!expenseView" text-left>{{ item.bonusName }}</h2>
             </ion-col>
             <ion-col>
-              <h2 class="price" text-right>{{ item.expenseValue }} zł</h2>
+              <h2 *ngIf="expenseView" class="price" text-right>{{ item.expenseValue }} zł</h2>
+              <h2 *ngIf="!expenseView" class="bonus" text-right>{{ item.bonusValue }} zł</h2>              
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col col-8>
-              <p class="description" text-left text-wrap>{{ item.expenseDescription }}</p>
+              <p *ngIf="expenseView" class="description" text-left text-wrap>{{ item.expenseDescription }}</p>
+              <p *ngIf="!expenseView" class="description" text-left text-wrap>{{ item.bonusDescription }}</p>
             </ion-col>
             <ion-col col-4>
-              <p class="date" text-right>{{ showTime(item.expenseDate) }}</p>
+              <p *ngIf="expenseView" class="date" text-right>{{ showTime(item.expenseDate) }}</p>
+              <p *ngIf="!expenseView" class="date" text-right>{{ showTime(item.bonusDate) }}</p>
             </ion-col>
           </ion-row>
         </ion-item>
       </ion-list>
 
       <div *ngIf="noData">
-          <ion-card class="box">
-            <ion-card-header>
-              <h2>Brak danych</h2>
-            </ion-card-header>
-          </ion-card>
-        </div>
+        <ion-card class="box">
+          <ion-card-header>
+            <h2>Brak danych</h2>
+          </ion-card-header>
+        </ion-card>
+      </div>
     </div>
 
   </ion-grid>

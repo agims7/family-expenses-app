@@ -1,11 +1,12 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Kategorie</ion-title>
-  </ion-navbar>
-</ion-header>
+    <ion-navbar color="primary">
+      <ion-title>Kategorie</ion-title>
+    </ion-navbar>
+  </ion-header>
 
 
 <ion-content padding>
+    <ion-grid>
   <loader *ngIf="showSpinner"></loader>
 
   <div *ngIf="!showSpinner">
@@ -16,8 +17,7 @@
       </ion-item>
       <div class="color-container">
         <label>Kolor</label>
-        <input class="color-picker-input" [(colorPicker)]="color" [style.background]="color" (colorPickerChange)="changeColor()"
-          [cpPosition]="'bottom'" [cpOutputFormat]="'hex'" [cpOKButtonClass]="'color-picker-button'" [cpOKButton]="true" [cpOKButtonText]="'OK'"
+        <input class="color-picker-input" [(colorPicker)]="color" [style.background]="color" [cpPosition]="'bottom'" [cpOutputFormat]="'hex'" [cpOKButtonClass]="'color-picker-button'" [cpOKButton]="true" [cpOKButtonText]="'OK'"
           required/>
       </div>
 
@@ -35,5 +35,5 @@
       </ion-item>
     </ion-list>
   </div>
-
+</ion-grid>
 </ion-content>

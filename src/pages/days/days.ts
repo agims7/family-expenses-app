@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
@@ -14,18 +14,25 @@ import { ExpensesService } from "../../services/expenses";
   selector: 'page-days',
   templateUrl: 'days.html',
 })
-export class DaysPage implements OnInit {
+export class DaysPage {
   dayPage = DayPage;
-  private currentYear: string = moment().format('YYYY');
-  private dbList = 'dydo/expenseItems/' + this.currentYear;
+  public viewType: string;
+  public title: string;
+  private dbExpenseList: string;
+  private dbBonusList: string;
   public daysList;
   public expenseListOfDays: FirebaseListObservable<any[]>
-  public expenseListSubscription: Subscription;
+  public expenseListOfDaysSubscription: Subscription;
+  public bonuseListOfDays: FirebaseListObservable<any[]>
+  public bonusListOfDaysSubscription: Subscription;
   public days = [];
   public dayWithExpenses = {};
-  public allMonthlyMoneySpent: number;
+  public dayWithBonuses = {};
+  public allMonthlyMoneySpent: number = 0;
+  public allMonthlyBonuses: number = 0;
   public showSpinner: boolean = true;
-  public noData: boolean = true;
+  public noExpenseData: boolean = true;
+  public noBonusData: boolean = true;
 
   constructor(
     public navParams: NavParams,
@@ -37,53 +44,114 @@ export class DaysPage implements OnInit {
   }
 
   ionViewDidLeave() {
-    this.expensesService.safeUnsubscribe(this.expenseListSubscription);
+    this.expensesService.safeUnsubscribe(this.expenseListOfDaysSubscription);
+    this.expensesService.safeUnsubscribe(this.bonusListOfDaysSubscription);
   }
 
-  ngOnInit() {
-    this.daysList = this.navParams.data;
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+    
+  }
+
+  ionViewDidEnter() {
+    // this.expensesService.loaderOn();
+    this.clearAll();
+    this.daysList = this.navParams.data[0];
     this.expensesService.selectedMonth = this.daysList.$key;
     this.getMonthNumber(this.daysList.$key);
-    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth;
-    this.expenseListOfDays = this.expensesService.getItemsList(this.dbList)
-    this.expenseListSubscription = this.expenseListOfDays.subscribe(data => {
-      this.showSpinner = false
+    this.viewType = this.navParams.data[1];
+    this.checkWhichBudget();
+  }
+
+  clearAll() {
+    this.days = [];
+    this.dayWithExpenses = {};
+    this.dayWithBonuses = {};
+    this.allMonthlyMoneySpent = 0;
+    this.allMonthlyBonuses = 0;
+  }
+
+  checkWhichBudget() {
+    if (this.viewType === 'bonuses') {
+      this.getBonusData();
+      this.title = "Bonusy";
+    } else if(this.viewType === 'expenses') {
+      this.getExpenseData();
+      this.title = "Wydatki";
+    }
+  }
+
+  getExpenseData() {
+    this.dbExpenseList = 'dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth;
+    this.expenseListOfDays = this.expensesService.getItemsList(this.dbExpenseList);
+    this.expenseListOfDaysSubscription = this.expenseListOfDays.subscribe((data) => {
       if (data == null) {
-        this.noData = true;
+        this.noExpenseData = true;
         return;
       } else {
         if (data.length < 1) {
-          this.noData = true;
+          this.noExpenseData = true;
           return;
         } else {
           this.getDays(data);
-          this.noData = false;
+          this.noExpenseData = false;
         }
       }
+      // this.showSpinner = false;
+      this.expensesService.loaderOff();
     });
   }
 
-  getMonthlySpentMoney() {
-    this.allMonthlyMoneySpent = 0;
-    for (let money in this.dayWithExpenses) {
-      this.allMonthlyMoneySpent = this.allMonthlyMoneySpent + this.dayWithExpenses[money];
-    }
+  getBonusData() {
+    this.dbBonusList = 'dydo/bonusItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth;
+    this.bonuseListOfDays = this.expensesService.getItemsList(this.dbBonusList);
+    this.bonusListOfDaysSubscription = this.bonuseListOfDays.subscribe((data) => {
+      if (data == null) {
+        this.noBonusData = true;
+        return;
+      } else {
+        if (data.length < 1) {
+          this.noBonusData = true;
+          return;
+        } else {
+          this.getDays(data);
+          this.noBonusData = false;
+        }
+      }
+      // this.showSpinner = false;
+      this.expensesService.loaderOff();
+    });
   }
 
   getDays(data) {
     for (let day of data) {
       this.days.push(day.$key);
     }
-    this.getDayMoney();
+    if (this.viewType === 'bonuses') {
+      this.getBonusDayMoney();
+    } else if(this.viewType === 'expenses') {
+      this.getExpenseDayMoney();
+    }
   }
 
-  getDayMoney() {
+  getExpenseDayMoney() {
     for (let day of this.days) {
-      let databaseAddress = 'dydo/expenseItems/' + this.currentYear + '/' + this.expensesService.selectedMonth + '/' + day;
+      let databaseAddress = 'dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + day;
       let listOfDay = this.database.list(databaseAddress);
-      listOfDay.subscribe(x => {
-        this.dayWithExpenses[day] = this.getFullSpentMoney(x);
+      listOfDay.subscribe(data => {
+        this.dayWithExpenses[day] = this.getFullSpentMoney(data);
         this.getMonthlySpentMoney();
+      });
+    }
+  }
+
+  getBonusDayMoney() {
+    for (let day of this.days) {
+      let databaseAddress = 'dydo/bonusItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + day;
+      let listOfDay = this.database.list(databaseAddress);
+      listOfDay.subscribe(data => {
+        this.dayWithBonuses[day] = this.getFullBonuses(data);
+        this.getMonthlyBonuses();
       });
     }
   }
@@ -94,6 +162,28 @@ export class DaysPage implements OnInit {
       allMoney += Number(expense.expenseValue);
     }
     return Number(allMoney);
+  }
+
+  getFullBonuses(data) {
+    let allMoney: number = 0;
+    for (let bonus of data) {
+      allMoney += Number(bonus.bonusValue);
+    }
+    return Number(allMoney);
+  }
+
+  getMonthlySpentMoney() {
+    this.allMonthlyMoneySpent = 0;
+    for (let money in this.dayWithExpenses) {
+      this.allMonthlyMoneySpent = this.allMonthlyMoneySpent + this.dayWithExpenses[money];
+    }
+  }
+
+  getMonthlyBonuses() {
+    this.allMonthlyBonuses = 0;
+    for (let money in this.dayWithBonuses) {
+      this.allMonthlyBonuses = this.allMonthlyBonuses + this.dayWithBonuses[money];
+    }
   }
 
   getMonthNumber(month) {

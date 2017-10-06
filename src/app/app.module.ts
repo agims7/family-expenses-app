@@ -11,6 +11,7 @@ import { config } from './firebase.credentials';
 import { MyApp } from './app.component';
 import { TabsPage } from '../pages/tabs/tabs';
 import { StatisticsPage } from "../pages/statistics/statistics";
+import { BudgetPage } from "../pages/budget/budget";
 import { ExpensesPage } from "../pages/expenses/expenses";
 import { MonthsPage } from "../pages/months/months";
 import { DaysPage } from "../pages/days/days";
@@ -40,6 +41,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     MyApp,
     TabsPage,
     StatisticsPage,
+    BudgetPage,
     ExpensesPage,
     MonthsPage,
     DaysPage,
@@ -70,6 +72,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     MyApp,
     TabsPage,
     StatisticsPage,
+    BudgetPage,
     ExpensesPage,
     MonthsPage,
     DaysPage,

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { StatisticsPage } from "../statistics/statistics";
+import { BudgetPage } from "../budget/budget";
 import { ExpensesPage } from "../expenses/expenses";
 import { NewExpensesPage } from "../new-expenses/new-expenses";
 import { CategoriesPage } from "../categories/categories";
@@ -13,6 +14,7 @@ import { ReceiptsPage } from "../receipts/receipts";
 })
 export class TabsPage {
   statisticsPage = StatisticsPage;
+  budgetPage = BudgetPage;
   expensesPage = ExpensesPage;
   newExpensesPage = NewExpensesPage;
   categoriesPage = CategoriesPage;

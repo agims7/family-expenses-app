@@ -1,10 +1,11 @@
 import { Component  } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import { ExpensesService } from "../../services/expenses";
 import { ExpenseItem } from '../../models/expense-item.interface';
+import { BonusItem } from '../../models/bonus-item.interface';
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
 
@@ -14,16 +15,22 @@ import * as _ from 'lodash';
 })
 export class NewExpensesPage {
   public expenseItem = {} as ExpenseItem;
+  public bonusItem = {} as BonusItem;
   public expenseItemsList: FirebaseListObservable<ExpenseItem[]>
+  public bonusesItemsList: FirebaseListObservable<BonusItem[]>
   public categoriesDataList: FirebaseListObservable<ExpenseItem[]>
   public categoriesDbList: string;
   public expensesDbList: string;
+  public bonusesDbList: string;
   public categoriesDataListSubscription: Subscription;
   public showSpinner: boolean = true;
   public localCategoriesData: any = [];
 
+  public expenses: boolean = true;
+  public title: string = 'wydatek';
+
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public navParams: NavParams,
     public database: AngularFireDatabase,
     public expensesService: ExpensesService
@@ -36,14 +43,20 @@ export class NewExpensesPage {
   }
 
   ionViewDidEnter() {
+    this.expensesService.loaderOn();
     this.categoriesDbList = 'dydo/categoriesItems/';
     this.categoriesDataList = this.expensesService.getItemsList(this.categoriesDbList);
     this.categoriesDataListSubscription = this.categoriesDataList.subscribe((data) => {
       this.expensesService.categoriesData = data;
       this.localCategoriesData = _.clone(this.expensesService.categoriesData);
       this.localCategoriesData.shift();
-      this.showSpinner = false
+      // this.showSpinner = false
+      this.expensesService.loaderOff();
     });
+  }
+
+  changeView() {
+    this.expenses === true ? this.title = 'wydatek' : this.title = 'bonus';
   }
 
   getYear() {
@@ -77,4 +90,21 @@ export class NewExpensesPage {
     }
   }
 
+  addBonusItem(bonusItem: BonusItem) {
+    this.bonusesDbList = 'dydo/bonusItems/' + this.getYear() + '/' + this.getMonth() + '/' + this.getDay();
+    this.bonusesItemsList = this.expensesService.getItemsList(this.bonusesDbList);
+    this.bonusesItemsList.push({
+      bonusName: this.bonusItem.bonusName,
+      bonusDescription: this.bonusItem.bonusDescription,
+      bonusValue: Number(this.bonusItem.bonusValue),
+      bonusDate: moment().unix()
+    }
+  );    
+    this.bonusItem = {
+      bonusName: null,
+      bonusDescription: null,
+      bonusValue: null,
+      bonusDate: null
+    }
+  }
 }

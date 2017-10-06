@@ -6,6 +6,7 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import * as moment from 'moment';
 import { ReceiptsPage } from "../receipts/receipts";
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { ExpensesService } from "../../services/expenses";
 
 @Component({
   selector: 'page-new-receipt',
@@ -25,6 +26,7 @@ export class NewReceiptPage {
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
+    public expensesService: ExpensesService,
     public database: AngularFireDatabase,
     public camera: Camera
   ) {
@@ -33,7 +35,7 @@ export class NewReceiptPage {
   ionViewDidEnter() {
     this.imageTaken = false;
     this.dbList = 'dydo/receiptsItems/';
-    this.receiptsList = this.database.list(this.dbList);
+    this.receiptsList = this.expensesService.getItemsList(this.dbList);
   }
 
   takePicture() {

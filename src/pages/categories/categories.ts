@@ -14,8 +14,10 @@ export class CategoriesPage {
   editCategoryPage = EditCategoryPage;
   public newCategoryName: string;
   public color: string = '#ffffff';
-  public categoriesItemsList: FirebaseListObservable<any[]>
+  public categoriesItemsList: FirebaseListObservable<any[]>;
+  public categoriesDataList: FirebaseListObservable<any[]>;
   public categoriesItemsListSubscription: Subscription;
+  public categoriesDataListSubscription: Subscription;
   public dbList: string = 'dydo/categoriesItems';
   public showSpinner: boolean = true;
   public categoriesTable;
@@ -27,6 +29,11 @@ export class CategoriesPage {
     public database: AngularFireDatabase,
     public expensesService: ExpensesService
   ) {
+  }
+
+  ionViewDidLeave() {
+    this.expensesService.safeUnsubscribe(this.categoriesItemsListSubscription);
+    this.expensesService.safeUnsubscribe(this.categoriesDataListSubscription);
   }
 
   ionViewDidEnter() {
@@ -51,6 +58,7 @@ export class CategoriesPage {
       radioSign: false,
       removable: true
     });
+    this.updateCategories()
     this.clearInput();
   }
 
@@ -63,6 +71,7 @@ export class CategoriesPage {
           text: 'Tak',
           handler: () => {
             this.categoriesItemsList.remove(key);
+            this.updateCategories();
           }
         },
         {
@@ -72,5 +81,12 @@ export class CategoriesPage {
       ]
     });
     alert.present();
+  }
+
+  updateCategories() {
+    this.categoriesDataList = this.expensesService.getItemsList(this.dbList);
+    this.categoriesDataListSubscription = this.categoriesDataList.subscribe((data) => {
+      this.expensesService.categoriesData = data;
+    });
   }
 }

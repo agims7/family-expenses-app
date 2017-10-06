@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LoadingController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 
@@ -16,8 +17,10 @@ export class ExpensesService {
     public categoriesTable = [];
     public dateFrom: Date = moment().startOf('month')['_d'];
     public dateTo: Date = moment()['_d'];
+    public loading: any;
 
     constructor(
+        public loadingCtrl: LoadingController,
         public database: AngularFireDatabase
     ) { }
 
@@ -72,6 +75,48 @@ export class ExpensesService {
           case (11): { return 'listopad'; }
           case (12): { return 'grudzień'; }
         }
+      }
+
+      loaderOn() {
+        this.loading = this.loadingCtrl.create({
+          spinner: 'hide',
+          content: `
+          <div class="sk-cube-grid">
+          <div class="sk-cube sk-cube1"></div>
+          <div class="sk-cube sk-cube2"></div>
+          <div class="sk-cube sk-cube3"></div>
+          <div class="sk-cube sk-cube4"></div>
+          <div class="sk-cube sk-cube5"></div>
+          <div class="sk-cube sk-cube6"></div>
+          <div class="sk-cube sk-cube7"></div>
+          <div class="sk-cube sk-cube8"></div>
+          <div class="sk-cube sk-cube9"></div>
+          <div class="sk-cube sk-cube10"></div>
+          <div class="sk-cube sk-cube11"></div>
+          <div class="sk-cube sk-cube12"></div>
+          <div class="sk-cube sk-cube13"></div>
+          <div class="sk-cube sk-cube14"></div>
+          <div class="sk-cube sk-cube15"></div>
+          <div class="sk-cube sk-cube16"></div>
+          <div class="sk-cube sk-cube17"></div>
+          <div class="sk-cube sk-cube18"></div>
+          <div class="sk-cube sk-cube19"></div>
+          <div class="sk-cube sk-cube20"></div>
+          <div class="sk-cube sk-cube21"></div>
+          <div class="sk-cube sk-cube22"></div>
+          <div class="sk-cube sk-cube23"></div>
+        </div>`
+        });
+      
+        this.loading.onDidDismiss(() => {
+          console.log('Dismissed loading');
+        });
+      
+        this.loading.present();
+      }
+
+      loaderOff() {
+        this.loading.dismiss();
       }
 
 }

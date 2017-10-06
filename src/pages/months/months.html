@@ -1,29 +1,48 @@
 <ion-header>
-
   <ion-navbar color="primary">
-    <ion-title>Lista wydatkow</ion-title>
+    <ion-title>{{ title }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-  <loader *ngIf="showSpinner"></loader>
+  <ion-grid>
+    <loader *ngIf="showSpinner"></loader>
 
-  <div *ngIf="!showSpinner">
-    <h3 *ngIf="!noData" text-center>Wybierz miesiąc</h3>
-    <ion-list *ngIf="!noData">
-      <button ion-item *ngFor="let months of expenseListOfMonths | async; let i = index" [navPush]="daysPage" [navParams]="months">
-        <ion-icon name="calendar" item-left></ion-icon>
-        <h3 class="months">{{ months.$key }}</h3>
-      </button>
-    </ion-list>
-    <ion-list *ngIf="noData">
-      <ion-card class="box">
-        <ion-card-header>
-          <h2 class="money-header">Brak danych</h2>
-        </ion-card-header>
-      </ion-card>
-    </ion-list>
-  </div>
+    <div *ngIf="!showSpinner" [ngSwitch]="viewType">
+      <div *ngSwitchCase="'expenses'">
+        <h3 *ngIf="!noExpenseData" text-center>Wybierz miesiąc</h3>
+        <ion-list *ngIf="!noExpenseData">
+          <button ion-item *ngFor="let months of expenseListOfMonths | async; let i = index" [navPush]="daysPage" [navParams]="[months, viewType]">
+                <ion-icon name="calendar" item-left></ion-icon>
+                <h3 class="months">{{ months.$key }}</h3>
+              </button>
+        </ion-list>
+        <ion-list *ngIf="noExpenseData">
+          <ion-card class="box">
+            <ion-card-header>
+              <h2 class="money-header">Brak danych</h2>
+            </ion-card-header>
+          </ion-card>
+        </ion-list>
+      </div>
 
+      <div *ngSwitchCase="'bonuses'">
+        <h3 *ngIf="!noBonusData" text-center>Wybierz miesiąc</h3>
+        <ion-list *ngIf="!noBonusData">
+          <button ion-item *ngFor="let months of bonuseListOfMonths | async; let i = index" [navPush]="daysPage" [navParams]="[months, viewType]">
+                <ion-icon name="calendar" item-left></ion-icon>
+                <h3 class="months">{{ months.$key }}</h3>
+              </button>
+        </ion-list>
+        <ion-list *ngIf="noBonusData">
+          <ion-card class="box">
+            <ion-card-header>
+              <h2 class="money-header">Brak danych</h2>
+            </ion-card-header>
+          </ion-card>
+        </ion-list>
+      </div>
+    </div>
+  </ion-grid>
 </ion-content>

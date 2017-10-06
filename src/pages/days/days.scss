@@ -9,6 +9,13 @@ page-days {
             display: inline;
         }
     }
+    .bonus {
+        float: right;
+        color: #488aff;
+        h2 {
+            display: inline;
+        }
+    }
     .box {
         margin: 7px;
         width: calc(100% - 14px);
@@ -18,6 +25,10 @@ page-days {
     }
     .all-money {
         color: red;
+        float: right;
+    }
+    .all-bonuses {
+        color: #488aff;
         float: right;
     }
 }

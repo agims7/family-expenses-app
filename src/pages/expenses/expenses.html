@@ -1,29 +1,29 @@
 <ion-header>
-
   <ion-navbar color="primary">
-    <ion-title>Lista wydatkow</ion-title>
+    <ion-title>Wydatki i bonusy</ion-title>
   </ion-navbar>
 </ion-header>
 
 
 <ion-content padding>
-  <loader *ngIf="showSpinner"></loader>
+  <ion-grid>
+    <loader *ngIf="showSpinner"></loader>
 
-  <div *ngIf="!showSpinner">
-    <h3 *ngIf="!noData" text-center>Wybierz rok</h3>
-    <ion-list *ngIf="!noData">
-      <button ion-item *ngFor="let years of expenseListOfYears | async; let i = index" [navPush]="monthsPage" [navParams]="years">
+    <div *ngIf="!showSpinner">
+      <h3 *ngIf="!noData" text-center>Wybierz rok</h3>
+      <ion-list *ngIf="!noData">
+        <button ion-item *ngFor="let years of expenseListOfYears | async; let i = index" [navPush]="monthsPage" [navParams]="years">
               <ion-icon name="calendar" item-left></ion-icon>
               <h3 class="years">{{ years.$key }}</h3>
             </button>
-    </ion-list>
-    <ion-list *ngIf="noData">
+      </ion-list>
+      <ion-list *ngIf="noData">
         <ion-card class="box">
-            <ion-card-header>
-              <h2 class="money-header">Brak danych</h2>
-            </ion-card-header>
-          </ion-card>
-    </ion-list>
-  </div>
-
+          <ion-card-header>
+            <h2 class="money-header">Brak danych</h2>
+          </ion-card-header>
+        </ion-card>
+      </ion-list>
+    </div>
+  </ion-grid>
 </ion-content>

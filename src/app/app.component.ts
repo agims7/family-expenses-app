@@ -7,8 +7,7 @@ import { NavController } from "ionic-angular";
 import { MenuController } from "ionic-angular";
 
 import { TabsPage } from '../pages/tabs/tabs';
-import { StatisticsPage } from "../pages/statistics/statistics";
-import { ExpensesPage } from "../pages/expenses/expenses";
+import { ExpensesPage } from '../pages/expenses/expenses';
 
 import { ExpensesService } from "../services/expenses";
 

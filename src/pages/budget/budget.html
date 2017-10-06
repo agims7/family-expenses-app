@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Budżet</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="budget" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="expenses">
+        Wydatki
+      </ion-segment-button>
+      <ion-segment-button value="bonuses">
+        Bonusy
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-grid>
+    <loader *ngIf="showSpinner"></loader>
+
+    <div *ngIf="!showSpinner" [ngSwitch]="budget">
+      <div *ngSwitchCase="'expenses'">
+          <h3 *ngIf="!noExpenseData" text-center>Wybierz rok</h3>
+          <ion-list *ngIf="!noExpenseData">
+            <button ion-item *ngFor="let years of expenseListOfYears | async; let i = index" [navPush]="monthsPage" [navParams]="[years, budget]">
+                  <ion-icon name="calendar" item-left></ion-icon>
+                  <h3 class="years">{{ years.$key }}</h3>
+                </button>
+          </ion-list>
+          <ion-list *ngIf="noExpenseData">
+            <ion-card class="box">
+              <ion-card-header>
+                <h2 class="money-header">Brak danych</h2>
+              </ion-card-header>
+            </ion-card>
+          </ion-list>
+      </div>
+
+      <div *ngSwitchCase="'bonuses'">
+          <h3 *ngIf="!noBonusData" text-center>Wybierz rok</h3>
+          <ion-list *ngIf="!noBonusData">
+            <button ion-item *ngFor="let years of bonuseListOfYears | async; let i = index" [navPush]="monthsPage" [navParams]="[years, budget]">
+                  <ion-icon name="calendar" item-left></ion-icon>
+                  <h3 class="years">{{ years.$key }}</h3>
+                </button>
+          </ion-list>
+          <ion-list *ngIf="noBonusData">
+            <ion-card class="box">
+              <ion-card-header>
+                <h2 class="money-header">Brak danych</h2>
+              </ion-card-header>
+            </ion-card>
+          </ion-list>
+      </div>
+    </div>
+  </ion-grid>
+</ion-content>

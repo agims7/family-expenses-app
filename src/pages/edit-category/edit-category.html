@@ -1,24 +1,26 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Edycja kategorii</ion-title>
-  </ion-navbar>
-</ion-header>
+    <ion-navbar color="primary">
+      <ion-title>Edycja kategorii</ion-title>
+    </ion-navbar>
+  </ion-header>
 
 
 <ion-content padding>
-  <form #edit="ngForm"  (ngSubmit)="editCategory()">
-    <ion-item>
-      <ion-label floating>Nazwa</ion-label>
-      <ion-input type="text" name="name" [(ngModel)]="categoryName" (ngModelChange)="changeName()" ngModel required></ion-input>
-    </ion-item>
-    <div class="color-container">
-      <label>Kolor</label>
-      <input class="color-picker-input" [(colorPicker)]="categoryColor" [style.background]="categoryColor" [cpPosition]="'bottom'" [cpOutputFormat]="'hex'" [cpOKButtonClass]="'color-picker-button'" [cpOKButton]="true" [cpOKButtonText]="'OK'" required/>
-    </div>
+  <ion-grid>
+    <form #edit="ngForm" (ngSubmit)="editCategory()">
+      <ion-item>
+        <ion-label floating>Nazwa</ion-label>
+        <ion-input type="text" name="name" [(ngModel)]="categoryName" (ngModelChange)="changeName()" ngModel required></ion-input>
+      </ion-item>
+      <div class="color-container">
+        <label>Kolor</label>
+        <input class="color-picker-input" [(colorPicker)]="categoryColor" [style.background]="categoryColor" [cpPosition]="'bottom'"
+          [cpOutputFormat]="'hex'" [cpOKButtonClass]="'color-picker-button'" [cpOKButton]="true" [cpOKButtonText]="'OK'" required/>
+      </div>
 
-    <div padding>
-      <button ion-button block [disabled]="!edit.valid" type="submit">Zmień</button>
-    </div>
-  </form>
-
+      <div padding>
+        <button ion-button block [disabled]="!edit.valid" type="submit">Zmień</button>
+      </div>
+    </form>
+  </ion-grid>
 </ion-content>

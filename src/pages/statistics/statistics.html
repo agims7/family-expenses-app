@@ -1,14 +1,13 @@
 <ion-header>
-  <ion-navbar color="primary">
-    <ion-title>Statystyki miesięcy</ion-title>
-  </ion-navbar>
-</ion-header>
+    <ion-navbar color="primary">
+      <ion-title>Statystyki miesięcy</ion-title>
+    </ion-navbar>
+  </ion-header>
 
 <ion-content padding>
   <ion-grid>
 
     <h3 text-center>Podaj zakres:</h3>
-
     <ion-row align-items-center class="date-section date-section-first">
       <ion-col>
         <p class="date-header">Data od:</p>
@@ -27,15 +26,13 @@
         <p class="date-header">Data do:</p>
       </ion-col>
       <ion-col>
-        <button ion-button outline icon-left ion-datepicker (ionChanged)="setDateTo($event);" [max]="maxDate" [value]="expensesService.dateTo" [showMaxAndMin]="true"
-          [localeStrings]="object">
+        <button ion-button outline icon-left ion-datepicker (ionChanged)="setDateTo($event);" [max]="maxDate" [value]="expensesService.dateTo"
+          [showMaxAndMin]="true" [localeStrings]="object">
           <span>{{ showTime(expensesService.dateTo) }}</span>
           <ion-icon name="calendar"></ion-icon>
         </button>
       </ion-col>
     </ion-row>
-
-
 
     <!-- <ion-item>
           <ion-label>Data od:</ion-label>
@@ -49,7 +46,6 @@
     <button ion-button block [navPush]="rangeStatisticPage">Przejdź</button>
 
     <h1 text-center>lub</h1>
-
     <ion-list>
       <button ion-item *ngFor="let month of polishMonths" [navPush]="monthStatisticPage" [navParams]="month">
             <ion-icon name="calendar" item-left></ion-icon>
