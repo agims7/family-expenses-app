@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { RangeStatisticPage } from "../range-statistic/range-statistic";
 import { MonthStatisticPage } from "../month-statistic/month-statistic";
 import { ExpensesService } from "../../services/expenses";
+import { Subscription } from 'rxjs/Subscription';
 import { DatePickerDirective } from 'ionic3-datepicker';
 
 
@@ -18,19 +19,18 @@ export class StatisticsPage {
   rangeStatisticPage = RangeStatisticPage;
   monthStatisticPage = MonthStatisticPage;
   public expenseFullList: FirebaseListObservable<any[]>
-  private currentYear: string = moment().format('YYYY');
   public allMonthlyMoney = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   public polishMonths = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień']
-  public dbList;
-  // public dateFrom: string = moment().startOf('month').format('YYYY-MM-DD');
-  // public dateTo: string = moment().endOf('month').format('YYYY-MM-DD');
-
+  private dbList = 'dydo/expenseItems/';
+  public expenseListOfYears: FirebaseListObservable<any[]>
+  public expenseListOfYearsSubscription: Subscription;
   public maxDate: Date = moment()['_d'];
   public object = {
     monday: true,
     weekdays: ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Niedz'],
     months: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień']
   };
+  public year: string = moment().format('YYYY');
 
   constructor(
     public navCtrl: NavController,
@@ -40,7 +40,27 @@ export class StatisticsPage {
   ) {
   }
 
+  ionViewDidLeave() {
+    this.expensesService.safeUnsubscribe(this.expenseListOfYearsSubscription);
+  }
+
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+  }
+
   ionViewDidEnter() {
+    this.getAvailableYears();
+  }
+
+  getAvailableYears() {
+    this.expensesService.availableYears = [];
+    this.expenseListOfYears = this.expensesService.getItemsList(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.expenseListOfYearsSubscription = this.expenseListOfYears.subscribe((data) => {
+      for (var key of data) {
+        this.expensesService.availableYears.push(key.$key)
+      }
+      this.expensesService.loaderOff();
+    });
   }
 
   setDateFrom(date: Date) {

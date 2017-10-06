@@ -20,7 +20,6 @@ export class NewReceiptPage {
   public receiptValue: number;
   public receiptImage: string;
   public receiptDate: number;
-  public showSpinner: boolean = false;
   public imageTaken: boolean = false;
 
   constructor(
@@ -39,7 +38,7 @@ export class NewReceiptPage {
   }
 
   takePicture() {
-    this.showSpinner = true;
+    this.expensesService.loaderOn();
     const options: CameraOptions = {
       quality: 80,
       correctOrientation: true,
@@ -55,15 +54,15 @@ export class NewReceiptPage {
     this.camera.getPicture(options).then((imageData) => {
       this.receiptImage = 'data:image/jpeg;base64,' + imageData;
       this.imageTaken = true;
-      this.showSpinner = false;
+      this.expensesService.loaderOff();
     }, (err) => {
       console.log('error');
-      this.showSpinner = false;
+      this.expensesService.loaderOff();
     });
   }
 
   getPicture() {
-    this.showSpinner = true;
+    this.expensesService.loaderOn();
     const options: CameraOptions = {
       quality: 80,
       correctOrientation: true,
@@ -79,15 +78,14 @@ export class NewReceiptPage {
     this.camera.getPicture(options).then((imageData) => {
       this.receiptImage = 'data:image/jpeg;base64,' + imageData;
       this.imageTaken = true;
-      this.showSpinner = false;
+      this.expensesService.loaderOff();
     }, (err) => {
       console.log('error');
-      this.showSpinner = false;
+      this.expensesService.loaderOff();
     });
   }
 
   addReceipt() {
-    this.showSpinner = true;
     let promise = this.receiptsList.push({
       date: moment().unix(),
       description: this.receiptDescription,
@@ -97,11 +95,9 @@ export class NewReceiptPage {
     });
     promise
       .then(_ => {
-        this.showSpinner = false;
         console.log('success');
       })
       .catch(err => {
-        this.showSpinner = false;
         console.log(err, 'Something went wrong!');
       });
     this.navCtrl.push(ReceiptsPage);

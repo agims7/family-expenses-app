@@ -5,7 +5,6 @@ import * as moment from 'moment';
 
 @Injectable()
 export class ExpensesService {
-    private currentYear: string = moment().format('YYYY');
     public selectedMonth;
     public selectedMonthNumber: number;
     public selectedYear: number;
@@ -18,6 +17,7 @@ export class ExpensesService {
     public dateFrom: Date = moment().startOf('month')['_d'];
     public dateTo: Date = moment()['_d'];
     public loading: any;
+    public availableYears: any = [];
 
     constructor(
         public loadingCtrl: LoadingController,

@@ -15,7 +15,7 @@ import { ExpensesService } from "../../services/expenses";
   templateUrl: 'day.html',
 })
 export class DayPage {
-  private viewType: string;
+  public viewType: string;
   public title: string;
   public selectedMonth: string;
   private dbExpenseList: string;
@@ -32,7 +32,6 @@ export class DayPage {
   public equal: string;
   public sortDateDown: boolean = true;
   public sortPriceDown: boolean = true;
-  public showSpinner: boolean = true;
   public noExpenseData: boolean = true;
   public noBonusData: boolean = true;
   private dbStart: string;
@@ -54,76 +53,80 @@ export class DayPage {
     this.expensesService.safeUnsubscribe(this.bonusListSubscription);
   }
 
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+  }
+
   ionViewDidEnter() {
     this.clearAll();
     this.dayList = this.navParams.data[0];
     this.expensesService.selectedDay = this.dayList.$key
     this.viewType = this.navParams.data[1];
     this.checkWhichBudget();
-}
-
-clearAll() {
-  this.expensesListArray = [];
-  this.bonusesListArray = [];
-  this.allMoneySpent = 0;
-  this.allBonuses = 0;
-}
-
-checkWhichBudget() {
-  if (this.viewType === 'bonuses') {
-    this.title = "Bonusy";
-    this.dbStart = 'dydo/bonusItems/';
-    this.queryValue = 'bonusValue';
-    this.queryDate = 'bonusDate';
-    this.getBonusData();
-  } else if(this.viewType === 'expenses') {
-    this.title = "Wydatki dzienne";
-    this.dbStart = 'dydo/expenseItems/';
-    this.queryValue = 'expenseValue';
-    this.queryDate = 'expenseDate';
-    this.getExpenseData();
   }
-}
 
-getExpenseData() {
-  this.dbExpenseList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
-  this.expenseListOfDay = this.expensesService.getItemsList(this.dbExpenseList);
-  this.expenseListSubscription = this.expenseListOfDay.subscribe((data) => {
-    if (data == null) {
-      this.noExpenseData = true;
-      return;
-    } else {
-      if (data.length < 1) {
+  clearAll() {
+    this.expensesListArray = [];
+    this.bonusesListArray = [];
+    this.allMoneySpent = 0;
+    this.allBonuses = 0;
+  }
+
+  checkWhichBudget() {
+    if (this.viewType === 'bonuses') {
+      this.title = "Bonusy";
+      this.dbStart = 'dydo/bonusItems/';
+      this.queryValue = 'bonusValue';
+      this.queryDate = 'bonusDate';
+      this.getBonusData();
+    } else if (this.viewType === 'expenses') {
+      this.title = "Wydatki dzienne";
+      this.dbStart = 'dydo/expenseItems/';
+      this.queryValue = 'expenseValue';
+      this.queryDate = 'expenseDate';
+      this.getExpenseData();
+    }
+  }
+
+  getExpenseData() {
+    this.dbExpenseList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+    this.expenseListOfDay = this.expensesService.getItemsList(this.dbExpenseList);
+    this.expenseListSubscription = this.expenseListOfDay.subscribe((data) => {
+      if (data == null) {
         this.noExpenseData = true;
         return;
       } else {
-        this.allMoneySpent = this.getFullSpentMoney(data);
-        this.noExpenseData = false;
+        if (data.length < 1) {
+          this.noExpenseData = true;
+          return;
+        } else {
+          this.allMoneySpent = this.getFullSpentMoney(data);
+          this.noExpenseData = false;
+        }
       }
-    }
-    this.showSpinner = false;
-  });
-}
+        this.expensesService.loaderOff();
+    });
+  }
 
-getBonusData() {
-  this.dbBonusList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
-  this.bonusListOfDay = this.expensesService.getItemsList(this.dbBonusList);
-  this.bonusListSubscription = this.bonusListOfDay.subscribe((data) => {
-    if (data == null) {
-      this.noBonusData = true;
-      return;
-    } else {
-      if (data.length < 1) {
+  getBonusData() {
+    this.dbBonusList = this.dbStart + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+    this.bonusListOfDay = this.expensesService.getItemsList(this.dbBonusList);
+    this.bonusListSubscription = this.bonusListOfDay.subscribe((data) => {
+      if (data == null) {
         this.noBonusData = true;
         return;
       } else {
-        this.allBonuses = this.getFullBonuses(data);
-        this.noBonusData = false;
+        if (data.length < 1) {
+          this.noBonusData = true;
+          return;
+        } else {
+          this.allBonuses = this.getFullBonuses(data);
+          this.noBonusData = false;
+        }
       }
-    }
-    this.showSpinner = false;
-  });
-}
+        this.expensesService.loaderOff();
+    });
+  }
 
   getFullSpentMoney(data) {
     let allMoney: number = 0;

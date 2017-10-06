@@ -13,13 +13,12 @@ import { ExpensesService } from '../../services/expenses';
 })
 export class StatisticByCategoryPage {
   public title: string;
-  private currentYear: string = moment().format('YYYY');
+  public selectedYear: string;
   private dbList: string;
   public statisticList: FirebaseListObservable<any[]>
   public statisticListSubscription: Subscription;
   public month: string;
   public category: string
-  public showSpinner: boolean = true;
   public data: any = [];
   public noData: boolean = false;
   public expenseView: boolean;
@@ -35,10 +34,15 @@ export class StatisticByCategoryPage {
     this.expensesService.safeUnsubscribe(this.statisticListSubscription);
   }
 
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+  }
+
   ionViewDidEnter() {
     this.clearAll();
     this.month = this.navParams.data[0];
     this.category = this.navParams.data[1];
+    this.selectedYear = this.navParams.data[2];
     this.checkWhichBudget();
   }
 
@@ -59,7 +63,7 @@ export class StatisticByCategoryPage {
   }
 
   getExpenseData() {
-    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.month;
+    this.dbList = 'dydo/expenseItems/' + this.selectedYear + '/' + this.month;
     this.statisticList = this.expensesService.getItemsList(this.dbList);
     this.statisticListSubscription = this.statisticList.subscribe(data => {
       this.getExpenseDays(data);
@@ -67,7 +71,7 @@ export class StatisticByCategoryPage {
   }
 
   getBonusData() {
-    this.dbList = 'dydo/bonusItems/' + this.currentYear + '/' + this.month;
+    this.dbList = 'dydo/bonusItems/' + this.selectedYear + '/' + this.month;
     this.statisticList = this.expensesService.getItemsList(this.dbList);
     this.statisticListSubscription = this.statisticList.subscribe(data => {
       this.getBonusDays(data);
@@ -85,7 +89,7 @@ export class StatisticByCategoryPage {
     if (this.data.length < 1) {
       this.noData = true;
     }
-    this.showSpinner = false
+    this.expensesService.loaderOff();
   }
 
   getBonusDays(data) {  
@@ -98,7 +102,7 @@ export class StatisticByCategoryPage {
     if (this.data.length < 1) {
       this.noData = true;
     }
-    this.showSpinner = false
+    this.expensesService.loaderOff();
   }
 
   showTime(time) {

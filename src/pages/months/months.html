@@ -7,9 +7,8 @@
 
 <ion-content padding>
   <ion-grid>
-    <loader *ngIf="showSpinner"></loader>
 
-    <div *ngIf="!showSpinner" [ngSwitch]="viewType">
+    <div [ngSwitch]="viewType">
       <div *ngSwitchCase="'expenses'">
         <h3 *ngIf="!noExpenseData" text-center>Wybierz miesiąc</h3>
         <ion-list *ngIf="!noExpenseData">

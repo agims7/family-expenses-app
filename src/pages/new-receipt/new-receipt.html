@@ -8,8 +8,7 @@
 
 <ion-content padding>
   <ion-grid>
-    <loader *ngIf="showSpinner"></loader>
-    <form *ngIf="!showSpinner" #receipt="ngForm" (ngSubmit)="addReceipt()">
+    <form #receipt="ngForm" (ngSubmit)="addReceipt()">
       <ion-item>
         <ion-label floating>Nazwa</ion-label>
         <ion-input class="input-field" type="text" name="name" [(ngModel)]="receiptName" ngModel required></ion-input>
@@ -26,7 +25,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label>Dodane zdjęcie {{ imageTaken }} </ion-label>
+        <ion-label>Dodane zdjęcie</ion-label>
         <ion-checkbox item-right color="primary" [checked]="imageTaken" disabled="true"></ion-checkbox>
       </ion-item>
 

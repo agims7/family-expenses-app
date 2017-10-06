@@ -7,9 +7,6 @@
 
 <ion-content padding>
   <ion-grid>
-    <loader *ngIf="showSpinner"></loader>
-
-    <div *ngIf="!showSpinner">
       <button ion-button block (click)="addItem()">Dodaj</button>
       <ion-item-group>
         <ion-grid>
@@ -56,6 +53,5 @@
           </ion-row>
         </ion-grid>
       </ion-item-group>
-    </div>
   </ion-grid>
 </ion-content>

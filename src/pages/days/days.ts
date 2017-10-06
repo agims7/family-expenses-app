@@ -30,7 +30,6 @@ export class DaysPage {
   public dayWithBonuses = {};
   public allMonthlyMoneySpent: number = 0;
   public allMonthlyBonuses: number = 0;
-  public showSpinner: boolean = true;
   public noExpenseData: boolean = true;
   public noBonusData: boolean = true;
 
@@ -50,11 +49,9 @@ export class DaysPage {
 
   ionViewCanEnter() {
     this.expensesService.loaderOn();
-    
   }
 
   ionViewDidEnter() {
-    // this.expensesService.loaderOn();
     this.clearAll();
     this.daysList = this.navParams.data[0];
     this.expensesService.selectedMonth = this.daysList.$key;
@@ -97,7 +94,6 @@ export class DaysPage {
           this.noExpenseData = false;
         }
       }
-      // this.showSpinner = false;
       this.expensesService.loaderOff();
     });
   }
@@ -118,7 +114,6 @@ export class DaysPage {
           this.noBonusData = false;
         }
       }
-      // this.showSpinner = false;
       this.expensesService.loaderOff();
     });
   }

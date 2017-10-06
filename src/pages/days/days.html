@@ -7,8 +7,6 @@
 
 <ion-content padding>
   <ion-grid>
-    <!-- <loader *ngIf="showSpinner"></loader> -->
-
     <div [ngSwitch]="viewType">
       <div *ngSwitchCase="'expenses'">
         <div *ngIf="!noExpenseData">

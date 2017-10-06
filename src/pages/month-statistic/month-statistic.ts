@@ -16,8 +16,8 @@ declare var AmCharts: any;
 })
 export class MonthStatisticPage {
   statisticByCategoryPage = StatisticByCategoryPage;
-  public selectedMonth;
-  private currentYear: string = moment().format('YYYY');
+  public selectedMonth: string;
+  public selectedYear: string;
   private dbList: string;
   private bonusesDbList: string;
   public expenseListOfDays: FirebaseListObservable<any[]>
@@ -33,7 +33,6 @@ export class MonthStatisticPage {
   public bonusDays = [];
   public chart: any;
   public bonuses: number = 0;
-  public showSpinner: boolean = true;
   public noData: boolean = true;
   public localCategoriesData: any = [];
   public bonus: string = "bonuses";
@@ -64,8 +63,13 @@ export class MonthStatisticPage {
     this.expensesService.safeUnsubscribe(this.bonusListOfDaySubscription);
   }
 
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+  }
+
   ionViewDidEnter() {
-    this.selectedMonth = this.navParams.data;
+    this.selectedMonth = this.navParams.data[0];
+    this.selectedYear = this.navParams.data[1];
     this.clearAll();
     this.getExpenseData();
     this.getBonusData();
@@ -83,10 +87,10 @@ export class MonthStatisticPage {
   }
 
   getExpenseData() {
-    this.dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth;
+    this.dbList = 'dydo/expenseItems/' + this.selectedYear + '/' + this.selectedMonth;
     this.expenseListOfDays = this.expensesService.getItemsList(this.dbList);
     this.expenseListSubscription = this.expenseListOfDays.subscribe(data => {
-      this.showSpinner = false
+      this.expensesService.loaderOff();
       if (data == null) {
         this.noData = true;
         return;
@@ -106,7 +110,7 @@ export class MonthStatisticPage {
   }
 
   getBonusData() {
-    this.bonusesDbList = 'dydo/bonusItems/' + this.currentYear + '/' + this.selectedMonth;
+    this.bonusesDbList = 'dydo/bonusItems/' + this.selectedYear + '/' + this.selectedMonth;
     this.bonusesItemsList = this.expensesService.getItemsList(this.bonusesDbList);
     this.bonusesItemsListSubscription = this.bonusesItemsList.subscribe(data => {
       this.getBonusDays(data);
@@ -140,7 +144,7 @@ export class MonthStatisticPage {
   getDayMoneyByCategory(category) {
     this.createEmptyDaysObjects();
     for (let day of this.days) {
-      let dbList = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
+      let dbList = 'dydo/expenseItems/' + this.selectedYear + '/' + this.selectedMonth + '/' + day;
       let listOfDay = this.expensesService.getItemsList(dbList, { orderByChild: 'expenseCategory', equalTo: category });
       this.listOfDaySubscription = listOfDay.subscribe(data => {
         for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
@@ -164,7 +168,7 @@ export class MonthStatisticPage {
 
   getDayMoney() {
     for (let day of this.days) {
-      let databaseAddress = 'dydo/expenseItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
+      let databaseAddress = 'dydo/expenseItems/' + this.selectedYear + '/' + this.selectedMonth + '/' + day;
       let listOfDay = this.expensesService.getItemsList(databaseAddress);
 
       this.listOfDayTwoSubscription = listOfDay.subscribe(data => {
@@ -184,7 +188,7 @@ export class MonthStatisticPage {
 
   getBonusMoney() {
     for (let day of this.bonusDays) {
-      let bonusAddress = 'dydo/bonusItems/' + this.currentYear + '/' + this.selectedMonth + '/' + day;
+      let bonusAddress = 'dydo/bonusItems/' + this.selectedYear + '/' + this.selectedMonth + '/' + day;
       let bonusListOfDay = this.expensesService.getItemsList(bonusAddress);
 
       this.bonusListOfDaySubscription = bonusListOfDay.subscribe(data => {

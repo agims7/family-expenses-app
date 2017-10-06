@@ -19,7 +19,6 @@ export class CategoriesPage {
   public categoriesItemsListSubscription: Subscription;
   public categoriesDataListSubscription: Subscription;
   public dbList: string = 'dydo/categoriesItems';
-  public showSpinner: boolean = true;
   public categoriesTable;
 
   constructor(
@@ -36,10 +35,14 @@ export class CategoriesPage {
     this.expensesService.safeUnsubscribe(this.categoriesDataListSubscription);
   }
 
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+  }
+
   ionViewDidEnter() {
     this.categoriesItemsList = this.expensesService.getItemsList(this.dbList);
     this.categoriesItemsListSubscription = this.categoriesItemsList.subscribe(() => {
-      this.showSpinner = false
+      this.expensesService.loaderOff();
     });
   }
 

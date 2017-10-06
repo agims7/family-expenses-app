@@ -7,9 +7,6 @@
 
 <ion-content padding>
   <ion-grid>
-    <loader *ngIf="showSpinner"></loader>
-
-    <div *ngIf="!showSpinner">
       <h3 *ngIf="!noData" text-center>Wybierz rok</h3>
       <ion-list *ngIf="!noData">
         <button ion-item *ngFor="let years of expenseListOfYears | async; let i = index" [navPush]="monthsPage" [navParams]="years">
@@ -24,6 +21,5 @@
           </ion-card-header>
         </ion-card>
       </ion-list>
-    </div>
   </ion-grid>
 </ion-content>

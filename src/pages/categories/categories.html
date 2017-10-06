@@ -7,9 +7,7 @@
 
 <ion-content padding>
     <ion-grid>
-  <loader *ngIf="showSpinner"></loader>
 
-  <div *ngIf="!showSpinner">
     <form #category="ngForm" (ngSubmit)="addCategory()">
       <ion-item>
         <ion-label floating>Nazwa</ion-label>
@@ -34,6 +32,5 @@
         <ion-icon *ngIf="category.removable" name="settings" color="primary" item-end [navPush]="editCategoryPage" [navParams]="category"></ion-icon>
       </ion-item>
     </ion-list>
-  </div>
 </ion-grid>
 </ion-content>

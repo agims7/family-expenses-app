@@ -15,14 +15,12 @@ export class MonthsPage {
   daysPage = DaysPage;
   private viewType: string;
   public title: string;
-  private currentYear: string = moment().format('YYYY');
   private dbExpenseList: string;
   private dbBonusList: string;
   public expenseListOfMonths: FirebaseListObservable<any[]>
   public expenseListOfMonthsSubscription: Subscription;
   public bonuseListOfMonths: FirebaseListObservable<any[]>
   public bonusListOfMonthsSubscription: Subscription;
-  public showSpinner: boolean = true;
   public noExpenseData: boolean = true;
   public noBonusData: boolean = true;
 
@@ -39,6 +37,10 @@ export class MonthsPage {
     this.expensesService.safeUnsubscribe(this.bonusListOfMonthsSubscription);
   }
 
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+  }
+
   ionViewDidEnter() {
     this.expensesService.selectedYear = this.navParams.data[0].$key;
     this.viewType = this.navParams.data[1];
@@ -49,7 +51,7 @@ export class MonthsPage {
     if (this.viewType === 'bonuses') {
       this.getBonusData();
       this.title = "Bonusy";
-    } else if(this.viewType === 'expenses') {
+    } else if (this.viewType === 'expenses') {
       this.getExpenseData();
       this.title = "Wydatki";
     }
@@ -70,7 +72,7 @@ export class MonthsPage {
           this.noExpenseData = false;
         }
       }
-      this.showSpinner = false;
+      this.expensesService.loaderOff();
     });
   }
 
@@ -89,7 +91,7 @@ export class MonthsPage {
           this.noBonusData = false;
         }
       }
-      this.showSpinner = false;
+      this.expensesService.loaderOff();
     });
   }
 

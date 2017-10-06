@@ -43,7 +43,6 @@ export class RangeStatisticPage {
   public categoriesAllSpentMoney: any = [];
   public categoriesTable: any = [];
   public localCategoriesData: any = [];
-  public showSpinner: boolean = true;
 
   @HostListener('init')
   handleInit() {
@@ -68,10 +67,8 @@ export class RangeStatisticPage {
     this.expensesService.safeUnsubscribe(this.statisticMonthsListSubscription);
   }
 
-  clearValues() {
-    this.categories = [];
-    this.categoriesAllSpentMoney = [];
-    this.allSpentMoney = 0;
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
   }
 
   ionViewDidEnter() {
@@ -88,6 +85,12 @@ export class RangeStatisticPage {
     }, 500);
     this.localCategoriesData = _.clone(this.categoriesAllSpentMoney);
     this.localCategoriesData.shift();
+  }
+
+  clearValues() {
+    this.categories = [];
+    this.categoriesAllSpentMoney = [];
+    this.allSpentMoney = 0;
   }
 
   getCategories() {
@@ -185,7 +188,7 @@ export class RangeStatisticPage {
         }
       }
     }
-    this.showSpinner = false
+    this.expensesService.loaderOff();
   }
 
   getChartInfoRange() {

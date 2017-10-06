@@ -21,8 +21,6 @@ export class ReceiptsPage {
   public edit: boolean = false;
   public receiptsListSubscription: Subscription;
   public noData: boolean = true;
-  public showSpinner: boolean = true;
-
   public selectedIndex: any = [];
 
   constructor(
@@ -39,13 +37,17 @@ export class ReceiptsPage {
     this.expensesService.safeUnsubscribe(this.receiptsListSubscription);
   }
 
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+  }
+
   ionViewDidEnter() {
     this.dbList = 'dydo/receiptsItems/';
     this.receiptsList = this.expensesService.getItemsList(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.receiptsListSubscription = this.receiptsList.subscribe((data) => {
       this.receiptsListLength = data.length;
       this.createSelectedIndexObject();
-      this.showSpinner = false
+      this.expensesService.loaderOff();
       if (data == null) {
         this.noData = true;
         return;

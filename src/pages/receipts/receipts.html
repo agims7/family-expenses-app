@@ -6,9 +6,7 @@
 
 <ion-content padding>
   <ion-grid>
-    <loader *ngIf="showSpinner"></loader>
 
-    <div *ngIf="!showSpinner">
       <button class="add-button" ion-button block color="primaryDark" [navPush]="newReceiptPage">Dodaj paragon</button>
 
       <ion-card class="box" *ngFor="let receipt of receiptsList | async; let i = index">
@@ -79,9 +77,7 @@
         </ion-row>
       </ion-grid>
 
-    </div>
-
-    <ion-card *ngIf="!showSpinner && noData" class="box">
+    <ion-card *ngIf="noData" class="box">
       <ion-card-header>
         <h2 class="money-header">Brak paragonów</h2>
       </ion-card-header>

@@ -6,9 +6,6 @@
 
 <ion-content padding>
   <ion-grid>
-    <loader *ngIf="showSpinner"></loader>
-
-    <div *ngIf="!showSpinner">
       <ion-list *ngIf="!noData">
         <ion-item *ngFor="let item of categoryData; let i = index">
           <ion-row>
@@ -37,6 +34,5 @@
           </ion-card-header>
         </ion-card>
       </div>
-    </div>
   </ion-grid>
 </ion-content>

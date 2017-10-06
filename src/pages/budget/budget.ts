@@ -19,7 +19,6 @@ export class BudgetPage {
   public expenseListOfYearsSubscription: Subscription;
   public bonuseListOfYears: FirebaseListObservable<any[]>
   public bonusListOfYearsSubscription: Subscription;
-  public showSpinner: boolean = true;
   public noExpenseData: boolean = true;
   public noBonusData: boolean = true;
 
@@ -35,17 +34,21 @@ export class BudgetPage {
     this.expensesService.safeUnsubscribe(this.bonusListOfYearsSubscription);
   }
 
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+  }
+
+  ionViewDidEnter() {
+    this.getExpenseData();
+  }
+
   segmentChanged($event) {
-    this.showSpinner = true;
+    this.expensesService.loaderOn();
     if ($event.value === 'bonuses') {
       this.getBonusData();
     } else if($event.value === 'expenses') {
       this.getExpenseData();
     }
-  }
-
-  ionViewDidEnter() {
-    this.getExpenseData();
   }
 
   getExpenseData() {
@@ -63,7 +66,7 @@ export class BudgetPage {
           this.noExpenseData = false;
         }
       }
-      this.showSpinner = false;
+      this.expensesService.loaderOff();
     });
   }
 
@@ -82,7 +85,7 @@ export class BudgetPage {
           this.noBonusData = false;
         }
       }
-      this.showSpinner = false;
+      this.expensesService.loaderOff();
     });
   }
 

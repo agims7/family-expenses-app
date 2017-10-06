@@ -11,7 +11,6 @@ import * as _ from 'lodash';
   templateUrl: 'range-statistic-by-category.html',
 })
 export class RangeStatisticByCategoryPage {
-  private currentYear: string = moment().format('YYYY');
   public category: string;
   public firstYear: any;
   public lastYear: any;
@@ -28,7 +27,6 @@ export class RangeStatisticByCategoryPage {
   public dbList: string;
   public dbMonthsList: string;
   public categoryData: any = [];
-  public showSpinner: boolean = true;
   public noData: boolean = false;
 
   constructor(
@@ -37,6 +35,10 @@ export class RangeStatisticByCategoryPage {
     public database: AngularFireDatabase,
     public expensesService: ExpensesService
   ) {
+  }
+
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
   }
 
   ionViewDidEnter() {
@@ -50,9 +52,6 @@ export class RangeStatisticByCategoryPage {
     this.firstDay = this.navParams.data[7];
     this.lastDay = this.navParams.data[8];
     this.getMoneySpent();
-  }
-
-  ionViewDidLeave() {
   }
 
   getMoneySpent() {
@@ -98,7 +97,7 @@ export class RangeStatisticByCategoryPage {
     if (this.categoryData.length < 1) {
       this.noData = true;
     }
-    this.showSpinner = false
+    this.expensesService.loaderOff();
   }
 
   showTime(time) {

@@ -46,8 +46,16 @@
     <button ion-button block [navPush]="rangeStatisticPage">Przejdź</button>
 
     <h1 text-center>lub</h1>
+
+        <ion-item>
+          <ion-label>Rok:</ion-label>
+          <ion-select interface="popover" name="year" [(ngModel)]="year" required>
+              <ion-option *ngFor="let year of expensesService.availableYears" [value]="year">{{ year }}</ion-option>
+            </ion-select>
+        </ion-item>
+
     <ion-list>
-      <button ion-item *ngFor="let month of polishMonths" [navPush]="monthStatisticPage" [navParams]="month">
+      <button ion-item *ngFor="let month of polishMonths" [navPush]="monthStatisticPage" [navParams]="[month, year]">
             <ion-icon name="calendar" item-left></ion-icon>
             <h3 class="months">{{ month }}</h3>
           </button>

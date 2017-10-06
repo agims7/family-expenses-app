@@ -13,7 +13,6 @@ export class ShoppingListPage {
   public dbList: any;
   public shoppingListArray: FirebaseListObservable<any[]>;
   public shoppingListSubscription: Subscription;
-  public showSpinner: boolean = true;
 
   constructor(
     public navCtrl: NavController,
@@ -28,11 +27,15 @@ export class ShoppingListPage {
     this.expensesService.safeUnsubscribe(this.shoppingListSubscription);
   }
 
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
+  }
+
   ionViewDidEnter() {
     this.dbList = 'dydo/shoppingItems/';
     this.shoppingListArray = this.expensesService.getItemsList(this.dbList)
     this.shoppingListSubscription = this.shoppingListArray.subscribe((data) => {
-      this.showSpinner = false
+      this.expensesService.loaderOff();
     });
   }
 

@@ -37,6 +37,14 @@ ion-label {
   line-height: 3.2rem !important;
 }
 
+ion-backdrop {
+  opacity: 0.5 !important;
+}
+
+.loading-wrapper {
+  background: transparent !important;
+}
+
 .sk-cube-grid {
   width: 200px;
   height: 200px;

@@ -1,39 +1,35 @@
 <ion-header>
-    
-      <ion-navbar>
-        <ion-title>Statystyki zakresu</ion-title>
-      </ion-navbar>
-    
-    </ion-header>
+
+  <ion-navbar>
+    <ion-title>Statystyki zakresu</ion-title>
+  </ion-navbar>
+
+</ion-header>
 
 
 <ion-content padding>
   <ion-grid>
-    <loader *ngIf="showSpinner"></loader>
+    <ion-card class="box">
+      <ion-card-header class="header-box">
+        <h2 class="money-header big-text">Wydane pieniadze:</h2>
+        <h2 class="money-header big-text all-money">{{ expensesService.valueFixed(allSpentMoney) }} zł</h2>
+      </ion-card-header>
+    </ion-card>
 
-    <div *ngIf="!showSpinner">
+    <div>
       <ion-card class="box">
-        <ion-card-header class="header-box">
-          <h2 class="money-header big-text">Wydane pieniadze:</h2>
-          <h2 class="money-header big-text all-money">{{ expensesService.valueFixed(allSpentMoney) }} zł</h2>
+        <ion-card-header>
+          <h2 class="money-header">Wydane pieniadze na:</h2>
         </ion-card-header>
-      </ion-card>
 
-      <div>
-        <ion-card class="box">
-          <ion-card-header>
-            <h2 class="money-header">Wydane pieniadze na:</h2>
-          </ion-card-header>
-
-          <ion-item class="row" *ngFor="let category of localCategoriesData; let i = index">
-            <button ion-item [navPush]="rangeStatisticByCategoryPage" [navParams]="[category.name, firstYear, lastYear, yearsRange, firstMonth, lastMonth, monthsRange, firstDay, lastDay]">
+        <ion-item class="row" *ngFor="let category of localCategoriesData; let i = index">
+          <button ion-item [navPush]="rangeStatisticByCategoryPage" [navParams]="[category.name, firstYear, lastYear, yearsRange, firstMonth, lastMonth, monthsRange, firstDay, lastDay]">
               <h3 class="money-header category-name">{{ category.name }}:</h3>
               <h3 class="money-header all-money">{{ expensesService.valueFixed(category.allMoney) }} zł</h3>
               </button>
-          </ion-item>
-        </ion-card>
-        <div id="chartdiv"></div>
-      </div>
+        </ion-item>
+      </ion-card>
+      <div id="chartdiv"></div>
     </div>
   </ion-grid>
 </ion-content>

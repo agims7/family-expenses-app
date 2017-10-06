@@ -15,7 +15,6 @@ export class ExpensesPage {
   private dbList = 'dydo/expenseItems/';
   public expenseListOfYears: FirebaseListObservable<any[]>
   public expenseListOfYearsSubscription: Subscription;
-  public showSpinner: boolean = true;
   public noData: boolean = true;
 
   constructor(
@@ -27,6 +26,10 @@ export class ExpensesPage {
 
   ionViewDidLeave() {
     this.expensesService.safeUnsubscribe(this.expenseListOfYearsSubscription);
+  }
+
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
   }
 
   ionViewDidEnter() {
@@ -44,7 +47,7 @@ export class ExpensesPage {
           this.noData = false;
         }
       }
-      this.showSpinner = false
+      this.expensesService.loaderOff();
     });
   }
 

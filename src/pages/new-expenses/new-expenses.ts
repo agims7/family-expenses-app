@@ -1,6 +1,6 @@
-import { Component  } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams  } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import { ExpensesService } from "../../services/expenses";
@@ -23,7 +23,6 @@ export class NewExpensesPage {
   public expensesDbList: string;
   public bonusesDbList: string;
   public categoriesDataListSubscription: Subscription;
-  public showSpinner: boolean = true;
   public localCategoriesData: any = [];
 
   public expenses: boolean = true;
@@ -42,15 +41,17 @@ export class NewExpensesPage {
     this.expensesService.safeUnsubscribe(this.categoriesDataListSubscription);
   }
 
-  ionViewDidEnter() {
+  ionViewCanEnter() {
     this.expensesService.loaderOn();
+  }
+
+  ionViewDidEnter() {
     this.categoriesDbList = 'dydo/categoriesItems/';
     this.categoriesDataList = this.expensesService.getItemsList(this.categoriesDbList);
     this.categoriesDataListSubscription = this.categoriesDataList.subscribe((data) => {
       this.expensesService.categoriesData = data;
       this.localCategoriesData = _.clone(this.expensesService.categoriesData);
       this.localCategoriesData.shift();
-      // this.showSpinner = false
       this.expensesService.loaderOff();
     });
   }
@@ -80,7 +81,7 @@ export class NewExpensesPage {
       expenseValue: Number(this.expenseItem.expenseValue),
       expenseCategory: this.expenseItem.expenseCategory,
       expenseDate: moment().unix()
-    });    
+    });
     this.expenseItem = {
       expenseName: null,
       expenseDescription: null,
@@ -99,7 +100,7 @@ export class NewExpensesPage {
       bonusValue: Number(this.bonusItem.bonusValue),
       bonusDate: moment().unix()
     }
-  );    
+    );
     this.bonusItem = {
       bonusName: null,
       bonusDescription: null,

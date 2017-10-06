@@ -9,9 +9,6 @@
 
 <ion-content padding>
   <ion-grid>
-    <loader *ngIf="showSpinner"></loader>
-
-    <div *ngIf="!showSpinner">
       <ion-card class="box">
         <ion-card-header class="header-box">
           <h2 class="money-header big-text">Wydane pieniadze:</h2>
@@ -26,14 +23,14 @@
           </ion-card-header>
 
           <ion-item class="row" *ngFor="let category of localCategoriesData; let i = index">
-            <button ion-item [navPush]="statisticByCategoryPage" [navParams]="[selectedMonth, category.name]">
+            <button ion-item [navPush]="statisticByCategoryPage" [navParams]="[selectedMonth, category.name, selectedYear]">
               <h3 class="money-header category-name">{{ category.name }}:</h3>
               <h3 class="money-header all-money"> {{ expensesService.valueFixed(category.allMonthlyMoneySpent) }} zł</h3>
           </button>
           </ion-item>
           <ion-item-divider></ion-item-divider>
           <ion-item class="row">
-            <button ion-item [navPush]="statisticByCategoryPage" [navParams]="[selectedMonth, bonus]">
+            <button ion-item [navPush]="statisticByCategoryPage" [navParams]="[selectedMonth, bonus, selectedYear]">
               <h3 class="money-header category-name-bonus">Bonusy:</h3>
               <h3 class="money-header all-money-bonus"> {{ expensesService.valueFixed(bonuses) }} zł</h3>
             </button>
@@ -49,6 +46,5 @@
           </ion-card-header>
         </ion-card>
       </div>
-    </div>
   </ion-grid>
 </ion-content>
