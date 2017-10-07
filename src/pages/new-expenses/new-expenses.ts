@@ -14,6 +14,7 @@ import * as _ from 'lodash';
   templateUrl: 'new-expenses.html',
 })
 export class NewExpensesPage {
+  public viewType: string;
   public expenseItem = {} as ExpenseItem;
   public bonusItem = {} as BonusItem;
   public expenseItemsList: FirebaseListObservable<ExpenseItem[]>
@@ -46,6 +47,7 @@ export class NewExpensesPage {
   }
 
   ionViewDidEnter() {
+    this.viewType = 'expenses'
     this.categoriesDbList = 'dydo/categoriesItems/';
     this.categoriesDataList = this.expensesService.getItemsList(this.categoriesDbList);
     this.categoriesDataListSubscription = this.categoriesDataList.subscribe((data) => {
@@ -54,10 +56,6 @@ export class NewExpensesPage {
       this.localCategoriesData.shift();
       this.expensesService.loaderOff();
     });
-  }
-
-  changeView() {
-    this.expenses === true ? this.title = 'wydatek' : this.title = 'bonus';
   }
 
   getYear() {

@@ -3,71 +3,69 @@
   <ion-navbar color="primary">
     <ion-title>Dodaj {{ title }}</ion-title>
   </ion-navbar>
+  <ion-toolbar no-border-top>
+      <ion-segment [(ngModel)]="viewType">
+        <ion-segment-button value="expenses">
+          Wydatki
+        </ion-segment-button>
+        <ion-segment-button value="bonuses">
+          Bonusy
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
 </ion-header>
 
 
 <ion-content padding>
   <ion-grid>
+    <div [ngSwitch]="viewType">
 
-    <ion-row text-right>
-      <ion-col>
-        <ion-label>Bonusy</ion-label>
-      </ion-col>
-      <ion-col>
-        <ion-toggle [(ngModel)]="expenses" (ngModelChange)="changeView()"></ion-toggle>
-      </ion-col>
-      <ion-col>
-        <ion-label text-left>Wydatki</ion-label>
-      </ion-col>
-    </ion-row>
-
-    <form *ngIf="expenses" #expense="ngForm" (ngSubmit)="addExpenseItem(expenseItem)">
-      <ion-item>
-        <ion-label floating>Nazwa</ion-label>
-        <ion-input class="input-field" type="text" name="name" [(ngModel)]="expenseItem.expenseName" ngModel required></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating>Opis</ion-label>
-        <ion-input class="input-field" type="text" name="description" [(ngModel)]="expenseItem.expenseDescription" ngModel required></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating>Wydane (zł)</ion-label>
-        <ion-input class="input-field" type="number" name="value" [(ngModel)]="expenseItem.expenseValue" ngModel required></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating>Kategoria</ion-label>
-        <ion-select interface="popover" name="category" [(ngModel)]="expenseItem.expenseCategory" ngModel required>
-          <ion-option *ngFor="let category of localCategoriesData" [value]="category.name">{{ category.name }}</ion-option>
-        </ion-select>
-      </ion-item>
-
-      <div padding>
-        <button ion-button block [disabled]="!expense.valid" type="submit">Dodaj wydatek</button>
+      <div *ngSwitchCase="'expenses'">
+        <form #expense="ngForm" (ngSubmit)="addExpenseItem(expenseItem)">
+          <ion-item>
+            <ion-label floating>Nazwa</ion-label>
+            <ion-input class="input-field" type="text" name="name" [(ngModel)]="expenseItem.expenseName" ngModel required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Opis</ion-label>
+            <ion-input class="input-field" type="text" name="description" [(ngModel)]="expenseItem.expenseDescription" ngModel required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Wydane (zł)</ion-label>
+            <ion-input class="input-field" type="number" name="value" [(ngModel)]="expenseItem.expenseValue" ngModel required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Kategoria</ion-label>
+            <ion-select interface="popover" name="category" [(ngModel)]="expenseItem.expenseCategory" ngModel required>
+              <ion-option *ngFor="let category of localCategoriesData" [value]="category.name">{{ category.name }}</ion-option>
+            </ion-select>
+          </ion-item>
+          <div padding>
+            <button ion-button block [disabled]="!expense.valid" type="submit">Dodaj wydatek</button>
+          </div>
+        </form>
       </div>
-    </form>
 
-    <form *ngIf="!expenses" #bonus="ngForm" (ngSubmit)="addBonusItem(bonusItem)">
-      <ion-item>
-        <ion-label floating>Nazwa</ion-label>
-        <ion-input class="input-field" type="text" name="name" [(ngModel)]="bonusItem.bonusName" ngModel required></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating>Opis</ion-label>
-        <ion-input class="input-field" type="text" name="description" [(ngModel)]="bonusItem.bonusDescription" ngModel required></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label floating>Wartość</ion-label>
-        <ion-input class="input-field" type="number" name="value" [(ngModel)]="bonusItem.bonusValue" ngModel required></ion-input>
-      </ion-item>
-
-      <div padding>
-        <button ion-button block type="submit">Dodaj bonus</button>
+      <div *ngSwitchCase="'bonuses'">
+        <form #bonus="ngForm" (ngSubmit)="addBonusItem(bonusItem)">
+          <ion-item>
+            <ion-label floating>Nazwa</ion-label>
+            <ion-input class="input-field" type="text" name="name" [(ngModel)]="bonusItem.bonusName" ngModel required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Opis</ion-label>
+            <ion-input class="input-field" type="text" name="description" [(ngModel)]="bonusItem.bonusDescription" ngModel required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label floating>Wartość</ion-label>
+            <ion-input class="input-field" type="number" name="value" [(ngModel)]="bonusItem.bonusValue" ngModel required></ion-input>
+          </ion-item>
+          <div padding>
+            <button ion-button block type="submit">Dodaj bonus</button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
+
   </ion-grid>
 </ion-content>

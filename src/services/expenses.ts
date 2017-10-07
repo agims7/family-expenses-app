@@ -52,7 +52,7 @@ export class ExpensesService {
         for (let i = 0; i < this.categoriesData.length; i++) {
             this.categoriesTable.push({
                 "name": this.categoriesData[i].name,
-                "value": this.categoriesData[i].allMonthlyMoneySpent
+                "value": this.valueFixed(this.categoriesData[i].allMonthlyMoneySpent)
             })
             this.categoriesColorTable.push(this.categoriesData[i].color);
         }

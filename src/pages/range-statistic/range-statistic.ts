@@ -85,6 +85,7 @@ export class RangeStatisticPage {
     }, 500);
     this.localCategoriesData = _.clone(this.categoriesAllSpentMoney);
     this.localCategoriesData.shift();
+    this.expensesService.loaderOff();    
   }
 
   clearValues() {
@@ -141,10 +142,9 @@ export class RangeStatisticPage {
     this.lastDay = Number(this.selectedDateTo.slice(8, 10));
   }
 
-  getMoneySpent() {
+  getMoneySpent() {  
     this.dbList = 'dydo/receiptsItems/';
     this.statisticYearsList = this.expensesService.getItemsList(this.dbList);
-
     for (let year of this.yearsRange) {
       for (let month of this.monthsRange) {
         this.dbMonthsList = 'dydo/expenseItems/' + year + '/' + this.expensesService.getMonthFromNumber(month);
@@ -156,7 +156,7 @@ export class RangeStatisticPage {
     }
   }
 
-  getDays(data, month, year) {
+  getDays(data, month, year) {    
     let monthName = this.expensesService.getMonthFromNumber(month)
     this.monthsDays[monthName] = [];
     for (let day of data) {
@@ -188,7 +188,6 @@ export class RangeStatisticPage {
         }
       }
     }
-    this.expensesService.loaderOff();
   }
 
   getChartInfoRange() {
@@ -198,7 +197,7 @@ export class RangeStatisticPage {
     for (let i = 0; i < this.categories.length; i++) {
       this.categoriesTable.push({
         "name": this.categoriesAllSpentMoney[i].name,
-        "value": Number(this.expensesService.valueFixed(this.categoriesAllSpentMoney[i].allMoney))
+        "value": this.expensesService.valueFixed(this.categoriesAllSpentMoney[i].allMoney)
       });
       this.expensesService.categoriesColorTable.push(this.expensesService.categoriesData[i].color);
     }
@@ -208,7 +207,6 @@ export class RangeStatisticPage {
 
   setChart() {
     this.getChartInfoRange();
-
     this.chart = AmCharts.makeChart("chartdiv", {
       "type": "pie",
       "language": "pl",

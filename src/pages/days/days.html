@@ -8,6 +8,7 @@
 <ion-content padding>
   <ion-grid>
     <div [ngSwitch]="viewType">
+      
       <div *ngSwitchCase="'expenses'">
         <div *ngIf="!noExpenseData">
           <h3 text-center>Wybierz dzień</h3>
