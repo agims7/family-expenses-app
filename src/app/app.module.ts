@@ -35,6 +35,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { DatePickerModule } from 'ionic3-datepicker';
 import { Camera } from '@ionic-native/camera';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
+// import { OneSignal } from '@ionic-native/onesignal';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ExpensesService,
     Camera,
-    PhotoViewer
+    PhotoViewer,
+    // OneSignal
   ]
 })
 export class AppModule {}

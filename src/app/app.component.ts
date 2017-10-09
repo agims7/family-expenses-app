@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+// import { OneSignal } from '@ionic-native/onesignal';
 
 import { NavController } from "ionic-angular";
 import { MenuController } from "ionic-angular";
@@ -15,22 +16,35 @@ import { ExpensesService } from "../services/expenses";
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = ExpensesPage;
+  rootPage: any = ExpensesPage;
   tabsPage = TabsPage;
+  // private appID: string = '26597b63-2542-4823-9ad8-690df1468ee6';
+  // private googleProjectNumber: string = '650821978280'; //also known as Sender ID
   @ViewChild('nav') nav: NavController;
 
   constructor(
-    platform: Platform, 
-    private menuCtrl: MenuController, 
-    statusBar: StatusBar, 
-    splashScreen: SplashScreen,
+    public platform: Platform,
+    public menuCtrl: MenuController,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen,
     public expensesService: ExpensesService,
+    // public notification: OneSignal
   ) {
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       statusBar.styleDefault();
       splashScreen.hide();
+      // OneSignal Code start:
+      // Enable to debug issues:
+      // window["plugins"].OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
+
+      // var notificationOpenedCallback = function (jsonData) {
+      //   console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+      // };
+
+      // window["plugins"].OneSignal
+      //   .startInit(this.appID, this.googleProjectNumber)
+      //   .handleNotificationOpened(notificationOpenedCallback)
+      //   .endInit();
     });
   }
 

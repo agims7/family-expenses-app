@@ -1,4 +1,3 @@
-import { DatabaseQuery } from 'angularfire2/database/interfaces';
 import { Component, Query } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
