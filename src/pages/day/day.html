@@ -28,7 +28,7 @@
             </ion-card-content>
             <ion-row>
               <ion-col text-right>
-                <button ion-button outline small color="primary" (click)="editExpense(expense.$key, expense.expenseName, expense.expenseDescription, expense.expenseValue, expense.expenseCategory)">Edytuj</button>
+                <button ion-button outline small color="primary" (click)="edit(expense.$key, expense.expenseName, expense.expenseDescription, expense.expenseValue, expense.expenseCategory)">Edytuj</button>
               </ion-col>
               <ion-col text-left>
                 <button ion-button outline small color="danger" (click)="deleteExpense(expense.$key)">Usuń</button>
@@ -98,11 +98,11 @@
             </ion-card-content>
             <ion-row>
               <ion-col text-right>
-                <button ion-button outline small color="primary" (click)="editBonus(bonus.$key, bonus.expenseName, bonus.expenseDescription, bonus.expenseValue)">Edytuj</button>
-              </ion-col>
-              <ion-col text-left>
-                <button ion-button outline small color="danger" (click)="deleteBonus(bonus.$key)">Usuń</button>
-              </ion-col>
+                  <button ion-button outline small color="primary" (click)="edit(bonus.$key, bonus.bonusName, bonus.bonusDescription, bonus.bonusValue)">Edytuj</button>
+                </ion-col>
+                <ion-col text-left>
+                  <button ion-button outline small color="danger" (click)="deleteBonus(bonus.$key)">Usuń</button>
+                </ion-col>
             </ion-row>
           </ion-card>
           <ion-grid>

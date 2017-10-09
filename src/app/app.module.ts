@@ -22,6 +22,7 @@ import { MonthStatisticPage } from "../pages/month-statistic/month-statistic";
 import { RangeStatisticPage } from "../pages/range-statistic/range-statistic";
 import { CategoriesPage } from "../pages/categories/categories";
 import { EditCategoryPage } from "../pages/edit-category/edit-category";
+import { EditExpensePage } from "../pages/edit-expense/edit-expense";
 import { ShoppingListPage } from "../pages/shopping-list/shopping-list";
 import { ReceiptsPage } from "../pages/receipts/receipts";
 import { NewReceiptPage } from "../pages/new-receipt/new-receipt";
@@ -53,6 +54,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     RangeStatisticPage,
     CategoriesPage,
     EditCategoryPage,
+    EditExpensePage,
     ShoppingListPage,
     ReceiptsPage,
     NewReceiptPage,
@@ -84,6 +86,7 @@ import { PhotoViewer } from '@ionic-native/photo-viewer';
     RangeStatisticPage,
     CategoriesPage,
     EditCategoryPage,
+    EditExpensePage,
     ShoppingListPage,
     ReceiptsPage,
     NewReceiptPage,

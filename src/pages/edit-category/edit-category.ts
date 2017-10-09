@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, ViewController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { CategoriesPage } from '../categories/categories';
-
+import { ExpensesService } from "../../services/expenses";
 
 @Component({
   selector: 'page-edit-category',
@@ -21,7 +21,13 @@ export class EditCategoryPage {
     public navCtrl: NavController, 
     public navParams: NavParams,
     public database: AngularFireDatabase,
+    public viewCtrl: ViewController,
+    public expensesService: ExpensesService    
   ) {
+  }
+
+  ionViewCanEnter() {
+    this.expensesService.loaderOn();
   }
 
   ionViewDidEnter() {
@@ -39,6 +45,7 @@ export class EditCategoryPage {
   setDbList() {
     this.dbList = 'dydo/categoriesItems/';
     this.categoriesList = this.database.list(this.dbList);
+    this.expensesService.loaderOff();
   }
 
   editCategory() {
@@ -47,6 +54,10 @@ export class EditCategoryPage {
       color: this.categoryColor
     });
     this.navCtrl.push(CategoriesPage);
+  }
+
+  dismiss() {
+    this.viewCtrl.dismiss();
   }
 
 }

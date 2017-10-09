@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { EditCategoryPage } from "../edit-category/edit-category";
 import { ExpensesService } from "../../services/expenses";
@@ -26,7 +26,8 @@ export class CategoriesPage {
     public navParams: NavParams,
     public alertCtrl: AlertController,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public modalCtrl: ModalController
   ) {
   }
 
@@ -63,6 +64,11 @@ export class CategoriesPage {
     });
     this.updateCategories()
     this.clearInput();
+  }
+
+  editCategory(category) {
+    let modal = this.modalCtrl.create(EditCategoryPage, category);
+    modal.present();
   }
 
   deleteCategory(key) {

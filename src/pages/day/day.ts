@@ -1,5 +1,5 @@
 import { Component, Query } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs/Subscription';
@@ -8,6 +8,9 @@ import 'rxjs/add/operator/map';
 import { ExpenseItem } from '../../models/expense-item.interface';
 import { BonusItem } from '../../models/bonus-item.interface';
 import { ExpensesService } from "../../services/expenses";
+
+import { EditExpensePage } from "../edit-expense/edit-expense";
+
 
 @Component({
   selector: 'page-day',
@@ -42,7 +45,8 @@ export class DayPage {
     public navCtrl: NavController,
     public alertCtrl: AlertController,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public modalCtrl: ModalController
   ) {
 
   }
@@ -103,8 +107,8 @@ export class DayPage {
           this.noExpenseData = false;
         }
       }
-        this.expensesService.loaderOff();
     });
+    this.expensesService.loaderOff();
   }
 
   getBonusData() {
@@ -123,8 +127,8 @@ export class DayPage {
           this.noBonusData = false;
         }
       }
-        this.expensesService.loaderOff();
     });
+    this.expensesService.loaderOff();
   }
 
   getFullSpentMoney(data) {
@@ -183,91 +187,96 @@ export class DayPage {
     alert.present();
   }
 
-  editExpense(key: string, name: string, description: string, amount, category) {
-    const alert = this.alertCtrl.create({
-      title: 'Edycja elementu',
-      inputs: [
-        {
-          name: 'expenseName',
-          placeholder: 'Nazwa',
-          value: name
-        },
-        {
-          name: 'expenseDescription',
-          placeholder: 'Opis',
-          value: description
-        },
-        {
-          name: 'expenseValue',
-          placeholder: 'Wydane',
-          value: amount
-        },
-        {
-          name: 'expenseCategory',
-          placeholder: 'Kategoria',
-          value: category
-        }
-      ],
-      buttons: [
-        {
-          text: 'Wstecz',
-          role: 'cancel'
-        },
-        {
-          text: 'Zapisz',
-          handler: data => {
-            this.expenseListOfDay.update(key, {
-              expenseName: data.expenseName,
-              expenseDescription: data.expenseDescription,
-              expenseValue: data.expenseValue,
-              expenseCategory: data.expenseCategory
-            });
-          }
-        }
-      ]
-    });
-    alert.present();
+  edit(key, name, description, value, category) {
+    let modal = this.modalCtrl.create(EditExpensePage, [key, name, description, value, category]);
+    modal.present();
   }
 
-  editBonus(key: string, name: string, description: string, amount) {
-    const alert = this.alertCtrl.create({
-      title: 'Edycja elementu',
-      inputs: [
-        {
-          name: 'bonusName',
-          placeholder: 'Nazwa',
-          value: name
-        },
-        {
-          name: 'bonusDescription',
-          placeholder: 'Opis',
-          value: description
-        },
-        {
-          name: 'bonusValue',
-          placeholder: 'Wydane',
-          value: amount
-        }
-      ],
-      buttons: [
-        {
-          text: 'Wstecz',
-          role: 'cancel'
-        },
-        {
-          text: 'Zapisz',
-          handler: data => {
-            this.expenseListOfDay.update(key, {
-              bonusName: data.bonusName,
-              bonusDescription: data.bonusDescription,
-              bonusValue: data.bonusValue
-            });
-          }
-        }
-      ]
-    });
-    alert.present();
-  }
+  // editExpense(key: string, name: string, description: string, amount, category) {
+  //   const alert = this.alertCtrl.create({
+  //     title: 'Edycja elementu',
+  //     inputs: [
+  //       {
+  //         name: 'expenseName',
+  //         placeholder: 'Nazwa',
+  //         value: name
+  //       },
+  //       {
+  //         name: 'expenseDescription',
+  //         placeholder: 'Opis',
+  //         value: description
+  //       },
+  //       {
+  //         name: 'expenseValue',
+  //         placeholder: 'Wydane',
+  //         value: amount
+  //       },
+  //       {
+  //         name: 'expenseCategory',
+  //         placeholder: 'Kategoria',
+  //         value: category
+  //       }
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Wstecz',
+  //         role: 'cancel'
+  //       },
+  //       {
+  //         text: 'Zapisz',
+  //         handler: data => {
+  //           this.expenseListOfDay.update(key, {
+  //             expenseName: data.expenseName,
+  //             expenseDescription: data.expenseDescription,
+  //             expenseValue: data.expenseValue,
+  //             expenseCategory: data.expenseCategory
+  //           });
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   alert.present();
+  // }
+
+  // editBonus(key: string, name: string, description: string, amount) {
+  //   const alert = this.alertCtrl.create({
+  //     title: 'Edycja elementu',
+  //     inputs: [
+  //       {
+  //         name: 'bonusName',
+  //         placeholder: 'Nazwa',
+  //         value: name
+  //       },
+  //       {
+  //         name: 'bonusDescription',
+  //         placeholder: 'Opis',
+  //         value: description
+  //       },
+  //       {
+  //         name: 'bonusValue',
+  //         placeholder: 'Wydane',
+  //         value: amount
+  //       }
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Wstecz',
+  //         role: 'cancel'
+  //       },
+  //       {
+  //         text: 'Zapisz',
+  //         handler: data => {
+  //           this.expenseListOfDay.update(key, {
+  //             bonusName: data.bonusName,
+  //             bonusDescription: data.bonusDescription,
+  //             bonusValue: data.bonusValue
+  //           });
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   alert.present();
+  // }
 
   setChecked(data) {
     for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
@@ -333,6 +342,11 @@ export class DayPage {
 
   showTime(time) {
     return moment.unix(time).format('LTS');
+  }
+
+  test(key: string, name: string, description: string, amount, category) {
+    let modal = this.modalCtrl.create(EditExpensePage, [key, name, description, amount, category]);
+    modal.present();
   }
 
 }

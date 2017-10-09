@@ -1,0 +1,79 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <ion-buttons start>
+            <button ion-button (click)="dismiss()">
+              <span ion-text>Wróć</span>
+            </button>
+          </ion-buttons>
+        <ion-title>{{ title }}</ion-title>
+      </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+    <ion-grid>
+      <div [ngSwitch]="viewType">
+  
+        <div *ngSwitchCase="'expenses'">
+          <form #expense="ngForm" (ngSubmit)="editExpenseItem()">
+            <ion-item>
+              <ion-label floating>Nazwa</ion-label>
+              <ion-input class="input-field" type="text" name="name" [(ngModel)]="name" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Opis</ion-label>
+              <ion-input class="input-field" type="text" name="description" [(ngModel)]="description" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Wydane (zł)</ion-label>
+              <ion-input class="input-field" type="number" name="value" [(ngModel)]="value" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Kategoria</ion-label>
+              <ion-select interface="popover" name="category" [(ngModel)]="category" ngModel required>
+                <ion-option *ngFor="let category of localCategoriesData" [value]="category.name">{{ category.name }}</ion-option>
+              </ion-select>
+            </ion-item>
+            <div padding>
+              <button ion-button block [disabled]="!expense.valid" type="submit">Zapisz zmiany</button>
+            </div>
+          </form>
+          <div *ngIf="noExpenseData">
+              <ion-card class="box">
+                <ion-card-header>
+                  <h2 class="money-header">Brak danych</h2>
+                </ion-card-header>
+              </ion-card>
+            </div>
+        </div>
+  
+        <div *ngSwitchCase="'bonuses'">
+          <form #bonus="ngForm" (ngSubmit)="editBonusItem()">
+            <ion-item>
+              <ion-label floating>Nazwa</ion-label>
+              <ion-input class="input-field" type="text" name="name" [(ngModel)]="name" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Opis</ion-label>
+              <ion-input class="input-field" type="text" name="description" [(ngModel)]="description" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label floating>Wartość</ion-label>
+              <ion-input class="input-field" type="number" name="value" [(ngModel)]="value" ngModel required></ion-input>
+            </ion-item>
+            <div padding>
+              <button ion-button block type="submit">Zapisz zmiany</button>
+            </div>
+          </form>
+          <div *ngIf="noBonusData">
+              <ion-card class="box">
+                <ion-card-header>
+                  <h2 class="money-header">Brak danych</h2>
+                </ion-card-header>
+              </ion-card>
+            </div>
+        </div>
+      </div>
+  
+    </ion-grid>
+  </ion-content>
