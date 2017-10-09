@@ -58,6 +58,7 @@ export class NewExpensesPage {
     });
   }
 
+
   getYear() {
     return moment().format('YYYY');
   }

@@ -5,6 +5,10 @@ import { ExpenseItem } from '../../models/expense-item.interface';
 import { MonthsPage } from "../months/months";
 import { ExpensesService } from "../../services/expenses";
 import { Subscription } from 'rxjs/Subscription';
+//
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+//
 
 @Component({
   selector: 'page-expenses',

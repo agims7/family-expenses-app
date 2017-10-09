@@ -1,4 +1,3 @@
-import { DatabaseQuery } from 'angularfire2/database/interfaces';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NavController, NavParams } from 'ionic-angular';
