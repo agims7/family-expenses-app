@@ -2,15 +2,16 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-// import { OneSignal } from '@ionic-native/onesignal';
+import { NavController, MenuController } from "ionic-angular";
 
-import { NavController } from "ionic-angular";
-import { MenuController } from "ionic-angular";
-
-import { TabsPage } from '../pages/tabs/tabs';
+import { TabsPage } from "../pages/tabs/tabs";
 import { ExpensesPage } from '../pages/expenses/expenses';
-
+import { LoginPage } from "../pages/login/login";
+import { RegisterPage } from "../pages/register/register";
+import { AuthService } from "../services/auth";
 import { ExpensesService } from "../services/expenses";
+
+import firebase from 'firebase';
 
 @Component({
   templateUrl: 'app.html'
@@ -18,8 +19,8 @@ import { ExpensesService } from "../services/expenses";
 export class MyApp {
   rootPage: any = ExpensesPage;
   tabsPage = TabsPage;
-  // private appID: string = '26597b63-2542-4823-9ad8-690df1468ee6';
-  // private googleProjectNumber: string = '650821978280'; //also known as Sender ID
+  loginPage = LoginPage;
+  registerPage = RegisterPage;
   @ViewChild('nav') nav: NavController;
 
   constructor(
@@ -28,29 +29,32 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public expensesService: ExpensesService,
-    // public notification: OneSignal
+    public authService: AuthService
   ) {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        this.authService.isAuthenticated = true;
+        this.rootPage = TabsPage;
+      } else {
+        this.authService.isAuthenticated = false;
+        this.rootPage = LoginPage;
+      }
+    });
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-      // OneSignal Code start:
-      // Enable to debug issues:
-      // window["plugins"].OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
-
-      // var notificationOpenedCallback = function (jsonData) {
-      //   console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
-      // };
-
-      // window["plugins"].OneSignal
-      //   .startInit(this.appID, this.googleProjectNumber)
-      //   .handleNotificationOpened(notificationOpenedCallback)
-      //   .endInit();
     });
   }
 
   onLoad(page: any) {
     this.nav.setRoot(page);
     this.menuCtrl.close();
+  }
+
+  onLogout() {
+    this.authService.logout();
+    this.menuCtrl.close();
+    this.nav.setRoot(LoginPage);
   }
 
 }

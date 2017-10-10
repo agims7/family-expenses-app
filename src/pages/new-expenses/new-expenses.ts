@@ -9,6 +9,9 @@ import { BonusItem } from '../../models/bonus-item.interface';
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
 
+import { PopoverController } from 'ionic-angular';
+import { LogoutPage } from '../logout/logout';
+
 @Component({
   selector: 'page-new-expenses',
   templateUrl: 'new-expenses.html',
@@ -33,9 +36,15 @@ export class NewExpensesPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController
   ) {
     moment.locale('pl');
+  }
+
+  presentPopover() {
+    let popover = this.popoverCtrl.create(LogoutPage);
+    popover.present();
   }
 
   ionViewDidLeave() {

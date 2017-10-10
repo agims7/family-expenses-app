@@ -8,6 +8,9 @@ import { CategoriesPage } from "../categories/categories";
 import { ShoppingListPage } from "../shopping-list/shopping-list";
 import { ReceiptsPage } from "../receipts/receipts";
 
+import { LoginPage } from '../login/login';
+import { RegisterPage } from '../register/register';
+
 @Component({
   selector: 'page-tabs',
   templateUrl: 'tabs.html'
@@ -20,4 +23,7 @@ export class TabsPage {
   categoriesPage = CategoriesPage;
   shoppingListPage = ShoppingListPage;
   receiptsPage = ReceiptsPage;
+
+  loginPage = LoginPage;
+  registerPage = RegisterPage;
 }
