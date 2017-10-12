@@ -23,6 +23,7 @@ export class ReceiptsPage {
   public receiptsListSubscription: Subscription;
   public noData: boolean = true;
   public selectedIndex: any = [];
+  public test = "t";
 
   constructor(
     public navCtrl: NavController,
@@ -67,6 +68,17 @@ export class ReceiptsPage {
   onShowOptions(event: MouseEvent) {
     const popover = this.popoverCtrl.create(LogoutPage);
     popover.present({ ev: event });
+  }
+
+  warrantyExceeded(warranty, date) {
+    let now = moment();
+    let boughtDate = moment.unix(date);
+    let diff = now.diff(boughtDate, 'months', true);
+    if (diff < warranty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   createSelectedIndexObject() {

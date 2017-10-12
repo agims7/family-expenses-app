@@ -15,6 +15,7 @@
       <button class="add-button" ion-button block color="primaryDark" [navPush]="newReceiptPage">Dodaj paragon</button>
 
       <ion-card class="box" *ngFor="let receipt of receiptsList | async; let i = index">
+        <div class="exceeded" *ngIf="warrantyExceeded(receipt.warranty, receipt.date)"></div>
         <ion-card-header>
           <h1 *ngIf="!edit" class="text">{{ receipt.name }}</h1>
           <ion-item *ngIf="edit">
@@ -22,7 +23,6 @@
             <ion-input class="input-field" type="text" name="name" [(ngModel)]="receipt.name" ngModel required></ion-input>
           </ion-item>
         </ion-card-header>
-
         <ion-card-content>
           <h1 *ngIf="!edit" class="receipt-value text">{{ expensesService.valueFixed(receipt.value) }} zł</h1>
           <ion-item *ngIf="edit">
@@ -37,6 +37,7 @@
           </ion-item>
 
           <p class="date" [ngClass]="{'time-middle': edit}">{{ showTime(receipt.date) }}</p>
+          <p class="date" [ngClass]="{'time-middle': edit}">Okres gwarancji: {{ receipt.warranty }} m</p>
 
           <button *ngIf="selectedIndex[i].index !== i" ion-button block small color="primary" (click)="showImage(i)">Pokaż zdjęcie paragonu</button>
 

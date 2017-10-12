@@ -29,6 +29,11 @@
       </ion-item>
 
       <ion-item>
+        <ion-label floating>Okres gwarancji (miesiące)</ion-label>
+        <ion-input class="input-field" type="number" name="warranty" [(ngModel)]="receiptWarranty" pattern="[1-9]" ngModel required></ion-input>
+      </ion-item>
+
+      <ion-item>
         <ion-label>Dodane zdjęcie</ion-label>
         <ion-checkbox item-right color="primary" [checked]="imageTaken" disabled="true"></ion-checkbox>
       </ion-item>

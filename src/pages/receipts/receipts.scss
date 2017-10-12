@@ -10,7 +10,7 @@ page-receipts {
         padding-left: 0 !important;
     }
     .card-content {
-        padding: 10px 10px 5px !important;
+        padding: 0px 10px 5px !important;
     }
     .text,
     .icon {
@@ -28,7 +28,7 @@ page-receipts {
         border-bottom: 1px solid rgb(200, 199, 204);
     }
     .date {
-        margin: 10px auto;
+        margin: 4px auto;
     }
     .time-middle {
         text-align: center;
@@ -38,5 +38,56 @@ page-receipts {
     .box {
         margin: 7px;
         width: calc(100% - 14px);
+        position: relative;
     }
+    .exceeded {
+        width: 11em;
+        height: 8em;
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        right: 0;
+        z-index: 9999;
+        pointer-events: none;
+        font-size: 13px;
+        text-decoration: none;
+        text-indent: -999999px;
+    }
+
+    .exceeded:before,
+    .exceeded:after {
+        position: absolute;
+        display: block;
+        width: 10.38em;
+        height: 1.54em;
+        top: 0.50em;
+        right: 0.50em;
+        box-sizing: content-box;
+    }
+      
+    .exceeded:before {
+        content: "Koniec gwarancji";
+        color: black;
+        padding: .38em 0;
+        background-color: #f53d3d;
+        box-shadow: 0 .15em .23em 0 rgba(0, 0, 0, 0.5);
+        pointer-events: auto;
+    }    
+
+    .exceeded:after {
+        content: "Koniec gwarancji";
+        color: #fff;
+        font: 500 1em "Helvetica Neue", Helvetica, Arial, sans-serif;
+        line-height: 1.54em;
+        text-decoration: none;
+        text-shadow: 0 -.08em rgba(0, 0, 0, 0.5);
+        text-align: center;
+        text-indent: 0;
+        padding: .15em 0;
+        margin: .15em 0;
+        border-width: .08em 0;
+        border-style: dotted;
+        border-color: #fff;
+        border-color: rgba(255, 255, 255, 0.7);
+    }   
 }

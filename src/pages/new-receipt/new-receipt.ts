@@ -18,6 +18,7 @@ export class NewReceiptPage {
   public receiptName: string;
   public receiptDescription: string;
   public receiptValue: number;
+  public receiptWarranty: number;
   public receiptImage: string;
   public receiptDate: number;
   public imageTaken: boolean = false;
@@ -33,7 +34,7 @@ export class NewReceiptPage {
   }
   
   ionViewDidEnter() {
-    this.imageTaken = false;
+    this.clear();
     this.dbList = 'michal1dydo/receiptsItems/';
     this.receiptsList = this.expensesService.getItemsList(this.dbList);
   }
@@ -41,6 +42,15 @@ export class NewReceiptPage {
   onShowOptions(event: MouseEvent) {
     const popover = this.popoverCtrl.create(LogoutPage);
     popover.present({ ev: event });
+  }
+
+  clear() {
+    this.imageTaken = false;
+    this.receiptDescription = null;
+    this.receiptImage = null;
+    this.receiptName = null;
+    this.receiptValue = null;
+    this.receiptWarranty = null;
   }
 
   takePicture() {
@@ -97,7 +107,8 @@ export class NewReceiptPage {
       description: this.receiptDescription,
       image: this.receiptImage,
       name: this.receiptName,
-      value: Number(this.receiptValue)
+      value: Number(this.receiptValue),
+      warranty: Number(this.receiptWarranty.toFixed(0))
     });
     promise
       .then(_ => {
