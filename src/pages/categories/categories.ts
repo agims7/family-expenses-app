@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ModalController, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { EditCategoryPage } from "../edit-category/edit-category";
 import { ExpensesService } from "../../services/expenses";
 import { Subscription } from 'rxjs/Subscription';
+import { LogoutPage } from '../logout/logout';
 
 @Component({
   selector: 'page-categories',
@@ -18,7 +19,7 @@ export class CategoriesPage {
   public categoriesDataList: FirebaseListObservable<any[]>;
   public categoriesItemsListSubscription: Subscription;
   public categoriesDataListSubscription: Subscription;
-  public dbList: string = 'dydo/categoriesItems';
+  public dbList: string = 'michal1dydo/categoriesItems';
   public categoriesTable;
 
   constructor(
@@ -27,7 +28,8 @@ export class CategoriesPage {
     public alertCtrl: AlertController,
     public database: AngularFireDatabase,
     public expensesService: ExpensesService,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController
   ) {
   }
 
@@ -45,6 +47,11 @@ export class CategoriesPage {
     this.categoriesItemsListSubscription = this.categoriesItemsList.subscribe(() => {
       this.expensesService.loaderOff();
     });
+  }
+
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
   }
 
   clearInput() {

@@ -1,6 +1,11 @@
 <ion-header>
       <ion-navbar>
         <ion-title>Statystyki zakresu kategorii</ion-title>
+        <ion-buttons end>
+            <button ion-button icon-only (click)="onShowOptions($event)">
+                <ion-icon name="more"></ion-icon>
+              </button>
+          </ion-buttons>
       </ion-navbar>
     </ion-header>
 
@@ -10,18 +15,22 @@
         <ion-item *ngFor="let item of categoryData; let i = index">
           <ion-row>
             <ion-col>
-              <h2 text-left>{{ item.expenseName }}</h2>
+              <h2 *ngIf="expenseView" text-left>{{ item.expenseName }}</h2>
+              <h2 *ngIf="!expenseView" text-left>{{ item.bonusName }}</h2>
             </ion-col>
             <ion-col>
-              <h2 class="price" text-right>{{ item.expenseValue }} zł</h2>
+              <h2 *ngIf="expenseView" class="price" text-right>{{ item.expenseValue }} zł</h2>
+              <h2 *ngIf="!expenseView" class="bonus" text-right>{{ item.bonusValue }} zł</h2>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col col-8>
-              <p class="description" text-left text-wrap>{{ item.expenseDescription }}</p>
+              <p *ngIf="expenseView" class="description" text-left text-wrap>{{ item.expenseDescription }}</p>
+              <p *ngIf="!expenseView" class="description" text-left text-wrap>{{ item.bonusDescription }}</p>
             </ion-col>
             <ion-col col-4>
-              <p class="date" text-right>{{ showTime(item.expenseDate) }}</p>
+              <p *ngIf="expenseView" class="date" text-right>{{ showTime(item.expenseDate) }}</p>
+              <p *ngIf="!expenseView" class="date" text-right>{{ showTime(item.bonusDate) }}</p>
             </ion-col>
           </ion-row>
         </ion-item>

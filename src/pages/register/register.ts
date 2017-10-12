@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { NgForm } from "@angular/forms";
-import { NavController, NavParams, LoadingController, AlertController } from 'ionic-angular';
-
+import { NavController, NavParams, AlertController, PopoverController  } from 'ionic-angular';
+import { LoginPage } from '../login/login';
+import { ExpensesService } from "../../services/expenses";
 import { AuthService } from "../../services/auth";
+import { LogoutPage } from '../logout/logout';
 
 @Component({
   selector: 'page-register',
@@ -14,24 +16,21 @@ export class RegisterPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private authService: AuthService,
-    private loadingCtrl: LoadingController,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    public expensesService: ExpensesService,
   ) {
   }
 
   onSignup(form: NgForm) {
-    const loading = this.loadingCtrl.create({
-      content: 'Signing you up...'
-    });
-    loading.present();
     this.authService.signup(form.value.email, form.value.password)
       .then(data => {
         console.log(data)
-        loading.dismiss();
+        form.reset();
+        this.navCtrl.push(LoginPage);
       })
       .catch(error => {
         console.log(error)
-        loading.dismiss();
+        form.reset();
         const alert = this.alertCtrl.create({
           title: 'Signup failed!',
           message: error.message,

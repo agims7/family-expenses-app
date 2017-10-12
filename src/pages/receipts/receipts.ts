@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { NewReceiptPage } from "../new-receipt/new-receipt";
 import * as moment from 'moment';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
+import { LogoutPage } from '../logout/logout';
 
 @Component({
   selector: 'page-receipts',
@@ -29,7 +30,8 @@ export class ReceiptsPage {
     public alertCtrl: AlertController,
     public database: AngularFireDatabase,
     public expensesService: ExpensesService,
-    private photoViewer: PhotoViewer
+    private photoViewer: PhotoViewer,
+    public popoverCtrl: PopoverController
   ) {
   }
 
@@ -42,7 +44,7 @@ export class ReceiptsPage {
   }
 
   ionViewDidEnter() {
-    this.dbList = 'dydo/receiptsItems/';
+    this.dbList = 'michal1dydo/receiptsItems/';
     this.receiptsList = this.expensesService.getItemsList(this.dbList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.receiptsListSubscription = this.receiptsList.subscribe((data) => {
       this.receiptsListLength = data.length;
@@ -60,7 +62,11 @@ export class ReceiptsPage {
         }
       }
     });
+  }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
   }
 
   createSelectedIndexObject() {
@@ -119,22 +125,22 @@ export class ReceiptsPage {
   }
 
   dateAscending() {
-    this.receiptsList = this.expensesService.getItemsList('dydo/receiptsItems/', { orderByChild: 'date' });
+    this.receiptsList = this.expensesService.getItemsList('michal1dydo/receiptsItems/', { orderByChild: 'date' });
     this.sortDateDown = false;
   }
 
   dateDescending() {
-    this.receiptsList = this.expensesService.getItemsList('dydo/receiptsItems/', { orderByChild: 'date' }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.receiptsList = this.expensesService.getItemsList('michal1dydo/receiptsItems/', { orderByChild: 'date' }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.sortDateDown = true;
   }
 
   priceAscending() {
-    this.receiptsList = this.receiptsList = this.expensesService.getItemsList('dydo/receiptsItems/', { orderByChild: 'value' });
+    this.receiptsList = this.receiptsList = this.expensesService.getItemsList('michal1dydo/receiptsItems/', { orderByChild: 'value' });
     this.sortPriceDown = false;
   }
 
   priceDescending() {
-    this.receiptsList = this.receiptsList = this.expensesService.getItemsList('dydo/receiptsItems/', { orderByChild: 'value' }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
+    this.receiptsList = this.receiptsList = this.expensesService.getItemsList('michal1dydo/receiptsItems/', { orderByChild: 'value' }).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.sortPriceDown = true;
   }
 

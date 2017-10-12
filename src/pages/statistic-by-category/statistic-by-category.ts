@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import { NavParams } from 'ionic-angular';
+import { NavParams, PopoverController  } from 'ionic-angular';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs/Subscription';
-
+import { LogoutPage } from '../logout/logout';
 import { ExpensesService } from '../../services/expenses';
 
 @Component({
@@ -26,7 +26,8 @@ export class StatisticByCategoryPage {
   constructor( 
     public navParams: NavParams,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController
   ) {
   }
 
@@ -46,6 +47,11 @@ export class StatisticByCategoryPage {
     this.checkWhichBudget();
   }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
+  }
+
   checkWhichBudget() {
     if (this.category === 'bonuses') {
       this.getBonusData();
@@ -63,7 +69,7 @@ export class StatisticByCategoryPage {
   }
 
   getExpenseData() {
-    this.dbList = 'dydo/expenseItems/' + this.selectedYear + '/' + this.month;
+    this.dbList = 'michal1dydo/expenseItems/' + this.selectedYear + '/' + this.month;
     this.statisticList = this.expensesService.getItemsList(this.dbList);
     this.statisticListSubscription = this.statisticList.subscribe(data => {
       this.getExpenseDays(data);
@@ -71,7 +77,7 @@ export class StatisticByCategoryPage {
   }
 
   getBonusData() {
-    this.dbList = 'dydo/bonusItems/' + this.selectedYear + '/' + this.month;
+    this.dbList = 'michal1dydo/bonusItems/' + this.selectedYear + '/' + this.month;
     this.statisticList = this.expensesService.getItemsList(this.dbList);
     this.statisticListSubscription = this.statisticList.subscribe(data => {
       this.getBonusDays(data);

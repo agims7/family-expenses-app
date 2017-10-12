@@ -1,14 +1,13 @@
 import { Component, Query } from '@angular/core';
-import { NavController, NavParams, AlertController, ModalController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, ModalController, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
-
+import { LogoutPage } from '../logout/logout';
 import { ExpenseItem } from '../../models/expense-item.interface';
 import { BonusItem } from '../../models/bonus-item.interface';
 import { ExpensesService } from "../../services/expenses";
-
 import { EditExpensePage } from "../edit-expense/edit-expense";
 
 
@@ -46,7 +45,8 @@ export class DayPage {
     public alertCtrl: AlertController,
     public database: AngularFireDatabase,
     public expensesService: ExpensesService,
-    public modalCtrl: ModalController
+    public modalCtrl: ModalController,
+    public popoverCtrl: PopoverController
   ) {
 
   }
@@ -68,6 +68,11 @@ export class DayPage {
     this.checkWhichBudget();
   }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
+  }
+
   clearAll() {
     this.expensesListArray = [];
     this.bonusesListArray = [];
@@ -78,13 +83,13 @@ export class DayPage {
   checkWhichBudget() {
     if (this.viewType === 'bonuses') {
       this.title = "Bonusy";
-      this.dbStart = 'dydo/bonusItems/';
+      this.dbStart = 'michal1dydo/bonusItems/';
       this.queryValue = 'bonusValue';
       this.queryDate = 'bonusDate';
       this.getBonusData();
     } else if (this.viewType === 'expenses') {
       this.title = "Wydatki dzienne";
-      this.dbStart = 'dydo/expenseItems/';
+      this.dbStart = 'michal1dydo/expenseItems/';
       this.queryValue = 'expenseValue';
       this.queryDate = 'expenseDate';
       this.getExpenseData();
@@ -327,7 +332,7 @@ export class DayPage {
       handler: data => {
         this.equal = this.expensesService.categoriesData[data].name;
         this.setChecked(data)
-        let dbList = 'dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
+        let dbList = 'michal1dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + this.expensesService.selectedDay;
         if (data == 0) {
           this.expenseListOfDay = this.expenseListOfDay = this.expensesService.getItemsList(dbList, { orderByChild: 'expenseCategory' });
         } else {

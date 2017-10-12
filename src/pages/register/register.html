@@ -1,31 +1,23 @@
 <ion-header>
-    <ion-navbar color="primary">
-      <ion-title>Rejestracja</ion-title>
-    </ion-navbar>
-  </ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Rejestracja</ion-title>
+  </ion-navbar>
+</ion-header>
 
 
 <ion-content padding>
+  <ion-grid>
     <form #register="ngForm" (ngSubmit)="onSignup(register)">
-        <ion-list>
-          <ion-item>
-            <ion-label fixed>Mail</ion-label>
-            <ion-input
-              type="email"
-              ngModel
-              name="email"
-              required></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label fixed>Password</ion-label>
-            <ion-input
-              type="password"
-              ngModel
-              name="password"
-              required
-              [minlength]="6"></ion-input>
-          </ion-item>
-        </ion-list>
-        <button ion-button block type="submit" [disabled]="!register.valid">Signup</button>
-      </form>
+      <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email" ngModel name="email" required email></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Hasło</ion-label>
+        <ion-input type="password" ngModel name="password" [minlength]=6 required></ion-input>
+      </ion-item>
+      <p  class="info">Hasło powinno zawierać przynajmniej 6 znaków</p>
+      <button ion-button block class="submit-button" type="submit" [disabled]="!register.valid">Zarejestruj</button>
+    </form>
+  </ion-grid>
 </ion-content>

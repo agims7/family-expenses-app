@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import { ReceiptsPage } from "../receipts/receipts";
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ExpensesService } from "../../services/expenses";
+import { LogoutPage } from '../logout/logout';
 
 @Component({
   selector: 'page-new-receipt',
@@ -26,14 +27,20 @@ export class NewReceiptPage {
     public navParams: NavParams,
     public expensesService: ExpensesService,
     public database: AngularFireDatabase,
-    public camera: Camera
+    public camera: Camera,
+    public popoverCtrl: PopoverController
   ) {
   }
   
   ionViewDidEnter() {
     this.imageTaken = false;
-    this.dbList = 'dydo/receiptsItems/';
+    this.dbList = 'michal1dydo/receiptsItems/';
     this.receiptsList = this.expensesService.getItemsList(this.dbList);
+  }
+
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
   }
 
   takePicture() {

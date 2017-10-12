@@ -23,7 +23,4 @@ export class TabsPage {
   categoriesPage = CategoriesPage;
   shoppingListPage = ShoppingListPage;
   receiptsPage = ReceiptsPage;
-
-  loginPage = LoginPage;
-  registerPage = RegisterPage;
 }

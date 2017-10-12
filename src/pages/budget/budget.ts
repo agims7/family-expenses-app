@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, PopoverController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { ExpenseItem } from '../../models/expense-item.interface';
 import { MonthsPage } from "../months/months";
 import { ExpensesService } from "../../services/expenses";
 import { Subscription } from 'rxjs/Subscription';
+import { LogoutPage } from '../logout/logout';
 
 @Component({
   selector: 'page-budget',
@@ -25,7 +26,8 @@ export class BudgetPage {
   constructor(
     public navCtrl: NavController,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController
   ) {
   }
 
@@ -42,6 +44,11 @@ export class BudgetPage {
     this.getExpenseData();
   }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
+  }
+
   segmentChanged($event) {
     this.expensesService.loaderOn();
     if ($event.value === 'bonuses') {
@@ -52,7 +59,7 @@ export class BudgetPage {
   }
 
   getExpenseData() {
-    this.dbExpenseList = 'dydo/expenseItems/';
+    this.dbExpenseList = 'michal1dydo/expenseItems/';
     this.expenseListOfYears = this.expensesService.getItemsList(this.dbExpenseList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;    
     this.expenseListOfYearsSubscription = this.expenseListOfYears.subscribe((data) => {
       if (data == null) {
@@ -71,7 +78,7 @@ export class BudgetPage {
   }
 
   getBonusData() {
-    this.dbBonusList = 'dydo/bonusItems/';
+    this.dbBonusList = 'michal1dydo/bonusItems/';
     this.bonuseListOfYears = this.expensesService.getItemsList(this.dbBonusList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.bonusListOfYearsSubscription = this.expenseListOfYears.subscribe((data) => {
       if (data == null) {

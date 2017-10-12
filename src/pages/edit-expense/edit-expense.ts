@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { ExpensesService } from "../../services/expenses";
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
+import { LogoutPage } from '../logout/logout';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class EditExpensePage {
     public navParams: NavParams,
     public expensesService: ExpensesService,
     public viewCtrl: ViewController,
+    public popoverCtrl: PopoverController
   ) {
   }
 
@@ -52,7 +54,7 @@ export class EditExpensePage {
   }
 
   ionViewDidEnter() {
-    this.categoriesDbList = 'dydo/categoriesItems/';
+    this.categoriesDbList = 'michal1dydo/categoriesItems/';
     this.categoriesDataList = this.expensesService.getItemsList(this.categoriesDbList);
     this.categoriesDataListSubscription = this.categoriesDataList.subscribe((data) => {
       this.expensesService.categoriesData = data;
@@ -67,17 +69,22 @@ export class EditExpensePage {
     this.checkWhichBudget();
   }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
+  }
+
   checkWhichBudget() {
     if (this.category === undefined) {
     this.viewType = 'bonuses';
     this.title = "Edycja bonusu";
-    this.dbStart = 'dydo/bonusItems/';
+    this.dbStart = 'michal1dydo/bonusItems/';
     this.getBonusData();
     
     } else {
       this.viewType = 'expenses';
       this.title = "Edycja wydatku";
-      this.dbStart = 'dydo/expenseItems/';
+      this.dbStart = 'michal1dydo/expenseItems/';
       this.getExpenseData();
     }
   }

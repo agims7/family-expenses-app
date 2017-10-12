@@ -2,17 +2,22 @@
 
   <ion-navbar color="primary">
     <ion-title>Dodaj {{ title }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="onShowOptions($event)">
+          <ion-icon name="more"></ion-icon>
+        </button>
+    </ion-buttons>
   </ion-navbar>
   <ion-toolbar no-border-top>
-      <ion-segment [(ngModel)]="viewType">
-        <ion-segment-button value="expenses">
-          Wydatki
-        </ion-segment-button>
-        <ion-segment-button value="bonuses">
-          Bonusy
-        </ion-segment-button>
-      </ion-segment>
-    </ion-toolbar>
+    <ion-segment [(ngModel)]="viewType">
+      <ion-segment-button value="expenses">
+        Wydatki
+      </ion-segment-button>
+      <ion-segment-button value="bonuses">
+        Bonusy
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
 

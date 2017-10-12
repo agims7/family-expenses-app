@@ -1,8 +1,8 @@
 import { Component, HostListener } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { RangeStatisticByCategoryPage } from "../range-statistic-by-category/range-statistic-by-category";
-
+import { LogoutPage } from '../logout/logout';
 import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
 import * as _ from 'lodash';
@@ -44,6 +44,15 @@ export class RangeStatisticPage {
   public categoriesTable: any = [];
   public localCategoriesData: any = [];
 
+  public bonusesDbList: string;
+  public bonusesStatisticYearsList: FirebaseListObservable<any[]>
+  public bonusesStatisticMongthsList: FirebaseListObservable<any[]>;
+  public bonusesStatisticMongthsListSubscription: Subscription;
+  public bonusMonthsDays = [];
+  public bonusedbMonthsList: string;
+  public bonusData: any = [];
+  public bonuses: number = 0;  
+
   @HostListener('init')
   handleInit() {
     this.chart.legend.addListener("rollOverItem", this.handleRollOver);
@@ -59,12 +68,15 @@ export class RangeStatisticPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController
   ) {
   }
 
   ionViewDidLeave() {
     this.expensesService.safeUnsubscribe(this.statisticMonthsListSubscription);
+    this.expensesService.safeUnsubscribe(this.bonusesStatisticMongthsListSubscription);    
+    this.expensesService.loaderOff();
   }
 
   ionViewCanEnter() {
@@ -80,6 +92,7 @@ export class RangeStatisticPage {
     this.getSelectedMonths();
     this.getSelectedDays();
     this.getMoneySpent();
+    this.getBonusMoney();
     setTimeout(() => {
       this.setChart()
     }, 500);
@@ -88,10 +101,18 @@ export class RangeStatisticPage {
     this.expensesService.loaderOff();    
   }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
+  }
+
   clearValues() {
     this.categories = [];
     this.categoriesAllSpentMoney = [];
     this.allSpentMoney = 0;
+    this.bonuses = 0;
+    this.bonusData= [];
+    this.bonusMonthsDays = [];
   }
 
   getCategories() {
@@ -143,14 +164,29 @@ export class RangeStatisticPage {
   }
 
   getMoneySpent() {  
-    this.dbList = 'dydo/receiptsItems/';
+    this.dbList = 'michal1dydo/receiptsItems/';
     this.statisticYearsList = this.expensesService.getItemsList(this.dbList);
     for (let year of this.yearsRange) {
       for (let month of this.monthsRange) {
-        this.dbMonthsList = 'dydo/expenseItems/' + year + '/' + this.expensesService.getMonthFromNumber(month);
+        this.dbMonthsList = 'michal1dydo/expenseItems/' + year + '/' + this.expensesService.getMonthFromNumber(month);
         this.statisticMonthsList = this.expensesService.getItemsList(this.dbMonthsList);
         this.statisticMonthsListSubscription = this.statisticMonthsList.subscribe(data => {
           this.getDays(data, month, year);
+        });
+      }
+    }
+  }
+
+  getBonusMoney() {
+    this.bonusesDbList = 'michal1dydo/bonusItems/';
+    this.bonusesStatisticYearsList = this.expensesService.getItemsList(this.bonusesDbList);
+
+    for (let year of this.yearsRange) {
+      for (let month of this.monthsRange) {
+        this.bonusedbMonthsList = 'michal1dydo/bonusItems/' + year + '/' + this.expensesService.getMonthFromNumber(month);
+        this.bonusesStatisticMongthsList = this.expensesService.getItemsList(this.bonusedbMonthsList);
+        this.bonusesStatisticMongthsListSubscription = this.bonusesStatisticMongthsList.subscribe(data => {
+          this.getBonusDays(data, month, year);
         });
       }
     }
@@ -177,16 +213,44 @@ export class RangeStatisticPage {
     }
   }
 
+  getBonusDays(data, month, year) {
+    let monthName = this.expensesService.getMonthFromNumber(month)
+    this.bonusMonthsDays[monthName] = [];
+    for (let day of data) {
+      if (month == this.firstMonth) {
+        if (day.$key >= this.firstDay) {
+          this.getBonusDayMoney(day)
+          this.bonusMonthsDays[monthName].push(day.$key)
+        }
+      } else if (month == this.lastMonth) {
+        if (day.$key <= this.lastDay) {
+          this.getBonusDayMoney(day)
+          this.bonusMonthsDays[monthName].push(day.$key)
+        }
+      } else {
+        this.getBonusDayMoney(day)
+        this.bonusMonthsDays[monthName].push(day.$key)
+      }
+    }
+  }
+
   getDayMoney(day) {
     for (let expenses in day) {
       let money = day[expenses].expenseValue;
-      this.allSpentMoney = this.allSpentMoney + Number(money);
+      this.allSpentMoney = Number(this.allSpentMoney) + Number(money);
       for (let i = 0; i < this.categoriesLength; i++) {
         let name = day[expenses].expenseCategory;
         if (name === this.categories[i]) {
           this.categoriesAllSpentMoney[i].allMoney += Number(money);
         }
       }
+    }
+  }
+
+  getBonusDayMoney(day) {
+    for (let bonus in day) {
+      let money = day[bonus].bonusValue;
+      this.bonuses = Number(this.bonuses) + Number(money);
     }
   }
 
@@ -221,7 +285,7 @@ export class RangeStatisticPage {
       "outlineThickness": 2,
       "outlineColor": "#fff",
       "innerRadius": "30%",
-      "radius": 100,
+      "radius": 80,
       "labelText": "[[percents]]% <br> [[name]]",
       "fontSize": 12,
       "autoMargins": false,

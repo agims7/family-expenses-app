@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-
 import { ExpenseItem } from '../../models/expense-item.interface';
 import { DayPage } from "../day/day";
-
+import { LogoutPage } from '../logout/logout';
 import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
 
@@ -37,7 +36,8 @@ export class DaysPage {
     public navParams: NavParams,
     public navCtrl: NavController,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController
   ) {
 
   }
@@ -60,6 +60,11 @@ export class DaysPage {
     this.checkWhichBudget();
   }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
+  }
+
   clearAll() {
     this.days = [];
     this.dayWithExpenses = {};
@@ -79,7 +84,7 @@ export class DaysPage {
   }
 
   getExpenseData() {
-    this.dbExpenseList = 'dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth;
+    this.dbExpenseList = 'michal1dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth;
     this.expenseListOfDays = this.expensesService.getItemsList(this.dbExpenseList);
     this.expenseListOfDaysSubscription = this.expenseListOfDays.subscribe((data) => {
       if (data == null) {
@@ -99,7 +104,7 @@ export class DaysPage {
   }
 
   getBonusData() {
-    this.dbBonusList = 'dydo/bonusItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth;
+    this.dbBonusList = 'michal1dydo/bonusItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth;
     this.bonuseListOfDays = this.expensesService.getItemsList(this.dbBonusList);
     this.bonusListOfDaysSubscription = this.bonuseListOfDays.subscribe((data) => {
       if (data == null) {
@@ -131,7 +136,7 @@ export class DaysPage {
 
   getExpenseDayMoney() {
     for (let day of this.days) {
-      let databaseAddress = 'dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + day;
+      let databaseAddress = 'michal1dydo/expenseItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + day;
       let listOfDay = this.database.list(databaseAddress);
       listOfDay.subscribe(data => {
         this.dayWithExpenses[day] = this.getFullSpentMoney(data);
@@ -142,7 +147,7 @@ export class DaysPage {
 
   getBonusDayMoney() {
     for (let day of this.days) {
-      let databaseAddress = 'dydo/bonusItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + day;
+      let databaseAddress = 'michal1dydo/bonusItems/' + this.expensesService.selectedYear + '/' + this.expensesService.selectedMonth + '/' + day;
       let listOfDay = this.database.list(databaseAddress);
       listOfDay.subscribe(data => {
         this.dayWithBonuses[day] = this.getFullBonuses(data);

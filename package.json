@@ -23,7 +23,6 @@
         "@angular/tsc-wrapped": "^4.4.4",
         "@ionic-native/camera": "^4.3.1",
         "@ionic-native/core": "^4.3.1",
-        "@ionic-native/onesignal": "^4.3.1",
         "@ionic-native/photo-viewer": "^4.3.1",
         "@ionic-native/splash-screen": "3.12.1",
         "@ionic-native/status-bar": "3.12.1",
@@ -58,7 +57,6 @@
     },
     "devDependencies": {
         "@ionic/app-scripts": "2.1.4",
-        "image-compressor": "^1.2.0",
         "typescript": "2.3.4"
     },
     "description": "An Ionic project",

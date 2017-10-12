@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import { ExpenseItem } from '../../models/expense-item.interface';
 import { DaysPage } from "../days/days";
 import { Subscription } from 'rxjs/Subscription';
 import { ExpensesService } from "../../services/expenses";
+import { LogoutPage } from '../logout/logout';
 
 @Component({
   selector: 'page-months',
@@ -28,7 +29,8 @@ export class MonthsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController
   ) {
   }
 
@@ -47,6 +49,11 @@ export class MonthsPage {
     this.checkWhichBudget();
   }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
+  }
+
   checkWhichBudget() {
     if (this.viewType === 'bonuses') {
       this.getBonusData();
@@ -58,7 +65,7 @@ export class MonthsPage {
   }
 
   getExpenseData() {
-    this.dbExpenseList = 'dydo/expenseItems/' + this.expensesService.selectedYear;
+    this.dbExpenseList = 'michal1dydo/expenseItems/' + this.expensesService.selectedYear;
     this.expenseListOfMonths = this.expensesService.getItemsList(this.dbExpenseList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.expenseListOfMonthsSubscription = this.expenseListOfMonths.subscribe((data) => {
       if (data == null) {
@@ -77,7 +84,7 @@ export class MonthsPage {
   }
 
   getBonusData() {
-    this.dbBonusList = 'dydo/bonusItems/' + this.expensesService.selectedYear;
+    this.dbBonusList = 'michal1dydo/bonusItems/' + this.expensesService.selectedYear;
     this.bonuseListOfMonths = this.expensesService.getItemsList(this.dbBonusList).map((array) => array.reverse()) as FirebaseListObservable<any[]>;
     this.bonusListOfMonthsSubscription = this.bonuseListOfMonths.subscribe((data) => {
       if (data == null) {

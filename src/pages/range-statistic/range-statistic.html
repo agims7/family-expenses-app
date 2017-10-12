@@ -1,9 +1,12 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title>Statystyki zakresu</ion-title>
+    <ion-buttons end>
+        <button ion-button icon-only (click)="onShowOptions($event)">
+            <ion-icon name="more"></ion-icon>
+          </button>
+      </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -23,10 +26,17 @@
         </ion-card-header>
 
         <ion-item class="row" *ngFor="let category of localCategoriesData; let i = index">
-          <button ion-item [navPush]="rangeStatisticByCategoryPage" [navParams]="[category.name, firstYear, lastYear, yearsRange, firstMonth, lastMonth, monthsRange, firstDay, lastDay]">
+          <button ion-item [navPush]="rangeStatisticByCategoryPage" [navParams]="[firstYear, lastYear, yearsRange, firstMonth, lastMonth, monthsRange, firstDay, lastDay, category.name]">
               <h3 class="money-header category-name">{{ category.name }}:</h3>
               <h3 class="money-header all-money">{{ expensesService.valueFixed(category.allMoney) }} zł</h3>
               </button>
+        </ion-item>
+        <ion-item-divider></ion-item-divider>
+        <ion-item class="row">
+          <button ion-item [navPush]="rangeStatisticByCategoryPage" [navParams]="[firstYear, lastYear, yearsRange, firstMonth, lastMonth, monthsRange, firstDay, lastDay]">
+            <h3 class="money-header category-name-bonus">Bonusy:</h3>
+            <h3 class="money-header all-money-bonus"> {{ expensesService.valueFixed(bonuses) }} zł</h3>
+          </button>
         </ion-item>
       </ion-card>
       <div id="chartdiv"></div>

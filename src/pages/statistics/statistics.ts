@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import { RangeStatisticPage } from "../range-statistic/range-statistic";
@@ -7,6 +7,7 @@ import { MonthStatisticPage } from "../month-statistic/month-statistic";
 import { ExpensesService } from "../../services/expenses";
 import { Subscription } from 'rxjs/Subscription';
 import { DatePickerDirective } from 'ionic3-datepicker';
+import { LogoutPage } from '../logout/logout';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class StatisticsPage {
   public expenseFullList: FirebaseListObservable<any[]>
   public allMonthlyMoney = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   public polishMonths = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień']
-  private dbList = 'dydo/expenseItems/';
+  private dbList = 'michal1dydo/expenseItems/';
   public expenseListOfYears: FirebaseListObservable<any[]>
   public expenseListOfYearsSubscription: Subscription;
   public maxDate: Date = moment()['_d'];
@@ -36,7 +37,8 @@ export class StatisticsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController
   ) {
   }
 
@@ -50,6 +52,11 @@ export class StatisticsPage {
 
   ionViewDidEnter() {
     this.getAvailableYears();
+  }
+
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
   }
 
   getAvailableYears() {

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams, ViewController } from 'ionic-angular';
+import { NavController, NavParams, ViewController, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { CategoriesPage } from '../categories/categories';
 import { ExpensesService } from "../../services/expenses";
+import { LogoutPage } from '../logout/logout';
 
 @Component({
   selector: 'page-edit-category',
@@ -22,7 +23,8 @@ export class EditCategoryPage {
     public navParams: NavParams,
     public database: AngularFireDatabase,
     public viewCtrl: ViewController,
-    public expensesService: ExpensesService    
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController    
   ) {
   }
 
@@ -38,12 +40,17 @@ export class EditCategoryPage {
     this.categoryKey = this.selectedCategory.$key;
   }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
+  }
+
   changeName() {
     this.categoryName = this.categoryName.toLowerCase();
   }
 
   setDbList() {
-    this.dbList = 'dydo/categoriesItems/';
+    this.dbList = 'michal1dydo/categoriesItems/';
     this.categoriesList = this.database.list(this.dbList);
     this.expensesService.loaderOff();
   }

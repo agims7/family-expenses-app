@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { LoadingController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class ExpensesService {
+    public userName: string;
     public selectedMonth;
     public selectedMonthNumber: number;
     public selectedYear: number;

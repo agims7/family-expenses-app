@@ -1,10 +1,11 @@
 import { Subscribable } from 'rxjs/Observable';
 import { Component, HostListener } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { Subscription } from 'rxjs/Subscription';
 import { StatisticByCategoryPage } from "../statistic-by-category/statistic-by-category";
 import { ExpensesService } from "../../services/expenses";
+import { LogoutPage } from '../logout/logout';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -52,7 +53,8 @@ export class MonthStatisticPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController
   ) {
   }
 
@@ -68,6 +70,7 @@ export class MonthStatisticPage {
   }
 
   ionViewDidEnter() {
+    console.log(this.expensesService.categoriesData)
     this.selectedMonth = this.navParams.data[0];
     this.selectedYear = this.navParams.data[1];
     this.clearAll();
@@ -75,6 +78,11 @@ export class MonthStatisticPage {
     this.getBonusData();
     this.localCategoriesData = _.clone(this.expensesService.categoriesData);
     this.localCategoriesData.shift();
+  }
+
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
   }
 
   clearAll() {
@@ -87,7 +95,7 @@ export class MonthStatisticPage {
   }
 
   getExpenseData() {
-    this.dbList = 'dydo/expenseItems/' + this.selectedYear + '/' + this.selectedMonth;
+    this.dbList = 'michal1dydo/expenseItems/' + this.selectedYear + '/' + this.selectedMonth;
     this.expenseListOfDays = this.expensesService.getItemsList(this.dbList);
     this.expenseListSubscription = this.expenseListOfDays.subscribe(data => {
       this.expensesService.loaderOff();
@@ -110,7 +118,7 @@ export class MonthStatisticPage {
   }
 
   getBonusData() {
-    this.bonusesDbList = 'dydo/bonusItems/' + this.selectedYear + '/' + this.selectedMonth;
+    this.bonusesDbList = 'michal1dydo/bonusItems/' + this.selectedYear + '/' + this.selectedMonth;
     this.bonusesItemsList = this.expensesService.getItemsList(this.bonusesDbList);
     this.bonusesItemsListSubscription = this.bonusesItemsList.subscribe(data => {
       this.getBonusDays(data);
@@ -120,7 +128,7 @@ export class MonthStatisticPage {
   getMonthlySpentMoney() {
     this.allMonthlyMoneySpent = 0;
     for (let money in this.dayWithExpenses) {
-      this.allMonthlyMoneySpent = this.allMonthlyMoneySpent + this.dayWithExpenses[money];
+      this.allMonthlyMoneySpent = Number(this.allMonthlyMoneySpent) + Number(this.dayWithExpenses[money]);
     }
   }
 
@@ -144,7 +152,7 @@ export class MonthStatisticPage {
   getDayMoneyByCategory(category) {
     this.createEmptyDaysObjects();
     for (let day of this.days) {
-      let dbList = 'dydo/expenseItems/' + this.selectedYear + '/' + this.selectedMonth + '/' + day;
+      let dbList = 'michal1dydo/expenseItems/' + this.selectedYear + '/' + this.selectedMonth + '/' + day;
       let listOfDay = this.expensesService.getItemsList(dbList, { orderByChild: 'expenseCategory', equalTo: category });
       this.listOfDaySubscription = listOfDay.subscribe(data => {
         for (let i = 0; i < this.expensesService.categoriesData.length; i++) {
@@ -168,7 +176,7 @@ export class MonthStatisticPage {
 
   getDayMoney() {
     for (let day of this.days) {
-      let databaseAddress = 'dydo/expenseItems/' + this.selectedYear + '/' + this.selectedMonth + '/' + day;
+      let databaseAddress = 'michal1dydo/expenseItems/' + this.selectedYear + '/' + this.selectedMonth + '/' + day;
       let listOfDay = this.expensesService.getItemsList(databaseAddress);
 
       this.listOfDayTwoSubscription = listOfDay.subscribe(data => {
@@ -188,12 +196,12 @@ export class MonthStatisticPage {
 
   getBonusMoney() {
     for (let day of this.bonusDays) {
-      let bonusAddress = 'dydo/bonusItems/' + this.selectedYear + '/' + this.selectedMonth + '/' + day;
+      let bonusAddress = 'michal1dydo/bonusItems/' + this.selectedYear + '/' + this.selectedMonth + '/' + day;
       let bonusListOfDay = this.expensesService.getItemsList(bonusAddress);
 
       this.bonusListOfDaySubscription = bonusListOfDay.subscribe(data => {
         for (let bonusDay of data) {
-          this.bonuses = this.bonuses + bonusDay.bonusValue;
+          this.bonuses = Number(this.bonuses) + Number(bonusDay.bonusValue);
         }
       });
     }
@@ -215,7 +223,7 @@ export class MonthStatisticPage {
       "outlineThickness": 2,
       "outlineColor": "#fff",
       "innerRadius": "30%",
-      "radius": 100,
+      "radius": 80,
       "labelText": "[[percents]]% <br> [[name]]",
       "fontSize": 12,
       "autoMargins": false,

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams, PopoverController, ToastController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import * as moment from 'moment';
 import { ExpensesService } from "../../services/expenses";
@@ -8,9 +8,8 @@ import { ExpenseItem } from '../../models/expense-item.interface';
 import { BonusItem } from '../../models/bonus-item.interface';
 import { Subscription } from 'rxjs/Subscription';
 import * as _ from 'lodash';
-
-import { PopoverController } from 'ionic-angular';
 import { LogoutPage } from '../logout/logout';
+import { AuthService } from "../../services/auth";
 
 @Component({
   selector: 'page-new-expenses',
@@ -37,14 +36,11 @@ export class NewExpensesPage {
     public navParams: NavParams,
     public database: AngularFireDatabase,
     public expensesService: ExpensesService,
-    public popoverCtrl: PopoverController
+    public popoverCtrl: PopoverController,
+    public authService: AuthService,
+    private toast: ToastController
   ) {
     moment.locale('pl');
-  }
-
-  presentPopover() {
-    let popover = this.popoverCtrl.create(LogoutPage);
-    popover.present();
   }
 
   ionViewDidLeave() {
@@ -52,21 +48,23 @@ export class NewExpensesPage {
   }
 
   ionViewCanEnter() {
-    this.expensesService.loaderOn();
   }
 
   ionViewDidEnter() {
     this.viewType = 'expenses'
-    this.categoriesDbList = 'dydo/categoriesItems/';
+    this.categoriesDbList = 'michal1dydo/categoriesItems/';
     this.categoriesDataList = this.expensesService.getItemsList(this.categoriesDbList);
     this.categoriesDataListSubscription = this.categoriesDataList.subscribe((data) => {
       this.expensesService.categoriesData = data;
       this.localCategoriesData = _.clone(this.expensesService.categoriesData);
       this.localCategoriesData.shift();
-      this.expensesService.loaderOff();
     });
   }
 
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
+  }
 
   getYear() {
     return moment().format('YYYY');
@@ -81,7 +79,7 @@ export class NewExpensesPage {
   }
 
   addExpenseItem(expenseItem: ExpenseItem) {
-    this.expensesDbList = 'dydo/expenseItems/' + this.getYear() + '/' + this.getMonth() + '/' + this.getDay();
+    this.expensesDbList = 'michal1dydo/expenseItems/' + this.getYear() + '/' + this.getMonth() + '/' + this.getDay();
     this.expenseItemsList = this.expensesService.getItemsList(this.expensesDbList);
     this.expenseItemsList.push({
       expenseName: this.expenseItem.expenseName,
@@ -100,7 +98,7 @@ export class NewExpensesPage {
   }
 
   addBonusItem(bonusItem: BonusItem) {
-    this.bonusesDbList = 'dydo/bonusItems/' + this.getYear() + '/' + this.getMonth() + '/' + this.getDay();
+    this.bonusesDbList = 'michal1dydo/bonusItems/' + this.getYear() + '/' + this.getMonth() + '/' + this.getDay();
     this.bonusesItemsList = this.expensesService.getItemsList(this.bonusesDbList);
     this.bonusesItemsList.push({
       bonusName: this.bonusItem.bonusName,

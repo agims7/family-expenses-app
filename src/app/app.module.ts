@@ -1,7 +1,6 @@
 import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Camera } from '@ionic-native/camera';
-import { OneSignal } from '@ionic-native/onesignal';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -33,6 +32,7 @@ import { StatisticsPage } from '../pages/statistics/statistics';
 import { TabsPage } from '../pages/tabs/tabs';
 import { RegisterPage } from '../pages/register/register';
 import { LoginPage } from '../pages/login/login';
+import { LogoutPage } from '../pages/logout/logout';
 
 import { ExpensesService } from '../services/expenses';
 import { AuthService } from '../services/auth';
@@ -64,6 +64,7 @@ import { config } from './firebase.credentials';
     RangeStatisticByCategoryPage,
     RegisterPage,
     LoginPage,
+    LogoutPage,
     //Components:
     LoaderComponent
   ],
@@ -100,7 +101,8 @@ import { config } from './firebase.credentials';
     StatisticByCategoryPage,
     RangeStatisticByCategoryPage,
     RegisterPage,
-    LoginPage
+    LoginPage,
+    LogoutPage
   ],
   providers: [
     StatusBar,
@@ -109,8 +111,7 @@ import { config } from './firebase.credentials';
     ExpensesService,
     AuthService,
     Camera,
-    PhotoViewer,
-    OneSignal
+    PhotoViewer
   ]
 })
 export class AppModule {}

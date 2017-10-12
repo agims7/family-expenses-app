@@ -1,31 +1,29 @@
 <ion-header>
-    <ion-navbar color="primary">
-      <ion-title>Login</ion-title>
-    </ion-navbar>
-  </ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+</ion-header>
 
-
-  <ion-content padding>
+<ion-content padding>
+  <ion-grid>
+    <div class="contnet">
       <form #login="ngForm" (ngSubmit)="onSignin(login)">
-        <ion-list>
-          <ion-item>
-            <ion-label fixed>Mail</ion-label>
-            <ion-input
-              type="email"
-              ngModel
-              name="email"
-              required></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label fixed>Password</ion-label>
-            <ion-input
-              type="password"
-              ngModel
-              name="password"
-              required></ion-input>
-          </ion-item>
-        </ion-list>
-        <button ion-button block type="submit" [disabled]="!login.valid">Signin</button>
+        <ion-item>
+          <ion-label floating>Email</ion-label>
+          <ion-input type="email" ngModel name="email" required email></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Hasło</ion-label>
+          <ion-input type="password" ngModel name="password" required></ion-input>
+        </ion-item>
+        <button ion-button block class="submit-button" type="submit" [disabled]="!login.valid">Zaloguj</button>
+        <p text-center *ngIf="error" class="danger">{{ errors[errorNumber] }}</p>
       </form>
-    </ion-content>
-    
+
+      <div class="no-account">
+        <p>Nie masz jeszcze konta?</p>
+        <button ion-button block [navPush]="registerPage">Zarejestruj się!</button>
+      </div>
+    </div>
+  </ion-grid>
+</ion-content>

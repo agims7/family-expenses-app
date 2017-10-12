@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, PopoverController  } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { ExpensesService } from "../../services/expenses";
 import { Subscription } from 'rxjs/Subscription';
+import { LogoutPage } from '../logout/logout';
 
 @Component({
   selector: 'page-shopping-list',
@@ -19,7 +20,8 @@ export class ShoppingListPage {
     public navParams: NavParams,
     public alertCtrl: AlertController,
     public database: AngularFireDatabase,
-    public expensesService: ExpensesService
+    public expensesService: ExpensesService,
+    public popoverCtrl: PopoverController
     ) {
   }
 
@@ -32,11 +34,16 @@ export class ShoppingListPage {
   }
 
   ionViewDidEnter() {
-    this.dbList = 'dydo/shoppingItems/';
+    this.dbList = 'michal1dydo/shoppingItems/';
     this.shoppingListArray = this.expensesService.getItemsList(this.dbList)
     this.shoppingListSubscription = this.shoppingListArray.subscribe((data) => {
       this.expensesService.loaderOff();
     });
+  }
+
+  onShowOptions(event: MouseEvent) {
+    const popover = this.popoverCtrl.create(LogoutPage);
+    popover.present({ ev: event });
   }
 
   addItem() {

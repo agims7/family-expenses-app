@@ -1,3 +1,29 @@
 page-login {
-
+    ion-item {
+        padding-left: 0 !important;
+    }
+    ion-grid {
+        height: 100%;
+    }
+    .contnet {
+        display: block;
+        width: 95%;
+        margin: 50px auto 0;
+        border: 1px solid #488aff;
+        padding: 0px 20px 15px 20px;
+        box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.21);
+        .submit-button {
+            margin-top: 25px;
+        }
+    }
+    .danger {
+        color: #f53d3d;
+        margin: 15px 0 0;
+        font-size: 14px;
+    }
+    .no-account {
+        margin-top: 50px;
+        text-align: center;
+        font-size: 16px;
+    }
 }
