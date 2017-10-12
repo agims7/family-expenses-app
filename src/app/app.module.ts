@@ -4,6 +4,7 @@ import { Camera } from '@ionic-native/camera';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { Push } from '@ionic-native/push';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
@@ -33,7 +34,6 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { RegisterPage } from '../pages/register/register';
 import { LoginPage } from '../pages/login/login';
 import { LogoutPage } from '../pages/logout/logout';
-
 import { ExpensesService } from '../services/expenses';
 import { AuthService } from '../services/auth';
 import { MyApp } from './app.component';
@@ -107,6 +107,7 @@ import { config } from './firebase.credentials';
   providers: [
     StatusBar,
     SplashScreen,
+    Push,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ExpensesService,
     AuthService,
