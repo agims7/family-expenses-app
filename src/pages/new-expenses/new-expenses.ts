@@ -48,6 +48,7 @@ export class NewExpensesPage {
   }
 
   ionViewCanEnter() {
+    this.expensesService.loaderOn();
   }
 
   ionViewDidEnter() {
@@ -58,6 +59,7 @@ export class NewExpensesPage {
       this.expensesService.categoriesData = data;
       this.localCategoriesData = _.clone(this.expensesService.categoriesData);
       this.localCategoriesData.shift();
+      this.expensesService.loaderOff();
     });
   }
 
