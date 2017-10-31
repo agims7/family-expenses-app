@@ -10,7 +10,6 @@ import { RegisterPage } from "../pages/register/register";
 import { StatisticsPage } from '../pages/statistics/statistics';
 import { AuthService } from "../services/auth";
 import { ExpensesService } from "../services/expenses";
-import { Push, PushObject, PushOptions } from '@ionic-native/push';
 
 import firebase from 'firebase';
 
@@ -30,86 +29,26 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public expensesService: ExpensesService,
     public alertCtrl: AlertController,
-    public push: Push,
     public authService: AuthService,
     public database: AngularFireDatabase,
   ) {
-    firebase.auth().onAuthStateChanged(user => {
-      console.log(user, 'user')
-      if (user) {
-        // this.getUserName(user);
-        this.authService.isAuthenticated = true;
-        this.rootPage = TabsPage
-      } else {
-        this.authService.isAuthenticated = false;
-        this.expensesService.userName = null;
-        this.rootPage = LoginPage;
-      }
-    });
+    // firebase.auth().onAuthStateChanged(user => {
+    //   console.log(user, 'user')
+    //   if (user) {
+    //     // this.getUserName(user);
+    //     this.authService.isAuthenticated = true;
+    //     this.rootPage = TabsPage
+    //   } else {
+    //     this.authService.isAuthenticated = false;
+    //     this.expensesService.userName = null;
+    //     this.rootPage = LoginPage;
+    //   }
+    // });
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
-      // this.pushsetup();
     });
   }
-
-
-  // pushsetup() {
-  //   const options: PushOptions = {
-  //     android: {
-  //       vibrate: 'true',
-  //       sound: 'true',
-  //       forceShow: 'true'
-  //     },
-  //     ios: {
-  //       alert: 'true',
-  //       badge: true,
-  //       sound: 'false'
-  //     },
-  //     windows: {}
-  //   };
-
-  //   const pushObject: PushObject = this.push.init(options);
-
-  //   pushObject.on('notification').subscribe((notification: any) => {
-  //     console.log('Received a notification', notification)
-  //     if (notification.additionalData.foreground) {
-  //       let youralert = this.alertCtrl.create({
-  //         title: 'New Push notification',
-  //         message: notification.message,
-  //         buttons: [{
-  //           text: 'Ignore',
-  //           role: 'cancel'
-  //         }, {
-  //           text: 'View',
-  //           handler: () => {
-  //             //TODO: Your logic here
-  //             this.nav.push(StatisticsPage);
-  //           }
-  //         }]
-  //       });
-  //       youralert.present();
-  //     }
-  //   });
-
-  //   pushObject.on('registration').subscribe((registration: any) => {
-  //     console.log('Device registered', registration);
-  //   });
-
-  //   pushObject.on('error').subscribe(error => {
-  //     console.log('Error with Push plugin', error);
-  //   });
-  // }
-
-  // getUserName(user) {
-  //   let atPosition = user.email.search('@');
-  //   this.expensesService.userName =  user.email.slice(0, atPosition);
-  //   let specialChars = "!@#$^&%*()+=-[]\/{}|:<>?,.";
-  //   for (let i = 0; i < specialChars.length; i++) {
-  //     this.expensesService.userName = this.expensesService.userName .replace(new RegExp("\\" + specialChars[i], 'gi'), '');
-  //   }
-  //   console.log(this.expensesService.userName)
-  // }
 
 }
 

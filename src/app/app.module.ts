@@ -4,7 +4,6 @@ import { Camera } from '@ionic-native/camera';
 import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { Push } from '@ionic-native/push';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -108,7 +107,6 @@ import { config } from './firebase.credentials';
   providers: [
     StatusBar,
     SplashScreen,
-    Push,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ExpensesService,
     AuthService,

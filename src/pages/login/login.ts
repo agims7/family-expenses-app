@@ -7,7 +7,6 @@ import { NewExpensesPage } from '../new-expenses/new-expenses';
 import { AuthService } from '../../services/auth';
 import { ExpensesService } from '../../services/expenses';
 import firebase from 'firebase';
-import { FCM } from '@ionic-native/fcm';
 
 @Component({
   selector: 'page-login',
