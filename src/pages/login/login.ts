@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AlertController, NavController, NavParams } from 'ionic-angular';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { RegisterPage } from '../register/register';
 import { NewExpensesPage } from '../new-expenses/new-expenses';
 import { AuthService } from '../../services/auth';
 import { ExpensesService } from '../../services/expenses';
+import firebase from 'firebase';
+import { FCM } from '@ionic-native/fcm';
 
 @Component({
   selector: 'page-login',
@@ -17,27 +20,29 @@ export class LoginPage {
   public errors: any = ["Nie ma takiego użytkownika w bazie.", "Podane hasło jest błędne.", "Adres email jest błędnie zformatowany", "Coś poszło nie tak, spróbuj ponownie"];
 
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public navParams: NavParams,
     private authService: AuthService,
     public expensesService: ExpensesService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    public database: AngularFireDatabase
   ) {
   }
 
   onSignin(form: NgForm) {
-    this.expensesService.loaderOn();
     this.authService.signin(form.value.email, form.value.password)
-      .then(data => {
-        this.error = false;
-        this.expensesService.loaderOff();
-        this.navCtrl.push(NewExpensesPage);
-      })
-      .catch(error => {
-        this.error = true;
-        this.expensesService.loaderOff();
-        this.errorNumber = this.errorMessage(error.message);
-      });
+    // this.expensesService.loaderOn();
+    // this.authService.signin(form.value.email, form.value.password)
+    //   .then(data => {
+    //     this.error = false;
+    //     this.expensesService.loaderOff();
+    //     this.navCtrl.push(NewExpensesPage);
+    //   })
+    //   .catch(error => {
+    //     this.error = true;
+    //     this.expensesService.loaderOff();
+    //     this.errorNumber = this.errorMessage(error.message);
+    //   });
   }
 
   errorMessage(message) {

@@ -8,6 +8,10 @@
 <ion-content padding>
   <ion-grid>
     <form #register="ngForm" (ngSubmit)="onSignup(register)">
+        <ion-item>
+            <ion-label floating>Nazwa użytkownika</ion-label>
+            <ion-input type="text" ngModel name="username" required></ion-input>
+          </ion-item>
       <ion-item>
         <ion-label floating>Email</ion-label>
         <ion-input type="email" ngModel name="email" required email></ion-input>

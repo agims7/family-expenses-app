@@ -12,6 +12,24 @@
 <ion-content padding>
   <ion-grid>
 
+
+
+    
+      <ion-card color="dark">
+          <ion-card-content align="center">
+            <h1>{{addZero(hours)}}:{{addZero(minutes)}}:{{addZero(seconds)}}</h1>
+          </ion-card-content>
+        </ion-card>
+      
+        <button ion-button block (click)="start()">{{ buttonText }}</button>
+        <button ion-button block (click)="pause()">Pauza</button>
+        <button ion-button block (click)="clear()">Wyczyść</button>
+
+
+
+
+
+
     <h3 text-center>Podaj zakres:</h3>
     <ion-row align-items-center class="date-section date-section-first">
       <ion-col>

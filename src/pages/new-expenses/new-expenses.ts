@@ -11,6 +11,10 @@ import * as _ from 'lodash';
 import { LogoutPage } from '../logout/logout';
 import { AuthService } from "../../services/auth";
 
+import firebase from 'firebase';
+
+declare var FCMPlugin;
+
 @Component({
   selector: 'page-new-expenses',
   templateUrl: 'new-expenses.html',
@@ -31,6 +35,9 @@ export class NewExpensesPage {
   public expenses: boolean = true;
   public title: string = 'wydatek';
 
+  // public firestore = firebase.database().ref('/michal1dydo/pushtokens');
+  // firemsg = firebase.database().ref('/michal1dydo/messages');
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -41,17 +48,80 @@ export class NewExpensesPage {
     private toast: ToastController
   ) {
     moment.locale('pl');
+    // this.tokensetup();
   }
+
+  // ionViewDidLoad() {
+  //   if (typeof FCMPlugin != 'undefined') {
+  //     FCMPlugin.onNotification(function (data) {
+  //       if (data.wasTapped) {
+  //         //Notification was received on device tray and tapped by the user.
+  //         alert(JSON.stringify(data));
+  //       } else {
+  //         //Notification was received in foreground. Maybe the user needs to be notified.
+  //         alert(JSON.stringify(data));
+  //       }
+  //     });
+
+  //     FCMPlugin.onTokenRefresh(function (token) {
+  //       alert(token);
+  //     });
+  //   }
+  // }
+
+  // tokensetup() {
+  //   console.log('start2')
+  //   let fcmCheck = setInterval(() => {
+  //     console.log('start43')
+  //     if (typeof FCMPlugin != 'undefined') {
+  //       console.log('start')
+  //       let promise = new Promise((resolve, reject) => {
+  //         FCMPlugin.getToken(token => {
+  //           resolve(token);
+  //         }, (err) => {
+  //           reject(err);
+  //         });
+  //       })
+  //       console.log(promise);
+  //       return promise;
+  //     }
+  //   }, 1000);
+  // }
+
+  // storetoken(token) {
+  //     this.database.list(this.firestore).push({
+  //       uid: firebase.auth().currentUser.uid,
+  //       devtoken: token
+  //     });
+  //     console.log('tetestestse')
+  //     this.database.list(this.firemsg).push({
+  //       sendername: firebase.auth().currentUser.displayName,
+  //       message: 'hello'
+  //     });
+  //     console.log('tetestestse 2')
+  // }
+
+
+
+
 
   ionViewDidLeave() {
     this.expensesService.safeUnsubscribe(this.categoriesDataListSubscription);
   }
 
   ionViewCanEnter() {
-    this.expensesService.loaderOn();
+    // this.expensesService.loaderOn();
   }
 
   ionViewDidEnter() {
+
+    // this.authService.getActiveUser().getToken()
+    // .then(
+    // (token: string) => {
+    //   alert(token);
+    //   console.log(token)
+    // }
+    // );
     this.viewType = 'expenses'
     this.categoriesDbList = 'michal1dydo/categoriesItems/';
     this.categoriesDataList = this.expensesService.getItemsList(this.categoriesDbList);
@@ -59,7 +129,7 @@ export class NewExpensesPage {
       this.expensesService.categoriesData = data;
       this.localCategoriesData = _.clone(this.expensesService.categoriesData);
       this.localCategoriesData.shift();
-      this.expensesService.loaderOff();
+      // this.expensesService.loaderOff();
     });
   }
 

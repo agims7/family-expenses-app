@@ -33,6 +33,20 @@ export class StatisticsPage {
   };
   public year: string = moment().format('YYYY');
 
+
+
+
+
+  public seconds: number = 0;
+  public minutes: number = 0;
+  public hours: number = 0;
+  public buttonText: string = "Start"
+  public interval;
+
+
+
+
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -41,6 +55,43 @@ export class StatisticsPage {
     public popoverCtrl: PopoverController
   ) {
   }
+
+  start() {
+    this.interval = setInterval(() => {
+      this.seconds++;
+      if (this.seconds > 59) {
+        this.seconds = 0;
+        this.minutes++;
+        if (this.minutes > 59) {
+          this.minutes = 0;
+          this.hours++;
+        }
+      }
+    }, 1000);
+    this.buttonText = "Start"
+  }
+
+  pause() {
+    clearInterval(this.interval);
+    this.buttonText = "Restart"
+  }
+
+  clear() {
+    clearInterval(this.interval);
+    this.seconds = 0;
+    this.minutes = 0;
+    this.hours = 0;
+    this.buttonText = "Start"
+  }
+
+  addZero(i) {
+    if (i < 10) {
+      i = "0" + i;
+    }
+    return i;
+  }
+
+
 
   ionViewDidLeave() {
     this.expensesService.safeUnsubscribe(this.expenseListOfYearsSubscription);

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from "@angular/forms";
 import { NavController, NavParams, AlertController, PopoverController  } from 'ionic-angular';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { LoginPage } from '../login/login';
 import { ExpensesService } from "../../services/expenses";
 import { AuthService } from "../../services/auth";
@@ -11,6 +12,8 @@ import { LogoutPage } from '../logout/logout';
   templateUrl: 'register.html',
 })
 export class RegisterPage {
+  public dbList = 'michal1dydo/users/';
+  public userList: FirebaseListObservable<any[]>
 
   constructor(
     public navCtrl: NavController,
@@ -24,7 +27,14 @@ export class RegisterPage {
   onSignup(form: NgForm) {
     this.authService.signup(form.value.email, form.value.password)
       .then(data => {
-        console.log(data)
+        console.log('data po rejestracji', data)
+        this.userList = this.expensesService.getItemsList(this.dbList);
+        this.userList.push({
+          username: form.value.username,
+          email: form.value.email,
+          uid: data.uid,
+          token: data.Yd
+        });
         form.reset();
         this.navCtrl.push(LoginPage);
       })
